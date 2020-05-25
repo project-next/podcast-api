@@ -1,0 +1,15 @@
+applications:
+- name: Three-Six-Oh-Dev
+  buildpacks:
+  - java_buildpack
+  disk_quota: 256M
+  env:
+    JAVA_OPTS: -XX:MaxMetaspaceSize=120m -Xss400k -XX:ReservedCodeCacheSize=150m -XX:MaxDirectMemorySize=24m
+      -Xmx400m
+    JBP_CONFIG_OPEN_JDK_JRE: '[memory_calculator: {stack_threads: 350}, jre: {version:
+      11.+}]'
+  instances: 1
+  memory: 400M
+  routes:
+  - route: 3-6-oh-dev.cfapps.io
+  stack: cflinuxfs3
