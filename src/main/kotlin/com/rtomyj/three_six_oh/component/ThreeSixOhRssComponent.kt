@@ -56,8 +56,8 @@ class ThreeSixOhRssComponent: AbstractRssFeedView()
             , response: HttpServletResponse)
             : MutableList<Item>
     {
-        val item: Item = Item()
-        val description: Description = Description()
+        val item = Item()
+        val description = Description()
         val enclosure = Enclosure()
         val entryInformationImpl = EntryInformationImpl()
 
