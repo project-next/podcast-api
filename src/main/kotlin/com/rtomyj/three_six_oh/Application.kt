@@ -1,4 +1,4 @@
-package com.rtomyj.Oh
+package com.rtomyj.three_six_oh
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
