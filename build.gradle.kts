@@ -1,5 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val romeToolsVersion = "1.12.2"
+
+
 plugins {
 	id("org.springframework.boot") version "2.3.0.RELEASE"
 	id("io.spring.dependency-management") version "1.0.9.RELEASE"
@@ -23,6 +26,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
+
+	implementation("com.rometools:rome:${romeToolsVersion}")
+	implementation("com.rometools:rome-modules:${romeToolsVersion}")
 }
 
 tasks.withType<Test> {
