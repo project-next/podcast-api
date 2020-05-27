@@ -12,6 +12,9 @@ import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Item
+import com.rtomyj.three_six_oh.dao.Dao
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.web.util.UriBuilder
 import java.net.URL
 import java.time.Instant
@@ -22,31 +25,39 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class ThreeSixOhRssComponent: AbstractRssFeedView()
 {
+
+    @Autowired
+    @Qualifier("Jdbc")
+    lateinit var dao: Dao
+
+
     override fun buildFeedMetadata(model: MutableMap<String, Any>, feed: Channel, request: HttpServletRequest)
     {
-        feed.title = "Three-Six-Oh Podcast Feed"
-        feed.description = "RSS feed with info about all the episodes on the Three-Six-Oh podcast."
-        feed.link = "https://thesupremekingscastle.com"
-        feed.language = "en-us"
-        feed.copyright = "Three-Six-Oh &#169;2020"
-        feed.lastBuildDate = Date.from(Instant.parse("2017-12-19T00:00:00Z"))
+        val podcastInfo = dao.getPodcastInfo()
+        podcastInfo.populateChanneelInfo(feed)
+//        feed.title = "Three-Six-Oh Podcast Feed"
+//        feed.description = "RSS feed with info about all the episodes on the Three-Six-Oh podcast."
+//        feed.link = "https://thesupremekingscastle.com"
+//        feed.language = "en-us"
+//        feed.copyright = "Three-Six-Oh &#169;2020"
+//        feed.lastBuildDate = Date.from(Instant.parse("2017-12-19T00:00:00Z"))
+//
+//
+//        val feedInformationImpl: FeedInformationImpl = FeedInformationImpl()
+//        feedInformationImpl.author = "Javi Gomez"
+//        feedInformationImpl.summary = "Three friends talking shit."
+//
+//        feedInformationImpl.ownerName = "Three-Six-Oh"
+//        feedInformationImpl.ownerEmailAddress = "rtomyj@gmail.com"
+//
+//        feedInformationImpl.explicit = true
+//
+//        feedInformationImpl.image = URL("http://files.idrsolutions.com/Java_PDF_Podcasts/idrlogo.png")
+//
+//        feedInformationImpl.categories = Arrays.asList(Category("Comedy"))
 
 
-        val feedInformationImpl: FeedInformationImpl = FeedInformationImpl()
-        feedInformationImpl.author = "Javi Gomez"
-        feedInformationImpl.summary = "Three friends talking shit."
-
-        feedInformationImpl.ownerName = "Three-Six-Oh"
-        feedInformationImpl.ownerEmailAddress = "rtomyj@gmail.com"
-
-        feedInformationImpl.explicit = true
-
-        feedInformationImpl.image = URL("http://files.idrsolutions.com/Java_PDF_Podcasts/idrlogo.png")
-
-        feedInformationImpl.categories = Arrays.asList(Category("Comedy"))
-
-
-        feed.modules = Arrays.asList(feedInformationImpl) as List<Module>?
+        //feed.modules = Arrays.asList(feedInformationImpl) as List<Module>?
     }
 
 
