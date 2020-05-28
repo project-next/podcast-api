@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val romeToolsVersion = "1.12.2"
+val archivesBaseName = "Three-Six-Oh-API"
 
 
 plugins {
@@ -50,12 +51,22 @@ tasks.withType<KotlinCompile> {
 
 
 tasks.create("bootJarPath")  {
+	group = "Project Info"
+	description = "Specifies the absolute path of the JAR created by the bootJar task."
+
 	doFirst {
 		println("${buildDir}/libs/${project.version}.jar")
 	}
 }
-//
-//
-//tasks.replace("bootJar").doFirst {
-//	println("Hello world")
-//}
+
+
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar>().configureEach {
+	group = "Build"
+	description = "Creates a JAR bundled by Spring plugin"
+
+
+	baseName = archivesBaseName
+	manifest.attributes.apply {
+		put("Implementation-Title", archivesBaseName)
+	}
+}
