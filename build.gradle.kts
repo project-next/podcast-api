@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.rtomyj"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -47,3 +47,15 @@ tasks.withType<KotlinCompile> {
 		jvmTarget = "1.8"
 	}
 }
+
+
+tasks.create("bootJarPath")  {
+	doFirst {
+		println("${buildDir}/libs/${project.version}.jar")
+	}
+}
+//
+//
+//tasks.replace("bootJar").doFirst {
+//	println("Hello world")
+//}
