@@ -7,7 +7,7 @@ applications:
     JAVA_OPTS: -XX:MaxMetaspaceSize=175m -Xss400k -XX:ReservedCodeCacheSize=50m -XX:MaxDirectMemorySize=24m
     JBP_CONFIG_OPEN_JDK_JRE: '[memory_calculator: {stack_threads: 150}, jre: {version: 11.+}]'
   instances: 1
-  memory: 220M
+  memory: 250M
   routes:
   - route: 3-6-oh-dev.cfapps.io
   stack: cflinuxfs3
