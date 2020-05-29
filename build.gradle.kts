@@ -55,7 +55,7 @@ tasks.create("bootJarPath")  {
 	description = "Specifies the absolute path of the JAR created by the bootJar task."
 
 	doFirst {
-		println("${buildDir}/libs/${project.version}.jar")
+		println("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
 	}
 }
 
