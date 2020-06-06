@@ -1,7 +1,9 @@
 package com.rtomyj.three_six_oh.dao
 
+import com.rtomyj.three_six_oh.model.PodcastEpisode
 import com.rtomyj.three_six_oh.model.PodcastInfo
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 import java.net.URL
@@ -21,7 +23,8 @@ class JdbcDao: Dao
     val getPodcastInfo = "SELECT * FROM podcast_info WHERE podcast_id = 1"
 
     // TODO: add exception handling for date creation
-    override fun getPodcastInfo(): PodcastInfo {
+    override fun getPodcastInfo(): PodcastInfo
+    {
 
         val podcastInfo: MutableList<PodcastInfo> = namedParameterJdbcTemplate.query(getPodcastInfo, fun(rs: ResultSet, _: Int): PodcastInfo {
             val podcastInfo = PodcastInfo()
@@ -44,4 +47,29 @@ class JdbcDao: Dao
 
         return podcastInfo[0]
     }
+
+
+    override fun getPodcastEpisodes(podcastId: Int): ArrayList<PodcastEpisode> {
+        val episodesQuery = "select episode_id, episode_title, episode_link, episode_description, episode_pub_date, episode_author, episode_image, episode_summary from podcast_episode where podcast_id = :podcastId"
+
+        val sqlParams = MapSqlParameterSource();
+        sqlParams.addValue("podcastId", podcastId)
+
+
+        return namedParameterJdbcTemplate.query(episodesQuery, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
+            val podcastEpisode = PodcastEpisode()
+            podcastEpisode.episodetitle = row.getString(1)
+            podcastEpisode.podcastId = podcastId
+            podcastEpisode.episodeTitle = row.getString(2)
+            podcastEpisode.episodeLink = URL(row.getString(3))
+            podcastEpisode.episodeDescription = row.getString(4)
+            podcastEpisode.episodePublicationDate = row.getString(5)
+            podcastEpisode.episodeAuthor = row.getString(6)
+            podcastEpisode.episodeImage = URL(row.getString(7))
+            podcastEpisode.episodeSummary = row.getString(8)
+
+            return podcastEpisode
+        }) as ArrayList<PodcastEpisode>
+    }
+
 }
