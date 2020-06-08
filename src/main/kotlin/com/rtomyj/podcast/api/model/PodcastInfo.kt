@@ -58,7 +58,7 @@ class PodcastInfo
         feedInformationImpl.image = podcastImageUrl
         feedInformationImpl.categories = Arrays.asList(Category(podcastCategory))
 
-        feed.modules = Arrays.asList(feedInformationImpl) as List<Module>?
+        feed.modules = listOf(feedInformationImpl)
     }
 
 }

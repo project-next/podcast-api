@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val romeToolsVersion = "1.12.2"
-val archivesBaseName = "Three-Six-Oh-API"
+val springBootVersion = "2.3.0.RELEASE"
+
+val archivesBaseName = "Podcast-API"
 
 
 plugins {
@@ -11,17 +13,20 @@ plugins {
 	kotlin("plugin.spring") version "1.3.72"
 }
 
+
 group = "com.rtomyj"
 version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
+
 
 repositories {
 	mavenCentral()
 }
 
+
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -32,15 +37,17 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 
-	implementation("com.rometools:rome:${romeToolsVersion}")
-	implementation("com.rometools:rome-modules:${romeToolsVersion}")
+	implementation("com.rometools:rome:$romeToolsVersion")
+	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
 	runtimeOnly("mysql:mysql-connector-java")
 }
 
+
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
@@ -60,7 +67,7 @@ tasks.create("bootJarPath")  {
 }
 
 
-tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar>().configureEach {
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
 	group = "Build"
 	description = "Creates a JAR bundled by Spring plugin"
 
