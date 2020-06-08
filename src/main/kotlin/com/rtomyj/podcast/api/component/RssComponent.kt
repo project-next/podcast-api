@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 
 
 @Component
-class ThreeSixOhRssComponent: AbstractRssFeedView()
+class RssComponent: AbstractRssFeedView()
 {
 
     @Autowired
