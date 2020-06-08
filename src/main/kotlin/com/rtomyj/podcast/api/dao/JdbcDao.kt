@@ -50,7 +50,7 @@ class JdbcDao: Dao
 
 
     override fun getPodcastEpisodes(podcastId: Int): ArrayList<PodcastEpisode> {
-        val episodesQuery = "select episode_id, episode_title, episode_link, episode_description, episode_pub_date, episode_author, episode_image, episode_summary from podcast_episode where podcast_id = :podcastId"
+        val episodesQuery = "select episode_id, episode_title, episode_link, episode_description, episode_pub_date, episode_author, episode_image, episode_summary, episode_keywords from podcast_episode where podcast_id = :podcastId"
 
         val sqlParams = MapSqlParameterSource();
         sqlParams.addValue("podcastId", podcastId)
@@ -67,6 +67,9 @@ class JdbcDao: Dao
             podcastEpisode.episodeAuthor = row.getString(6)
             podcastEpisode.episodeImage = URL(row.getString(7))
             podcastEpisode.episodeSummary = row.getString(8)
+
+            val keywords = row.getString(9)
+            keywords.split("|").toCollection(podcastEpisode.episodeKeywords)
 
             return podcastEpisode
         }) as ArrayList<PodcastEpisode>

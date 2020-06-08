@@ -4,9 +4,10 @@ import com.rometools.modules.itunes.EntryInformationImpl
 import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Item
+import com.rtomyj.three_six_oh.helper.Constants
 import java.net.URL
-import java.time.Instant
 import java.util.*
+
 
 class PodcastEpisode
 {
@@ -20,8 +21,8 @@ class PodcastEpisode
     lateinit var episodeAuthor: String
     lateinit var episodeImage: URL
     lateinit var episodeSummary: String
+    var episodeKeywords = arrayListOf<String>()
 
-    val mediaType = "audio/mpeg"
 
 
     fun toRssItem(): Item
@@ -31,13 +32,12 @@ class PodcastEpisode
 
         // Set description
         val description = Description()
-        description.type = "type"
-        description.value = "First podcast episode mofos"
+        description.value = episodeDescription
         item.description = description
 
         val enclosure = Enclosure()
-        enclosure.length = 11779397
-        enclosure.type = mediaType
+//        enclosure.length = 11779397
+        enclosure.type = Constants.MEDIA_TYPE
         enclosure.url = episodeLink.toString()
         item.enclosures = Arrays.asList(enclosure)
 
@@ -49,6 +49,7 @@ class PodcastEpisode
         val entryInformationImpl = EntryInformationImpl()
         entryInformationImpl.summary = episodeSummary
         entryInformationImpl.image = episodeImage
+        entryInformationImpl.keywords = episodeKeywords.toTypedArray()
         item.modules = listOf(entryInformationImpl)
 
         println(item)
