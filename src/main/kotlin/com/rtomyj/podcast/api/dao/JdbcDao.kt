@@ -1,5 +1,6 @@
 package com.rtomyj.podcast.api.dao
 
+import com.rtomyj.podcast.api.helper.Constants
 import com.rtomyj.podcast.api.model.PodcastEpisode
 import com.rtomyj.podcast.api.model.PodcastInfo
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,13 +21,12 @@ class JdbcDao: Dao
     @Autowired
     lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
-    val getPodcastInfo = "SELECT * FROM podcast_info WHERE podcast_id = 1"
 
     // TODO: add exception handling for date creation
     override fun getPodcastInfo(): PodcastInfo
     {
 
-        val podcastInfo: MutableList<PodcastInfo> = namedParameterJdbcTemplate.query(getPodcastInfo, fun(rs: ResultSet, _: Int): PodcastInfo {
+        val podcastInfo: MutableList<PodcastInfo> = namedParameterJdbcTemplate.query(Constants.PODCAST_INFO_QUERY, fun(rs: ResultSet, _: Int): PodcastInfo {
             val podcastInfo = PodcastInfo()
             podcastInfo.podcastId = rs.getInt(1)
             podcastInfo.podcastTitle = rs.getString(2)
@@ -50,13 +50,12 @@ class JdbcDao: Dao
 
 
     override fun getPodcastEpisodes(podcastId: Int): ArrayList<PodcastEpisode> {
-        val episodesQuery = "select episode_id, episode_title, episode_link, episode_description, episode_pub_date, episode_author, episode_image, episode_summary, episode_keywords from podcast_episode where podcast_id = :podcastId"
 
         val sqlParams = MapSqlParameterSource();
         sqlParams.addValue("podcastId", podcastId)
 
 
-        return namedParameterJdbcTemplate.query(episodesQuery, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
+        return namedParameterJdbcTemplate.query(Constants.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
             val podcastEpisode = PodcastEpisode()
             podcastEpisode.episodetitle = row.getString(1)
             podcastEpisode.podcastId = podcastId
