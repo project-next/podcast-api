@@ -1,4 +1,4 @@
-package com.rtomyj.three_six_oh
+package com.rtomyj.podcast.api
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

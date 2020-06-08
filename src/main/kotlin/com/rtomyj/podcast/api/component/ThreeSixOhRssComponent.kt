@@ -1,8 +1,8 @@
-package com.rtomyj.three_six_oh.component
+package com.rtomyj.podcast.api.component
 
 import com.rometools.rome.feed.rss.Channel
 import com.rometools.rome.feed.rss.Item
-import com.rtomyj.three_six_oh.dao.Dao
+import com.rtomyj.podcast.api.dao.Dao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component

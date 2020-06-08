@@ -1,7 +1,7 @@
-package com.rtomyj.three_six_oh.dao
+package com.rtomyj.podcast.api.dao
 
-import com.rtomyj.three_six_oh.model.PodcastEpisode
-import com.rtomyj.three_six_oh.model.PodcastInfo
+import com.rtomyj.podcast.api.model.PodcastEpisode
+import com.rtomyj.podcast.api.model.PodcastInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate

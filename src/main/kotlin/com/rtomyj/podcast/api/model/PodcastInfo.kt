@@ -1,4 +1,4 @@
-package com.rtomyj.three_six_oh.model
+package com.rtomyj.podcast.api.model
 
 import com.rometools.modules.itunes.FeedInformationImpl
 import com.rometools.rome.feed.rss.Channel

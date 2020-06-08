@@ -1,4 +1,4 @@
-package com.rtomyj.three_six_oh
+package com.rtomyj.podcast.api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

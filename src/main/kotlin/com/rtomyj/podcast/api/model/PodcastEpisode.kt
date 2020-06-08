@@ -1,10 +1,10 @@
-package com.rtomyj.three_six_oh.model
+package com.rtomyj.podcast.api.model
 
 import com.rometools.modules.itunes.EntryInformationImpl
 import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Item
-import com.rtomyj.three_six_oh.helper.Constants
+import com.rtomyj.podcast.api.helper.Constants
 import java.net.URL
 import java.util.*
 
