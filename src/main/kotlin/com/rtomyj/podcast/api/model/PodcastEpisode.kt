@@ -6,6 +6,8 @@ import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Item
 import com.rtomyj.podcast.api.helper.Constants
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 
@@ -17,7 +19,7 @@ class PodcastEpisode
     lateinit var episodeTitle: String
     lateinit var episodeLink: URL
     lateinit var episodeDescription: String
-    lateinit var episodePublicationDate: String
+    lateinit var episodePublicationDate: LocalDateTime
     lateinit var episodeAuthor: String
     lateinit var episodeImage: URL
     lateinit var episodeSummary: String
@@ -44,7 +46,7 @@ class PodcastEpisode
         item.title = episodeTitle
         item.author = episodeAuthor
         item.link = episodeLink.toString()
-        //item.pubDate = Date.from(Instant.parse(episodePublicationDate))
+        item.pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
 
         val entryInformationImpl = EntryInformationImpl()
         entryInformationImpl.summary = episodeSummary
