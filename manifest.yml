@@ -9,5 +9,5 @@ applications:
   instances: 1
   memory: 220M
   routes:
-  - route: 3-6-oh-dev.cfapps.io
+  - route: podcast-api.cfapps.io
   stack: cflinuxfs3
