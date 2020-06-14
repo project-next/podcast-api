@@ -74,6 +74,7 @@ class JdbcDao: Dao
             keywords.split("|").toCollection(podcastEpisode.episodeKeywords)
 
             podcastEpisode.episodeGuid.value = row.getString(10)
+            podcastEpisode.episodeLength = row.getLong(11)
             return podcastEpisode
         }) as ArrayList<PodcastEpisode>
     }

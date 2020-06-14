@@ -25,6 +25,7 @@ class PodcastEpisode
     lateinit var episodeImage: URL
     lateinit var episodeSummary: String
     var episodeGuid = Guid()
+    var episodeLength = 0L
 
     var episodeKeywords = arrayListOf<String>()
 
@@ -41,7 +42,7 @@ class PodcastEpisode
         item.description = description
 
         val enclosure = Enclosure()
-//        enclosure.length = 11779397
+        enclosure.length = episodeLength
         enclosure.type = Constants.MEDIA_TYPE
         enclosure.url = episodeLink.toString()
         item.enclosures = Arrays.asList(enclosure)
