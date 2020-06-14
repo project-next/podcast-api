@@ -35,12 +35,6 @@ class PodcastEpisode
     {
         val item = Item()
 
-
-        // Set description
-        val description = Description()
-        description.value = episodeDescription
-        item.description = description
-
         val enclosure = Enclosure()
         enclosure.length = episodeLength
         enclosure.type = Constants.MEDIA_TYPE

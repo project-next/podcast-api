@@ -64,7 +64,6 @@ class JdbcDao: Dao
             podcastEpisode.podcastId = podcastId
             podcastEpisode.episodeTitle = row.getString(2)
             podcastEpisode.episodeLink = URL(row.getString(3))
-            podcastEpisode.episodeDescription = row.getString(4)
             podcastEpisode.episodePublicationDate = LocalDateTime.from(dbDate.parse(row.getString(5)))
             podcastEpisode.episodeAuthor = row.getString(6)
             podcastEpisode.episodeImage = URL(row.getString(7))
