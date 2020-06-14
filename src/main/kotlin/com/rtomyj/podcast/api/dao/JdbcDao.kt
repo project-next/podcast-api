@@ -57,23 +57,24 @@ class JdbcDao: Dao
         val sqlParams = MapSqlParameterSource();
         sqlParams.addValue("podcastId", podcastId)
 
-
+//episode_title, podcast_id, episode_link, 4 episode_description, episode_pub_date, episode_author, episode_image, 8 episode_keywords, episode_guid, episode_length, episode_media_type, is_episode_explicit
         return namedParameterJdbcTemplate.query(Constants.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
             val podcastEpisode = PodcastEpisode()
-            podcastEpisode.episodetitle = row.getString(1)
+            podcastEpisode.episodeTitle = row.getString(1)
             podcastEpisode.podcastId = podcastId
-            podcastEpisode.episodeTitle = row.getString(2)
             podcastEpisode.episodeLink = URL(row.getString(3))
+            podcastEpisode.episodeDescription = row.getString(4)
             podcastEpisode.episodePublicationDate = LocalDateTime.from(dbDate.parse(row.getString(5)))
             podcastEpisode.episodeAuthor = row.getString(6)
             podcastEpisode.episodeImage = URL(row.getString(7))
-            podcastEpisode.episodeSummary = row.getString(8)
 
-            val keywords = row.getString(9)
+            val keywords = row.getString(8)
             keywords.split("|").toCollection(podcastEpisode.episodeKeywords)
 
-            podcastEpisode.episodeGuid.value = row.getString(10)
-            podcastEpisode.episodeLength = row.getLong(11)
+            podcastEpisode.episodeGuid.value = row.getString(9)
+            podcastEpisode.episodeLength = row.getLong(10)
+            podcastEpisode.episodeMediaType = row.getString(11)
+            podcastEpisode.isEpisodeExplicit = row.getBoolean(12)
             return podcastEpisode
         }) as ArrayList<PodcastEpisode>
     }

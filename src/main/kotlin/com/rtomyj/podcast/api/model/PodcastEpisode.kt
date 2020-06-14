@@ -16,19 +16,18 @@ import java.util.*
 class PodcastEpisode
 {
 
-    lateinit var episodetitle: String
     var podcastId: Int = -1
     lateinit var episodeTitle: String
     lateinit var episodeLink: URL
+    lateinit var episodeDescription: String
     lateinit var episodePublicationDate: LocalDateTime
     lateinit var episodeAuthor: String
     lateinit var episodeImage: URL
-    lateinit var episodeSummary: String
+    var episodeKeywords = arrayListOf<String>()
     var episodeGuid = Guid()
     var episodeLength = 0L
-
-    var episodeKeywords = arrayListOf<String>()
-
+    lateinit var episodeMediaType: String
+    var isEpisodeExplicit = false
 
 
     fun toRssItem(): Item
@@ -37,7 +36,7 @@ class PodcastEpisode
 
         // Set description
         val description = Description()
-        description.value = episodeSummary
+        description.value = episodeDescription
         item.description = description
 
         val enclosure = Enclosure()
@@ -53,9 +52,8 @@ class PodcastEpisode
         item.guid = episodeGuid
 
         val entryInformationImpl = EntryInformationImpl()
-        entryInformationImpl.summary = episodeSummary
         entryInformationImpl.image = episodeImage
-//        entryInformationImpl.keywords = episodeKeywords.toTypedArray()
+        entryInformationImpl.keywords = episodeKeywords.toTypedArray()
         entryInformationImpl.duration = Duration(2, 1, 37f)
         item.modules = listOf(entryInformationImpl)
 
