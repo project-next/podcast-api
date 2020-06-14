@@ -55,11 +55,10 @@ class PodcastEpisode
         val entryInformationImpl = EntryInformationImpl()
         entryInformationImpl.summary = episodeSummary
         entryInformationImpl.image = episodeImage
-        entryInformationImpl.keywords = episodeKeywords.toTypedArray()
+//        entryInformationImpl.keywords = episodeKeywords.toTypedArray()
         entryInformationImpl.duration = Duration(2, 1, 37f)
         item.modules = listOf(entryInformationImpl)
 
-        println(item)
         return item
     }
 
