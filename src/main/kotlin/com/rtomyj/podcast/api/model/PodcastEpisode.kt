@@ -20,7 +20,6 @@ class PodcastEpisode
     var podcastId: Int = -1
     lateinit var episodeTitle: String
     lateinit var episodeLink: URL
-    lateinit var episodeDescription: String
     lateinit var episodePublicationDate: LocalDateTime
     lateinit var episodeAuthor: String
     lateinit var episodeImage: URL
@@ -35,6 +34,11 @@ class PodcastEpisode
     fun toRssItem(): Item
     {
         val item = Item()
+
+        // Set description
+        val description = Description()
+        description.value = episodeSummary
+        item.description = description
 
         val enclosure = Enclosure()
         enclosure.length = episodeLength
