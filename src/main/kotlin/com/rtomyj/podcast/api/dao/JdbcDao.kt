@@ -1,5 +1,6 @@
 package com.rtomyj.podcast.api.dao
 
+import com.rometools.rome.feed.rss.Guid
 import com.rtomyj.podcast.api.helper.Constants
 import com.rtomyj.podcast.api.model.PodcastEpisode
 import com.rtomyj.podcast.api.model.PodcastInfo
@@ -11,6 +12,8 @@ import java.net.URL
 import java.sql.ResultSet
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Repository("Jdbc")
 class JdbcDao: Dao
@@ -70,6 +73,7 @@ class JdbcDao: Dao
             val keywords = row.getString(9)
             keywords.split("|").toCollection(podcastEpisode.episodeKeywords)
 
+            podcastEpisode.episodeGuid.value = row.getString(10)
             return podcastEpisode
         }) as ArrayList<PodcastEpisode>
     }

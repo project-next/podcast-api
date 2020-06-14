@@ -3,6 +3,7 @@ package com.rtomyj.podcast.api.model
 import com.rometools.modules.itunes.EntryInformationImpl
 import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
+import com.rometools.rome.feed.rss.Guid
 import com.rometools.rome.feed.rss.Item
 import com.rtomyj.podcast.api.helper.Constants
 import java.net.URL
@@ -23,6 +24,8 @@ class PodcastEpisode
     lateinit var episodeAuthor: String
     lateinit var episodeImage: URL
     lateinit var episodeSummary: String
+    var episodeGuid = Guid()
+
     var episodeKeywords = arrayListOf<String>()
 
 
@@ -47,6 +50,7 @@ class PodcastEpisode
         item.author = episodeAuthor
         item.link = episodeLink.toString()
         item.pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+        item.guid = episodeGuid
 
         val entryInformationImpl = EntryInformationImpl()
         entryInformationImpl.summary = episodeSummary
