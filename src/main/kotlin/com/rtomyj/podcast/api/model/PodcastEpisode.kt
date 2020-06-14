@@ -1,6 +1,7 @@
 package com.rtomyj.podcast.api.model
 
 import com.rometools.modules.itunes.EntryInformationImpl
+import com.rometools.modules.itunes.types.Duration
 import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Guid
@@ -51,6 +52,7 @@ class PodcastEpisode
         entryInformationImpl.summary = episodeSummary
         entryInformationImpl.image = episodeImage
         entryInformationImpl.keywords = episodeKeywords.toTypedArray()
+        entryInformationImpl.duration = Duration(2, 1, 37f)
         item.modules = listOf(entryInformationImpl)
 
         println(item)
