@@ -43,7 +43,6 @@ class JdbcDao: Dao
             podcastInfo.podcastAuthor = rs.getString(10)
             podcastInfo.isExplicit = rs.getBoolean(11)
             podcastInfo.podcastImageUrl = URL(rs.getString(12))
-            podcastInfo.podcastSummary = rs.getString(13)
 
             return podcastInfo
         })

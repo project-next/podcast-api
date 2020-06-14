@@ -27,7 +27,6 @@ class PodcastInfo
 
     var isExplicit: Boolean = true
     lateinit var podcastImageUrl: URL
-    lateinit var podcastSummary: String
 
     override fun toString(): String
     {
@@ -51,7 +50,6 @@ class PodcastInfo
         val feedInformationImpl = FeedInformationImpl()
 
         feedInformationImpl.author = podcastAuthor
-        feedInformationImpl.summary = podcastSummary
         feedInformationImpl.ownerName = podcastAuthor
         feedInformationImpl.ownerEmailAddress = podcastEmail
         feedInformationImpl.explicit = isExplicit
