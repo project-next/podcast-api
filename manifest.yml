@@ -1,5 +1,5 @@
 applications:
-- name: Three-Six-Oh-Dev
+- name: podcast-api
   buildpacks:
   - java_buildpack
   disk_quota: 256M
@@ -10,4 +10,5 @@ applications:
   memory: 220M
   routes:
   - route: podcast-api.cfapps.io
+  - route: api-podcast.cfapps.io
   stack: cflinuxfs3
