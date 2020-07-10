@@ -39,22 +39,28 @@ class PodcastInfo
 
     fun populateChanneelInfo(feed: Channel)
     {
-        feed.title = this.podcastTitle
-        feed.link = this.podcastLink.toString()
-        feed.description = this.podcastDescription
-        feed.language = this.podcastLanguage
-        feed.copyright = this.podcastCopyright
-        feed.lastBuildDate = Date.from(podcastLastBuildDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+        with(feed)
+        {
+            title = podcastTitle
+            link = podcastLink.toString()
+            description = podcastDescription
+            language = podcastLanguage
+            copyright = podcastCopyright
+            lastBuildDate = Date.from(podcastLastBuildDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+        }
 
 
         val feedInformationImpl = FeedInformationImpl()
 
-        feedInformationImpl.author = podcastAuthor
-        feedInformationImpl.ownerName = podcastAuthor
-        feedInformationImpl.ownerEmailAddress = podcastEmail
-        feedInformationImpl.explicit = isExplicit
-        feedInformationImpl.image = podcastImageUrl
-        feedInformationImpl.categories = Arrays.asList(Category(podcastCategory))
+        with(feedInformationImpl)
+        {
+            author = podcastAuthor
+            ownerName = podcastAuthor
+            ownerEmailAddress = podcastEmail
+            explicit = isExplicit
+            image = podcastImageUrl
+            categories = Arrays.asList(Category(podcastCategory))
+        }
 
         feed.modules = listOf(feedInformationImpl)
     }
