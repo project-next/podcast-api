@@ -37,7 +37,7 @@ class PodcastInfo
     }
 
 
-    fun populateChanneelInfo(feed: Channel)
+    fun populateChannelInfo(feed: Channel)
     {
         with(feed)
         {

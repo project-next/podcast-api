@@ -23,14 +23,17 @@ class JdbcDao: Dao
 
 
     // TODO: add exception handling for date creation
-    override fun getPodcastInfo(): PodcastInfo
+    override fun getPodcastInfo(podcastId: Int): PodcastInfo
     {
 
-        val podcastInfo: MutableList<PodcastInfo> = namedParameterJdbcTemplate.query(Constants.PODCAST_INFO_QUERY, fun(rs: ResultSet, _: Int): PodcastInfo {
+        val mapSqlParameterSource = MapSqlParameterSource()
+        mapSqlParameterSource.addValue("podcastId", podcastId)
+
+        val podcastInfo = namedParameterJdbcTemplate.query(Constants.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): PodcastInfo {
             val podcastInfo = PodcastInfo()
             with(podcastInfo)
             {
-                podcastId = rs.getInt(1)
+                this.podcastId = rs.getInt(1)
                 podcastTitle = rs.getString(2)
                 podcastLink = URL(rs.getString(3))
                 podcastDescription = rs.getString(4)
@@ -48,6 +51,7 @@ class JdbcDao: Dao
         })
 
         return podcastInfo[0]
+
     }
 
 

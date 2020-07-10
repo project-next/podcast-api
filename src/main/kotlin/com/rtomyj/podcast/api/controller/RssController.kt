@@ -1,6 +1,6 @@
 package com.rtomyj.podcast.api.controller
 
-import com.rtomyj.podcast.api.component.RssComponent
+import com.rtomyj.podcast.api.service.RssService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -12,12 +12,12 @@ class RssController
 {
 
     @Autowired
-    lateinit var rssView: RssComponent
+    lateinit var rssService: RssService
 
     @GetMapping
     fun getFeed(): View
     {
-        return rssView
+        return rssService.getRssFeedForPodcast(1)
     }
 
 }

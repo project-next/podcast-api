@@ -5,7 +5,7 @@ import com.rtomyj.podcast.api.model.PodcastInfo
 
 interface Dao
 {
-    fun getPodcastInfo(): PodcastInfo
+    fun getPodcastInfo(podcastId: Int): PodcastInfo
 
     fun getPodcastEpisodes(podcastId: Int): ArrayList<PodcastEpisode>
 }
