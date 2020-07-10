@@ -60,7 +60,6 @@ class JdbcDao: Dao
         val sqlParams = MapSqlParameterSource();
         sqlParams.addValue("podcastId", podcastId)
 
-//episode_title, podcast_id, episode_link, 4 episode_description, episode_pub_date, episode_author, episode_image, 8 episode_keywords, episode_guid, episode_length, episode_media_type, is_episode_explicit
         return namedParameterJdbcTemplate.query(Constants.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
             val podcastEpisode = PodcastEpisode()
             with(podcastEpisode)
