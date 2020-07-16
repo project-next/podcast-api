@@ -27,6 +27,7 @@ class PodcastEpisode(val podcastId: Int)
     var episodeLength = 0L
     lateinit var episodeMediaType: String
     var isEpisodeExplicit = false
+    lateinit var episodeDuration: String
 
 
     fun toRssItem(): Item
@@ -54,7 +55,9 @@ class PodcastEpisode(val podcastId: Int)
             this.modules = EntryInformationImpl().run {
                 image = episodeImage
                 keywords = episodeKeywords.toTypedArray()
-                duration = Duration(2, 1, 37f)
+
+                val durationTokens = episodeDuration.split(":")
+                duration = Duration(durationTokens[0].toInt(), durationTokens[1].toInt(), durationTokens[2].toFloat())
                 listOf(this)
             }
         }

@@ -76,6 +76,7 @@ class JdbcDao: Dao
                 episodeLength = row.getLong(10)
                 episodeMediaType = row.getString(11)
                 isEpisodeExplicit = row.getBoolean(12)
+                episodeDuration = row.getString(13)
             }
 
         }) as ArrayList<PodcastEpisode>
