@@ -13,10 +13,9 @@ import java.time.ZoneId
 import java.util.*
 
 
-class PodcastEpisode
+class PodcastEpisode(val podcastId: Int)
 {
 
-    var podcastId: Int = -1
     lateinit var episodeTitle: String
     lateinit var episodeLink: URL
     lateinit var episodeDescription: String
@@ -32,32 +31,34 @@ class PodcastEpisode
 
     fun toRssItem(): Item
     {
-        val item = Item()
 
-        // Set description
-        val description = Description()
-        description.value = episodeDescription
-        item.description = description
+        return Item().apply {
+            // Set description
+            this.description = Description().apply {
+                value = episodeDescription
+            }
 
-        val enclosure = Enclosure()
-        enclosure.length = episodeLength
-        enclosure.type = Constants.MEDIA_TYPE
-        enclosure.url = episodeLink.toString()
-        item.enclosures = Arrays.asList(enclosure)
+            this.enclosures = Enclosure().run {
+                length = episodeLength
+                type = Constants.MEDIA_TYPE
+                url = episodeLink.toString()
+                listOf(this)
+            }
 
-        item.title = episodeTitle
-        item.author = episodeAuthor
-        item.link = episodeLink.toString()
-        item.pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
-        item.guid = episodeGuid
+            title = episodeTitle
+            author = episodeAuthor
+            link = episodeLink.toString()
+            pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+            guid = episodeGuid
 
-        val entryInformationImpl = EntryInformationImpl()
-        entryInformationImpl.image = episodeImage
-        entryInformationImpl.keywords = episodeKeywords.toTypedArray()
-        entryInformationImpl.duration = Duration(2, 1, 37f)
-        item.modules = listOf(entryInformationImpl)
+            this.modules = EntryInformationImpl().run {
+                image = episodeImage
+                keywords = episodeKeywords.toTypedArray()
+                duration = Duration(2, 1, 37f)
+                listOf(this)
+            }
+        }
 
-        return item
     }
 
 }

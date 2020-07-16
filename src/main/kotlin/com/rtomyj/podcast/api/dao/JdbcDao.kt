@@ -12,7 +12,7 @@ import java.sql.ResultSet
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Repository("Jdbc")
+@Repository("jdbc")
 class JdbcDao: Dao
 {
 
@@ -23,17 +23,17 @@ class JdbcDao: Dao
 
 
     // TODO: add exception handling for date creation
-    override fun getPodcastInfo(podcastId: Int): PodcastInfo
+    override fun getPodcastInfo(podcastId: Int): PodcastInfo?
     {
 
         val mapSqlParameterSource = MapSqlParameterSource()
         mapSqlParameterSource.addValue("podcastId", podcastId)
 
-        val podcastInfo = namedParameterJdbcTemplate.query(Constants.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): PodcastInfo {
-            val podcastInfo = PodcastInfo()
-            with(podcastInfo)
-            {
-                this.podcastId = rs.getInt(1)
+        return namedParameterJdbcTemplate.queryForObject(Constants.PODCAST_INFO_QUERY, mapSqlParameterSource
+                , fun(rs: ResultSet, _: Int): PodcastInfo
+        {
+
+            return PodcastInfo(podcastId).apply {
                 podcastTitle = rs.getString(2)
                 podcastLink = URL(rs.getString(3))
                 podcastDescription = rs.getString(4)
@@ -47,10 +47,7 @@ class JdbcDao: Dao
                 podcastImageUrl = URL(rs.getString(12))
             }
 
-            return podcastInfo
         })
-
-        return podcastInfo[0]
 
     }
 
@@ -60,12 +57,12 @@ class JdbcDao: Dao
         val sqlParams = MapSqlParameterSource();
         sqlParams.addValue("podcastId", podcastId)
 
-        return namedParameterJdbcTemplate.query(Constants.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
-            val podcastEpisode = PodcastEpisode()
-            with(podcastEpisode)
-            {
+        return namedParameterJdbcTemplate.query(Constants.PODCAST_EPISODES_QUERY, sqlParams
+                , fun(row: ResultSet, _: Int): PodcastEpisode
+        {
+
+            return PodcastEpisode(podcastId).apply {
                 episodeTitle = row.getString(1)
-                this.podcastId = podcastId
                 episodeLink = URL(row.getString(3))
                 episodeDescription = row.getString(4)
                 episodePublicationDate = LocalDateTime.from(dbDate.parse(row.getString(5)))
@@ -81,7 +78,6 @@ class JdbcDao: Dao
                 isEpisodeExplicit = row.getBoolean(12)
             }
 
-            return podcastEpisode
         }) as ArrayList<PodcastEpisode>
     }
 

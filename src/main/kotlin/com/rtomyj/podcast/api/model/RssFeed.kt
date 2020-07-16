@@ -10,10 +10,8 @@ import javax.servlet.http.HttpServletResponse
 class RssFeed(private val podcastInfo: PodcastInfo, private val podcastEpisodes: List<PodcastEpisode>): AbstractRssFeedView()
 {
 
-    override fun buildFeedMetadata(model: MutableMap<String, Any>, feed: Channel, request: HttpServletRequest)
-    {
-        podcastInfo.populateChannelInfo(feed)
-    }
+    override fun buildFeedMetadata(model: MutableMap<String, Any>
+                                   , feed: Channel, request: HttpServletRequest) = podcastInfo.populateChannelInfo(feed)
 
 
     override fun buildFeedItems(
@@ -22,12 +20,12 @@ class RssFeed(private val podcastInfo: PodcastInfo, private val podcastEpisodes:
             , response: HttpServletResponse)
             : ArrayList<Item>
     {
-//        val podcastsEpisodes = dao.getPodcastEpisodes(1)
 
         val episodes = podcastEpisodes
                 .map { podcastEpisode ->  podcastEpisode.toRssItem()}
 
         return episodes as ArrayList<Item>
+
     }
 
 }

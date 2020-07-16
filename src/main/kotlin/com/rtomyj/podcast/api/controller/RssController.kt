@@ -15,9 +15,6 @@ class RssController
     lateinit var rssService: RssService
 
     @GetMapping
-    fun getFeed(): View
-    {
-        return rssService.getRssFeedForPodcast(1)
-    }
+    fun getFeed(): View = rssService.getRssFeedForPodcast(1)
 
 }

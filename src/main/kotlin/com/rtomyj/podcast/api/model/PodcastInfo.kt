@@ -10,10 +10,9 @@ import com.rometools.modules.itunes.types.Category
 import com.rometools.rome.feed.module.Module
 import java.time.ZoneId
 
-class PodcastInfo
+class PodcastInfo(val podcastId: Int)
 {
 
-    var podcastId: Int = 0
     lateinit var podcastTitle: String
     lateinit var podcastLink: URL
     lateinit var podcastDescription: String
@@ -39,6 +38,7 @@ class PodcastInfo
 
     fun populateChannelInfo(feed: Channel)
     {
+
         with(feed)
         {
             title = podcastTitle
@@ -49,11 +49,7 @@ class PodcastInfo
             lastBuildDate = Date.from(podcastLastBuildDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
         }
 
-
-        val feedInformationImpl = FeedInformationImpl()
-
-        with(feedInformationImpl)
-        {
+        val feedInformationImpl = FeedInformationImpl().apply {
             author = podcastAuthor
             ownerName = podcastAuthor
             ownerEmailAddress = podcastEmail
@@ -63,6 +59,7 @@ class PodcastInfo
         }
 
         feed.modules = listOf(feedInformationImpl)
+
     }
 
 }
