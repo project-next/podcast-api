@@ -18,10 +18,10 @@ import java.time.format.DateTimeFormatter
 class JdbcDao: Dao
 {
 
-    val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")!!
 
     @Autowired
-    lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
+    private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
 
     // TODO: add exception handling for date creation

@@ -1,7 +1,7 @@
 package com.rtomyj.podcast.api.enum
 
 enum class PodcastApiTables(
-        var tableName: String
+        val tableName: String
 )
 {
     PODCAST_INFO_TABLE("podcast_info")
@@ -12,7 +12,7 @@ enum class PodcastApiTables(
 
 
     enum class PodcastInfoTableColumns(
-            var columnName: String
+            val columnName: String
     )
     {
         PODCAST_ID("podcast_id")
@@ -36,7 +36,7 @@ enum class PodcastApiTables(
 
 
     enum class PodcastEpisodeTableColumns(
-            var columnName: String
+            val columnName: String
     )
     {
 

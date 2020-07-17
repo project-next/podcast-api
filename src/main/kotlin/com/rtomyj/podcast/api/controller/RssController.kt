@@ -12,7 +12,7 @@ class RssController
 {
 
     @Autowired
-    lateinit var rssService: RssService
+    private lateinit var rssService: RssService
 
     @GetMapping
     fun getFeed(): View = rssService.getRssFeedForPodcast(1)
