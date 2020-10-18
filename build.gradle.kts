@@ -52,7 +52,7 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "1.8"
+		jvmTarget = JavaVersion.VERSION_11.toString()
 	}
 }
 
@@ -62,7 +62,7 @@ tasks.create("bootJarPath")  {
 	description = "Specifies the absolute path of the JAR created by the bootJar task."
 
 	doFirst {
-		println("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
+		println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
 	}
 }
 

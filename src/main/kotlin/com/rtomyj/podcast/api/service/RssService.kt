@@ -14,7 +14,7 @@ class RssService
 
     @Autowired
     @Qualifier("jdbc")
-    lateinit var dao: Dao
+    private lateinit var dao: Dao
 
     fun getRssFeedForPodcast(podcastId: Int): RssFeed
     {
