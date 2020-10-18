@@ -2,7 +2,7 @@ repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
   name: podcast-api
   description: API that interfaces with podcast DB to get info about podcasts then creates valid RSS metadata to be used by iTunes.
-  homepage: https://www.thesupremekingscastle.com/about
+  homepage: null
   private: false
   has_issues: true
   has_wiki: true
@@ -11,7 +11,7 @@ repository:
   has_downloads: true
 
   # Updates the default branch for this repository.
-  default_branch: v1.0.1
+  default_branch: v1.0.2
 
   # Either `true` to allow squash-merging pull requests, or `false` to prevent
   # squash-merging.
