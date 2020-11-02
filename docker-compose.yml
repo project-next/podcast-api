@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  podcast-api:
+    image: openjdk
+    container_name: ${CONTAINER_NAME}
+    ports:
+      - "${HOST_PORT}:${CONTAINER_PORT}"
+    volumes:
+      - "${JAR_PATH}:/podcast-api.jar"
+    command: java -jar podcast-api.jar
+    restart: always
+    networks:
+      - podcast-api
+
+networks:
+  podcast-api:
+    name: podcast-api
+    driver: bridge
