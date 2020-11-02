@@ -10,7 +10,7 @@ import com.rometools.modules.itunes.types.Category
 import com.rometools.rome.feed.module.Module
 import java.time.ZoneId
 
-class PodcastInfo(val podcastId: Int)
+class PodcastInfo(val podcastId: String)
 {
 
     lateinit var podcastTitle: String

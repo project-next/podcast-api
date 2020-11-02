@@ -16,7 +16,7 @@ class RssService
     @Qualifier("jdbc")
     private lateinit var dao: Dao
 
-    fun getRssFeedForPodcast(podcastId: Int): RssFeed
+    fun getRssFeedForPodcast(podcastId: String): RssFeed
     {
 
         val podcastInfo = dao.getPodcastInfo(podcastId) ?: throw Exception()

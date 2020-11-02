@@ -14,7 +14,7 @@ import java.time.ZoneId
 import java.util.*
 
 
-class PodcastEpisode(val podcastId: Int)
+class PodcastEpisode(val podcastId: String)
 {
 
     lateinit var episodeTitle: String

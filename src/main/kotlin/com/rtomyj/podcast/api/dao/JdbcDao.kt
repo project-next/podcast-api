@@ -25,7 +25,7 @@ class JdbcDao: Dao
 
 
     // TODO: add exception handling for date creation
-    override fun getPodcastInfo(podcastId: Int): PodcastInfo?
+    override fun getPodcastInfo(podcastId: String): PodcastInfo?
     {
 
         val mapSqlParameterSource = MapSqlParameterSource()
@@ -54,7 +54,7 @@ class JdbcDao: Dao
     }
 
 
-    override fun getPodcastEpisodes(podcastId: Int): ArrayList<PodcastEpisode> {
+    override fun getPodcastEpisodes(podcastId: String): ArrayList<PodcastEpisode> {
 
         val sqlParams = MapSqlParameterSource();
         sqlParams.addValue("podcastId", podcastId)
