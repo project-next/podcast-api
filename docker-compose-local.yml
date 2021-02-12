@@ -2,16 +2,18 @@ version: '3.8'
 
 services:
   podcast-api:
-    image: openjdk
-    container_name: ${CONTAINER_NAME}
+    image: "openjdk:11.0-jdk-slim"
+    container_name: podcast-api
     ports:
-      - "${HOST_PORT}:${CONTAINER_PORT}"
+      - "9001:8808"
     volumes:
-      - "${JAR_PATH}:/podcast-api.jar"
+      - "./build/libs/Podcast-API-1.0.2.jar:/podcast-api.jar"
     command: java -jar podcast-api.jar
     restart: always
     networks:
       - podcast-api
+    environment:
+      - SPRING_PROFILES_ACTIVE: local
 
 networks:
   podcast-api:
