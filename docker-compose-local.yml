@@ -5,7 +5,7 @@ services:
     image: "openjdk:11.0-jdk-slim"
     container_name: podcast-api
     ports:
-      - "9001:8808"
+      - "9001:8080"
     volumes:
       - "./build/libs/Podcast-API-1.0.2.jar:/podcast-api.jar"
     command: java -jar podcast-api.jar
@@ -13,7 +13,7 @@ services:
     networks:
       - podcast-api
     environment:
-      - SPRING_PROFILES_ACTIVE: local
+      - SPRING_PROFILES_ACTIVE=docker
 
 networks:
   podcast-api:

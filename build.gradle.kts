@@ -9,8 +9,8 @@ val archivesBaseName = "Podcast-API"
 plugins {
 	id("org.springframework.boot") version "2.4.1"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.3.72"
-	kotlin("plugin.spring") version "1.3.72"
+	kotlin("jvm") version "1.4.30"
+	kotlin("plugin.spring") version "1.4.30"
 }
 
 
@@ -57,16 +57,6 @@ tasks.withType<KotlinCompile> {
 }
 
 
-tasks.create("bootJarPath")  {
-	group = "Project Info"
-	description = "Specifies the absolute path of the JAR created by the bootJar task."
-
-	doFirst {
-		println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
-	}
-}
-
-
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
 	group = "Build"
 	description = "Creates a JAR bundled by Spring plugin"
@@ -75,5 +65,15 @@ tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
 	baseName = archivesBaseName
 	manifest.attributes.apply {
 		put("Implementation-Title", archivesBaseName)
+	}
+}
+
+
+tasks.create("bootJarPath")  {
+	group = "Project Info"
+	description = "Specifies the absolute path of the JAR created by the bootJar task."
+
+	doFirst {
+		println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
 	}
 }
