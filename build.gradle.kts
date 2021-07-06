@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val romeToolsVersion = "1.15.0"
+val romeToolsVersion = "1.16.0"
 val springBootVersion = "2.5.2"
 
 val archivesBaseName = "Podcast-API"
