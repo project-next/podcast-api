@@ -3,12 +3,11 @@ version: '3.8'
 services:
   podcast-api:
     image: "openjdk:11.0-jdk-slim"
-    container_name: podcast-api
     ports:
-      - "9001:8080"
+      - "9001-9003:8080"
     volumes:
       - "./build/libs/Podcast-API-1.0.2.jar:/podcast-api.jar"
-    command: java -jar podcast-api.jar
+    command: "java -jar podcast-api.jar"
     restart: always
     networks:
       - podcast-api
