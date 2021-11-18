@@ -2,6 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val romeToolsVersion = "1.16.0"
 val springBootVersion = "2.5.6"
+val jacksonVersion = "2.13.0"
+val kotlinVersion = "1.6.0"
 
 val archivesBaseName = "Podcast-API"
 
@@ -15,7 +17,7 @@ plugins {
 
 
 group = "com.rtomyj"
-version = "1.0.2"
+version = "1.0.3"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 
@@ -28,12 +30,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+	testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 
