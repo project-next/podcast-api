@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter
 class JdbcDao: Dao
 {
 
-    private val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")!!
+    private val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSS]")
 
     @Autowired
     private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
