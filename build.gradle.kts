@@ -4,6 +4,7 @@ val romeToolsVersion = "1.16.0"
 val springBootVersion = "2.5.6"
 val jacksonVersion = "2.13.0"
 val kotlinVersion = "1.6.0"
+val postgresqlVersion = "42.3.1"
 
 val archivesBaseName = "Podcast-API"
 
@@ -42,7 +43,7 @@ dependencies {
 	implementation("com.rometools:rome:$romeToolsVersion")
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
-	runtimeOnly("mysql:mysql-connector-java")
+	runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
 }
 
 
