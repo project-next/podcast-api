@@ -18,7 +18,7 @@ plugins {
 
 
 group = "com.rtomyj"
-version = "1.0.3"
+version = "1.1.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 
