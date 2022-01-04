@@ -1,11 +1,11 @@
 server=$1
 user="ec2-user"
 
-ssh -i "~/Downloads/podcast-api.pem" "${user}@${server}" << EOF
+ssh -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
     mkdir -p api/build/libs
 EOF
 
-sftp -i "~/Downloads/podcast-api.pem" "${user}@${server}" << EOF
+sftp -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
     cd api
     put .env-local.txt
     put docker-compose.yml
