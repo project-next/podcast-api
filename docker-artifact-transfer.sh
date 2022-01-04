@@ -5,7 +5,7 @@ ssh -y -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
     mkdir -p api/build/libs
 EOF
 
-sftp -y -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
+sftp -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
     cd api
     put .env-local.txt
     put docker-compose.yml
