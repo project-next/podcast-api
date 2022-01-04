@@ -19,7 +19,7 @@ plugins {
 
 group = "com.rtomyj"
 version = "1.1.0"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_16
 
 
 repositories {
@@ -55,7 +55,7 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = JavaVersion.VERSION_11.toString()
+		jvmTarget = JavaVersion.VERSION_16.toString()
 	}
 }
 
@@ -79,4 +79,15 @@ tasks.create("bootJarPath")  {
 	doFirst {
 		println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
 	}
+}
+
+
+tasks.register("createDockerJar", Copy::class) {
+	description = "Renames JAR (removes version number) which makes it easier to deploy via Docker"
+	group = "Util"
+
+	from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
+	into("${buildDir}/libs")
+
+	rename ("${archivesBaseName}-${project.version}.jar", "${archivesBaseName}.jar")
 }

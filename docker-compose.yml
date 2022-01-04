@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  podcast-api:
+    image: "openjdk:16.0-jdk-slim"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./build/libs/podcast-api.jar:/podcast-api.jar"
+    command: "java -jar podcast-api.jar"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+    networks:
+      - podcast-api
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+networks:
+  podcast-api:
+    name: podcast-api
+    driver: bridge
