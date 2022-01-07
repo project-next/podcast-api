@@ -7,7 +7,6 @@ EOF
 
 sftp -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
     cd api/podcast-api
-    put .env-local.txt
     put docker-compose.yml
     cd build/libs
     put build/libs/*
