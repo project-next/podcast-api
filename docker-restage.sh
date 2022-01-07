@@ -7,7 +7,7 @@ if [ $# -eq 0 ]
 fi
 
 ssh -y -i ~/.ssh/podcast-api-server.pem "${user}@${server}" << EOF
-	cd api/podcast
+	cd ~/api/podcast-api
 	docker-compose kill
 	docker-compose rm -f
 	docker-compose up --scale podcast-api=1 -d
