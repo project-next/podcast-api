@@ -47,47 +47,45 @@ dependencies {
 }
 
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
-
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = JavaVersion.VERSION_16.toString()
+tasks {
+	withType<Test> {
+		useJUnitPlatform()
 	}
-}
 
-
-tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
-	group = "Build"
-	description = "Creates a JAR bundled by Spring plugin"
-
-
-	baseName = archivesBaseName
-	manifest.attributes.apply {
-		put("Implementation-Title", archivesBaseName)
+	withType<KotlinCompile> {
+		kotlinOptions {
+			freeCompilerArgs = listOf("-Xjsr305=strict")
+			jvmTarget = JavaVersion.VERSION_16.toString()
+		}
 	}
-}
+
+	withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
+		group = "Build"
+		description = "Creates a JAR bundled by Spring plugin"
 
 
-tasks.create("bootJarPath")  {
-	group = "Project Info"
-	description = "Specifies the absolute path of the JAR created by the bootJar task."
-
-	doFirst {
-		println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
+		baseName = archivesBaseName
+		manifest.attributes.apply {
+			put("Implementation-Title", archivesBaseName)
+		}
 	}
-}
 
+	create("bootJarPath")  {
+		group = "Project Info"
+		description = "Specifies the absolute path of the JAR created by the bootJar task."
 
-tasks.register("createDockerJar", Copy::class) {
-	description = "Renames JAR (removes version number) which makes it easier to deploy via Docker"
-	group = "Util"
+		doFirst {
+			println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
+		}
+	}
 
-	from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
-	into("${buildDir}/libs")
+	register("createDockerJar", Copy::class) {
+		description = "Renames JAR (removes version number) which makes it easier to deploy via Docker"
+		group = "Util"
 
-	rename ("${archivesBaseName}-${project.version}.jar", "${archivesBaseName}.jar")
+		from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
+		into("${buildDir}/libs")
+
+		rename ("${archivesBaseName}-${project.version}.jar", "${archivesBaseName}.jar")
+	}
 }
