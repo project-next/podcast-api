@@ -1,22 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val romeToolsVersion = "1.16.0"
-val springBootVersion = "2.5.6"
+val romeToolsVersion = "1.18.0"
+val springBootVersion = "2.6.2"
+val jacksonVersion = "2.13.1"
+val kotlinVersion = "1.6.10"
+val postgresqlVersion = "42.3.1"
 
-val archivesBaseName = "Podcast-API"
+val archivesBaseName = "podcast-api"
 
 
 plugins {
-	id("org.springframework.boot") version "2.5.6"
+	id("org.springframework.boot") version "2.6.2"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.6.0"
-	kotlin("plugin.spring") version "1.6.0"
+	kotlin("jvm") version "1.6.10"
+	kotlin("plugin.spring") version "1.6.10"
 }
 
 
 group = "com.rtomyj"
-version = "1.0.2"
-java.sourceCompatibility = JavaVersion.VERSION_11
+version = "1.1.0"
+java.sourceCompatibility = JavaVersion.VERSION_16
 
 
 repositories {
@@ -28,19 +31,19 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+	testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 
 	implementation("com.rometools:rome:$romeToolsVersion")
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
-	runtimeOnly("mysql:mysql-connector-java")
+	runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
 }
 
 
@@ -52,7 +55,7 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = JavaVersion.VERSION_11.toString()
+		jvmTarget = JavaVersion.VERSION_16.toString()
 	}
 }
 
@@ -76,4 +79,15 @@ tasks.create("bootJarPath")  {
 	doFirst {
 		println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
 	}
+}
+
+
+tasks.register("createDockerJar", Copy::class) {
+	description = "Renames JAR (removes version number) which makes it easier to deploy via Docker"
+	group = "Util"
+
+	from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
+	into("${buildDir}/libs")
+
+	rename ("${archivesBaseName}-${project.version}.jar", "${archivesBaseName}.jar")
 }

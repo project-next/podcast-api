@@ -5,13 +5,13 @@ repository:
   homepage: null
   private: false
   has_issues: true
-  has_wiki: true
+  has_wiki: false
 
   # Either `true` to enable downloads for this repository, `false` to disable them.
   has_downloads: true
 
   # Updates the default branch for this repository.
-  default_branch: v1.0.3
+  default_branch: v1.1.0
 
   # Either `true` to allow squash-merging pull requests, or `false` to prevent
   # squash-merging.

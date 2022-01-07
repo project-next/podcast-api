@@ -4,7 +4,7 @@ services:
   podcast-api:
     image: "openjdk:16.0-jdk-slim"
     ports:
-      - "9001:8080"
+      - "8080:8080"
     volumes:
       - "./build/libs/podcast-api.jar:/podcast-api.jar"
     command: "java -jar podcast-api.jar"

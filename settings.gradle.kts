@@ -1,1 +1,1 @@
-rootProject.name = "Podcast-API"
+rootProject.name = "podcast-api"

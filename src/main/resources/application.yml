@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/podcast_api_db
-    username: root
-    password:
+    url: "jdbc:postgresql://${PODCAST_API_DB_URI}"
+    username: "${PODCAST_API_DB_USERNAME}"
+    password: "${PODCAST_API_DB_PASSWORD}"
   jpa:
     hibernate:
       ddl-auto: update
