@@ -6,7 +6,7 @@ val jacksonVersion = "2.13.1"
 val kotlinVersion = "1.6.10"
 val postgresqlVersion = "42.3.1"
 
-val archivesBaseName = "Podcast-API"
+val archivesBaseName = "podcast-api"
 
 
 plugins {
