@@ -9,5 +9,5 @@ sftp -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
     cd api/podcast-api
     put docker-compose.yml
     cd build/libs
-    put build/libs/*
+    put build/libs/podcast-api.jar
 EOF
