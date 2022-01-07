@@ -5,7 +5,7 @@ repository:
   homepage: null
   private: false
   has_issues: true
-  has_wiki: true
+  has_wiki: false
 
   # Either `true` to enable downloads for this repository, `false` to disable them.
   has_downloads: true
