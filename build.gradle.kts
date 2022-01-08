@@ -17,8 +17,8 @@ plugins {
 }
 
 
-group = "com.rtomyj"
-version = "1.1.0"
+group = "com.rtomyj.next"
+version = "1.2.0"
 java.sourceCompatibility = JavaVersion.VERSION_16
 
 
@@ -36,14 +36,14 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
-		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-	}
-
 	implementation("com.rometools:rome:$romeToolsVersion")
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
 	runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
+		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+	}
 }
 
 
