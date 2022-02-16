@@ -4,7 +4,7 @@ val romeToolsVersion = "1.18.0"
 val springBootVersion = "2.6.3"
 val jacksonVersion = "2.13.1"
 val kotlinVersion = "1.6.10"
-val postgresqlVersion = "42.3.2"
+val postgresqlVersion = "42.3.3"
 
 val archivesBaseName = "podcast-api"
 
