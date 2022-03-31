@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val romeToolsVersion = "1.18.0"
-val springBootVersion = "2.6.5"
+val springBootVersion = "2.6.6"
 val jacksonVersion = "2.13.2"
 val kotlinVersion = "1.6.10"
 val postgresqlVersion = "42.3.3"
@@ -10,7 +10,7 @@ val archivesBaseName = "podcast-api"
 
 
 plugins {
-	id("org.springframework.boot") version "2.6.5"
+	id("org.springframework.boot") version "2.6.6"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
