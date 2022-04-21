@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   podcast-api:
-    image: "openjdk:17.0-jdk-slim"
+    image: "openjdk:18.0-jdk-slim"
     ports:
       - "8080:8080"
     volumes:
