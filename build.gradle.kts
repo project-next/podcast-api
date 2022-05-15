@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val romeToolsVersion = "1.18.0"
 val springBootVersion = "2.6.7"
-val jacksonVersion = "2.13.2"
+val jacksonVersion = "2.13.3"
 val kotlinVersion = "1.6.21"
 val postgresqlVersion = "42.3.5"
 
