@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val romeToolsVersion = "1.18.0"
 val springBootVersion = "2.7.1"
 val jacksonVersion = "2.13.3"
-val kotlinVersion = "1.7.0"
+val kotlinVersion = "1.7.10"
 val postgresqlVersion = "42.4.0"
 
 val archivesBaseName = "podcast-api"
