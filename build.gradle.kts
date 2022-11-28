@@ -6,6 +6,7 @@ val springBootVersion = "3.0.0"
 val jacksonVersion = "2.14.1"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.5.1"
+val slf4jVersion = "2.0.5"
 
 val archivesBaseName = "podcast-api"
 
@@ -36,19 +37,38 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
+	implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
+	runtimeOnly("org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion")
+
+	implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
+	runtimeOnly("org.eclipse.jetty:jetty-alpn-java-server")
+	runtimeOnly("org.eclipse.jetty.http2:http2-server")
+
+	implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-
-	implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 
 	implementation("com.rometools:rome:$romeToolsVersion")
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
 	runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+}
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
+configurations {
+	implementation {
+		exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+		exclude(module = "spring-boot-starter-tomcat")
+		exclude(group = "org.apache.tomcat")
+		exclude(group = "junit")
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+	}
+
+	testImplementation {
+		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+	}
+
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
 	}
 }
 
