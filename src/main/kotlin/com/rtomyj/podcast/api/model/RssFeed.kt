@@ -3,8 +3,8 @@ package com.rtomyj.podcast.api.model
 import com.rometools.rome.feed.rss.Channel
 import com.rometools.rome.feed.rss.Item
 import org.springframework.web.servlet.view.feed.AbstractRssFeedView
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 
 class RssFeed(private val podcastInfo: PodcastInfo, private val podcastEpisodes: List<PodcastEpisode>): AbstractRssFeedView()
