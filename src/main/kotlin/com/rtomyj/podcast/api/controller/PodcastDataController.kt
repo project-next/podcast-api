@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class RssController {
-    @Autowired
-    private lateinit var rssService: RssService
+class PodcastDataController {
+	@Autowired
+	private lateinit var rssService: RssService
 
-    @GetMapping("api/v1/podcast/{podcastId}")
-    fun getPodcastInfoUsingPodcastId(@PathVariable podcastId: String) = rssService.getRssFeedForPodcast(podcastId)
+	@GetMapping("api/v1/podcast/{podcastId}")
+	fun getPodcastInfoUsingPodcastId(@PathVariable podcastId: String) = rssService.getRssFeedForPodcast(podcastId)
 }
