@@ -14,7 +14,6 @@ import java.util.*
 
 
 class PodcastEpisode(val podcastId: String) {
-
 	lateinit var episodeTitle: String
 	lateinit var episodeLink: URL
 	lateinit var episodeDescription: String
