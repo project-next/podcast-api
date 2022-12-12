@@ -6,7 +6,7 @@ val springBootVersion = "3.0.0"
 val jacksonVersion = "2.14.1"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.5.1"
-val slf4jVersion = "2.0.5"
+val slf4jVersion = "2.0.6"
 
 val archivesBaseName = "podcast-api"
 
