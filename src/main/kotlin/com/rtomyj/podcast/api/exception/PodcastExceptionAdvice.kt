@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
-class PodcastExceptionHandler : ResponseEntityExceptionHandler() {
+class PodcastExceptionAdvice : ResponseEntityExceptionHandler() {
 	companion object {
 		private val log: Logger = LoggerFactory.getLogger(this::class.java)
 	}
@@ -23,6 +23,6 @@ class PodcastExceptionHandler : ResponseEntityExceptionHandler() {
 	fun onValidationFail(exception: ConstraintViolationException): PodcastError {
 		log.error("Request did not conform to spec. Constraints violated: {}", exception.toString())
 
-		return PodcastError(ErrorType.G001.error, ErrorType.G001)
+		return PodcastError(ErrorType.G001.error, ErrorType.G001.name)
 	}
 }
