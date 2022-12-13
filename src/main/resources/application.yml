@@ -20,3 +20,11 @@ server:
     enabled: true
     mime-types: application/json
     min-response-size: 4096
+
+---
+spring:
+  config:
+    activate.on-profile: docker
+
+server:
+  port: 8080
