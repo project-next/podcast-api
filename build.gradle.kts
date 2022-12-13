@@ -3,7 +3,9 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 val romeToolsVersion = "1.18.0"
 val springBootVersion = "3.0.0"
-val jacksonVersion = "2.14.1"
+val jacksonDatabindVersion = "2.14.1"
+val jacksonKotlinVersion = "2.14.1"
+val jacksonCoreVersion = "2.14.1"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.5.1"
 val slf4jVersion = "2.0.6"
@@ -47,7 +49,9 @@ dependencies {
 
 	implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion")
+	implementation("com.fasterxml.jackson.core:jackson-core:$jacksonCoreVersion")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
 
 	implementation("com.rometools:rome:$romeToolsVersion")
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
