@@ -1,8 +1,8 @@
 package com.rtomyj.podcast.api.dao
 
-import com.rtomyj.podcast.api.constant.SqlQueries
-import com.rtomyj.podcast.api.enum.PodcastApiTables.PodcastEpisodeTableColumns
-import com.rtomyj.podcast.api.enum.PodcastApiTables.PodcastInfoTableColumns
+import com.rtomyj.podcast.api.util.constant.SqlQueries
+import com.rtomyj.podcast.api.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
+import com.rtomyj.podcast.api.util.enum.PodcastApiTables.PodcastInfoTableColumns
 import com.rtomyj.podcast.api.model.PodcastEpisode
 import com.rtomyj.podcast.api.model.PodcastInfo
 import org.springframework.beans.factory.annotation.Autowired

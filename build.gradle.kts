@@ -7,6 +7,7 @@ val jacksonVersion = "2.14.1"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.5.1"
 val slf4jVersion = "2.0.6"
+val guavaVersion = "31.1-jre"
 
 val archivesBaseName = "podcast-api"
 
@@ -52,6 +53,8 @@ dependencies {
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
 	runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+
+	implementation("com.google.guava:guava:$guavaVersion")
 }
 
 configurations {

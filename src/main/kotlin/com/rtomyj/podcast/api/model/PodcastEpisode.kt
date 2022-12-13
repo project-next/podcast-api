@@ -6,7 +6,7 @@ import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Guid
 import com.rometools.rome.feed.rss.Item
-import com.rtomyj.podcast.api.constant.GenericConstants
+import com.rtomyj.podcast.api.util.constant.Generic
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -37,7 +37,7 @@ class PodcastEpisode(val podcastId: String) {
 
 			this.enclosures = Enclosure().run {
 				length = episodeLength
-				type = GenericConstants.MEDIA_TYPE
+				type = Generic.MEDIA_TYPE
 				url = episodeLink.toString()
 				listOf(this)
 			}
