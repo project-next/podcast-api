@@ -8,8 +8,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-class PodcastInfo(val podcastId: String) {
-
+data class PodcastInfo(val podcastId: String = UUID.randomUUID().toString()) {
 	lateinit var podcastTitle: String
 	lateinit var podcastLink: URL
 	lateinit var podcastDescription: String
