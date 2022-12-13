@@ -15,11 +15,9 @@ class RssFeed(private val podcastInfo: PodcastInfo, private val podcastEpisodes:
 
 	override fun buildFeedItems(
 		model: MutableMap<String, Any>, request: HttpServletRequest, response: HttpServletResponse
-	)
-			: ArrayList<Item> {
+	): ArrayList<Item> {
 
-		val episodes = podcastEpisodes
-			.map { podcastEpisode -> podcastEpisode.toRssItem() }
+		val episodes = podcastEpisodes.map { podcastEpisode -> podcastEpisode.toRssItem() }
 
 		return episodes as ArrayList<Item>
 	}

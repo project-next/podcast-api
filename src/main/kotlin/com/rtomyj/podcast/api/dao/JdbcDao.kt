@@ -45,7 +45,7 @@ class JdbcDao : Dao {
 
 		})
 	}
-	
+
 	override fun getPodcastEpisodes(podcastId: String): ArrayList<PodcastEpisode> {
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("podcastId", podcastId)

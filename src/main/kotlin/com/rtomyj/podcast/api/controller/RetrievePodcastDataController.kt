@@ -12,9 +12,9 @@ class RetrievePodcastDataController {
 	@Autowired
 	private lateinit var podcastService: PodcastService
 
-	@GetMapping("api/v1/podcast/{podcastId}")
+	@GetMapping("/podcast/{podcastId}")
 	fun getPodcastInfoUsingPodcastId(@PathVariable podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
 
-	@GetMapping("api/v1/podcast/json/{podcastId}")
+	@GetMapping("/podcast/json/{podcastId}")
 	fun getPodcastInfoUsingPodcastIdAsJson(@PathVariable podcastId: String) = podcastService.getPodcastData(podcastId)
 }
