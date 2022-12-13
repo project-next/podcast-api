@@ -80,7 +80,6 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
 	withType<KotlinCompile> {
 		kotlinOptions {
-			freeCompilerArgs = listOf("-Xjsr305=strict")
 			jvmTarget = JavaVersion.VERSION_17.toString()
 		}
 	}
@@ -93,6 +92,11 @@ tasks {
 			put("Implementation-Title", archivesBaseName)
 			put("Implementation-Version", project.version)
 		}
+	}
+
+	withType<Javadoc> {
+		options.memberLevel = JavadocMemberLevel.PRIVATE
+		source = sourceSets["main"].allJava
 	}
 
 	getByName<Jar>("jar") {
