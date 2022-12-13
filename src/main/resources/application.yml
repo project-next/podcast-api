@@ -1,11 +1,22 @@
-server:
-  port: 9000
-
 spring:
   datasource:
+    hikari:
+      maximum-pool-size: 30
     url: "jdbc:postgresql://${PODCAST_API_DB_URI}"
     username: "${PODCAST_API_DB_USERNAME}"
     password: "${PODCAST_API_DB_PASSWORD}"
   jpa:
     hibernate:
       ddl-auto: update
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher # fixes spring-fox error on spring-boot >= v2.6
+
+server:
+  port: 9000
+  servlet:
+    contextPath: /api/v1
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 4096
