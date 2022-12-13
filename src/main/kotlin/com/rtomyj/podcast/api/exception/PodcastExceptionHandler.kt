@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
-class ExceptionProvider : ResponseEntityExceptionHandler() {
+class PodcastExceptionHandler : ResponseEntityExceptionHandler() {
 	companion object {
 		private val log: Logger = LoggerFactory.getLogger(this::class.java)
 	}
-
 
 	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
