@@ -1,8 +1,8 @@
-package com.rtomyj.podcast.api.util.filter
+package com.rtomyj.podcast.util.filter
 
 import com.google.common.base.Strings
 import com.google.common.net.HttpHeaders
-import com.rtomyj.podcast.api.util.Logging
+import com.rtomyj.podcast.util.Logging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

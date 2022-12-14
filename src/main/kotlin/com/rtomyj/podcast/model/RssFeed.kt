@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.model
+package com.rtomyj.podcast.model
 
 import com.rometools.rome.feed.rss.Channel
 import com.rometools.rome.feed.rss.Item

@@ -1,7 +1,7 @@
-package com.rtomyj.podcast.api.exception
+package com.rtomyj.podcast.exception
 
-import com.rtomyj.podcast.api.util.constant.Generic
-import com.rtomyj.podcast.api.util.enum.ErrorType
+import com.rtomyj.podcast.util.constant.Generic
+import com.rtomyj.podcast.util.enum.ErrorType
 import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api
+package com.rtomyj.podcast
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

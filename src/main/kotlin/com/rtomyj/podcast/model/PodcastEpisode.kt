@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.model
+package com.rtomyj.podcast.model
 
 import com.rometools.modules.itunes.EntryInformationImpl
 import com.rometools.modules.itunes.types.Duration
@@ -6,7 +6,7 @@ import com.rometools.rome.feed.rss.Description
 import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Guid
 import com.rometools.rome.feed.rss.Item
-import com.rtomyj.podcast.api.util.constant.Generic
+import com.rtomyj.podcast.util.constant.Generic
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size

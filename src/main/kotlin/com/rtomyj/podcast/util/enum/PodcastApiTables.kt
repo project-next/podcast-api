@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.util.enum
+package com.rtomyj.podcast.util.enum
 
 enum class PodcastApiTables(
 	val tableName: String

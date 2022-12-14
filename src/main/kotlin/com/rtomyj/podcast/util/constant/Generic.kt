@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.util.constant
+package com.rtomyj.podcast.util.constant
 
 object Generic {
 	const val MEDIA_TYPE = "audio/x-m4a"

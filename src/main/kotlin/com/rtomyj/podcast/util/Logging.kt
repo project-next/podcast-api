@@ -1,7 +1,7 @@
-package com.rtomyj.podcast.api.util
+package com.rtomyj.podcast.util
 
 import com.google.common.net.HttpHeaders
-import com.rtomyj.podcast.api.util.constant.Generic
+import com.rtomyj.podcast.util.constant.Generic
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.MDC
 import java.util.*

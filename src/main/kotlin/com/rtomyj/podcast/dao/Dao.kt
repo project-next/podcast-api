@@ -1,7 +1,7 @@
-package com.rtomyj.podcast.api.dao
+package com.rtomyj.podcast.dao
 
-import com.rtomyj.podcast.api.model.PodcastEpisode
-import com.rtomyj.podcast.api.model.Podcast
+import com.rtomyj.podcast.model.PodcastEpisode
+import com.rtomyj.podcast.model.Podcast
 
 interface Dao {
 	fun getPodcastInfo(podcastId: String): Podcast?

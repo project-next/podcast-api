@@ -1,8 +1,8 @@
-package com.rtomyj.podcast.api.service
+package com.rtomyj.podcast.service
 
-import com.rtomyj.podcast.api.dao.Dao
-import com.rtomyj.podcast.api.model.PodcastData
-import com.rtomyj.podcast.api.model.RssFeed
+import com.rtomyj.podcast.dao.Dao
+import com.rtomyj.podcast.model.PodcastData
+import com.rtomyj.podcast.model.RssFeed
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service

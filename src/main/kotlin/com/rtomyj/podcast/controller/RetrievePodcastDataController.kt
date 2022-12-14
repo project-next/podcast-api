@@ -1,6 +1,6 @@
-package com.rtomyj.podcast.api.controller
+package com.rtomyj.podcast.controller
 
-import com.rtomyj.podcast.api.service.PodcastService
+import com.rtomyj.podcast.service.PodcastService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

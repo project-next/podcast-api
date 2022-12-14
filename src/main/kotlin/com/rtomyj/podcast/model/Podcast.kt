@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.model
+package com.rtomyj.podcast.model
 
 import com.rometools.modules.itunes.FeedInformationImpl
 import com.rometools.modules.itunes.types.Category

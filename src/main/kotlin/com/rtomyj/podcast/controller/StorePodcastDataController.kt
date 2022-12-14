@@ -1,9 +1,9 @@
-package com.rtomyj.podcast.api.controller
+package com.rtomyj.podcast.controller
 
-import com.rtomyj.podcast.api.exception.PodcastException
-import com.rtomyj.podcast.api.model.Podcast
-import com.rtomyj.podcast.api.model.PodcastEpisode
-import com.rtomyj.podcast.api.service.PodcastService
+import com.rtomyj.podcast.exception.PodcastException
+import com.rtomyj.podcast.model.Podcast
+import com.rtomyj.podcast.model.PodcastEpisode
+import com.rtomyj.podcast.service.PodcastService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

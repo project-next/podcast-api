@@ -1,10 +1,10 @@
-package com.rtomyj.podcast.api.dao
+package com.rtomyj.podcast.dao
 
-import com.rtomyj.podcast.api.util.constant.SqlQueries
-import com.rtomyj.podcast.api.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
-import com.rtomyj.podcast.api.util.enum.PodcastApiTables.PodcastInfoTableColumns
-import com.rtomyj.podcast.api.model.PodcastEpisode
-import com.rtomyj.podcast.api.model.Podcast
+import com.rtomyj.podcast.util.constant.SqlQueries
+import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
+import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastInfoTableColumns
+import com.rtomyj.podcast.model.PodcastEpisode
+import com.rtomyj.podcast.model.Podcast
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate

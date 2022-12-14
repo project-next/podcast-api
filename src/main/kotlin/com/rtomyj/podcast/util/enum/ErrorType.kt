@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.util.enum
+package com.rtomyj.podcast.util.enum
 
 import org.springframework.http.HttpStatus
 

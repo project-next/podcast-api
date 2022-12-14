@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.api.util.filter
+package com.rtomyj.podcast.util.filter
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
