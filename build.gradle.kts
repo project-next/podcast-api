@@ -19,6 +19,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.0"
 	id("info.solidsoft.pitest") version "1.9.11"
 	id("com.adarshr.test-logger") version "3.2.0"	// printing for JUnits
+//	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
 	kotlin("jvm") version "1.7.22"
 	kotlin("plugin.spring") version "1.7.22"
@@ -52,6 +53,10 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion")
 	implementation("com.fasterxml.jackson.core:jackson-core:$jacksonCoreVersion")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
+
+	// below are needed for native???
+//	implementation("org.jetbrains.kotlin:kotlin-reflect")
+//	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("com.rometools:rome:$romeToolsVersion")
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
