@@ -31,7 +31,7 @@ class JdbcDao : Dao {
 
 			return PodcastInfo(podcastId).apply {
 				podcastTitle = rs.getString(PodcastInfoTableColumns.PODCAST_TITLE.columnName)
-				podcastLink = URL(rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName))
+				podcastLink = rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName)
 				podcastDescription = rs.getString(PodcastInfoTableColumns.PODCAST_DESCRIPTION.columnName)
 				podcastLanguage = rs.getString(PodcastInfoTableColumns.PODCAST_LANGUAGE.columnName)
 				podcastCopyright = rs.getString(PodcastInfoTableColumns.PODCAST_COPYRIGHT.columnName)
@@ -40,7 +40,7 @@ class JdbcDao : Dao {
 				podcastCategory = rs.getString(PodcastInfoTableColumns.PODCAST_CATEGORY.columnName)
 				podcastAuthor = rs.getString(PodcastInfoTableColumns.PODCAST_AUTHOR.columnName)
 				isExplicit = rs.getBoolean(PodcastInfoTableColumns.IS_EXPLICIT.columnName)
-				podcastImageUrl = URL(rs.getString(PodcastInfoTableColumns.PODCAST_IMAGE_URL.columnName))
+				podcastImageUrl = rs.getString(PodcastInfoTableColumns.PODCAST_IMAGE_URL.columnName)
 			}
 
 		})

@@ -18,10 +18,10 @@ data class PodcastInfo(val podcastId: String = UUID.randomUUID().toString()) {
 	@Pattern(regexp = "[\\w\\d ]+")
 	lateinit var podcastTitle: String
 
-	//	@NotBlank(message = "Podcast link cannot be empty")
-//	@Length(max = 255)
-//	@org.hibernate.validator.constraints.URL(message = "Podcast link must be a valid url")
-	lateinit var podcastLink: URL
+	@NotBlank
+	@Size(max = 255)
+	@org.hibernate.validator.constraints.URL(message = "Podcast link must be a valid url")
+	lateinit var podcastLink: String
 
 	@NotBlank
 	@Size(min = 10, max = 1000)
@@ -51,7 +51,10 @@ data class PodcastInfo(val podcastId: String = UUID.randomUUID().toString()) {
 
 	var isExplicit: Boolean = true
 
-	lateinit var podcastImageUrl: URL
+	@NotBlank
+	@Size(max = 255)
+	@org.hibernate.validator.constraints.URL(message = "Podcast link must be a valid url")
+	lateinit var podcastImageUrl: String
 
 	override fun toString(): String {
 		return StringBuilder("Podcast ID: $podcastId").append("Podcast Title: $podcastTitle").append("Podcast Link: $podcastLink").toString()
@@ -60,7 +63,7 @@ data class PodcastInfo(val podcastId: String = UUID.randomUUID().toString()) {
 	fun populateChannelInfo(feed: Channel) {
 		with(feed) {
 			title = podcastTitle
-			link = podcastLink.toString()
+			link = podcastLink
 			description = podcastDescription
 			language = podcastLanguage
 			copyright = podcastCopyright
@@ -72,7 +75,7 @@ data class PodcastInfo(val podcastId: String = UUID.randomUUID().toString()) {
 			ownerName = podcastAuthor
 			ownerEmailAddress = podcastEmail
 			explicit = isExplicit
-			image = podcastImageUrl
+			image = URL(podcastImageUrl)
 			categories = Arrays.asList(Category(podcastCategory))
 		}
 
