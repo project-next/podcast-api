@@ -67,13 +67,13 @@ class PodcastEpisode(val podcastId: String = Guid().toString()) {
 			this.enclosures = Enclosure().run {
 				length = episodeLength
 				type = Generic.MEDIA_TYPE
-				url = episodeLink.toString()
+				url = episodeLink
 				listOf(this)
 			}
 
 			title = episodeTitle
 			author = episodeAuthor
-			link = episodeLink.toString()
+			link = episodeLink
 			pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
 			guid = episodeGuid
 
