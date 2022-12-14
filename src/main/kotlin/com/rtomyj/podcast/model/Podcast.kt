@@ -4,6 +4,7 @@ import com.rometools.modules.itunes.FeedInformationImpl
 import com.rometools.modules.itunes.types.Category
 import com.rometools.rome.feed.rss.Channel
 import com.rometools.rome.feed.rss.Guid
+import com.rtomyj.podcast.util.constant.Generic
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -21,7 +22,7 @@ data class Podcast(val podcastId: String = Guid().toString()) {
 
 	@NotBlank
 	@Size(max = 255)
-	@org.hibernate.validator.constraints.URL
+	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
 	lateinit var podcastLink: String
 
 	@NotBlank
@@ -54,7 +55,7 @@ data class Podcast(val podcastId: String = Guid().toString()) {
 
 	@NotBlank
 	@Size(max = 255)
-	@org.hibernate.validator.constraints.URL
+	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
 	lateinit var podcastImageUrl: String
 
 	override fun toString(): String {

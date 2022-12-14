@@ -24,7 +24,7 @@ class PodcastEpisode(val podcastId: String = Guid().toString()) {
 
 	@NotBlank
 	@Size(max = 255)
-	@org.hibernate.validator.constraints.URL
+	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
 	lateinit var episodeLink: String
 
 	@NotBlank
@@ -39,7 +39,7 @@ class PodcastEpisode(val podcastId: String = Guid().toString()) {
 
 	@NotBlank
 	@Size(max = 255)
-	@org.hibernate.validator.constraints.URL
+	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
 	lateinit var episodeImageLink: String
 
 	var episodeKeywords = arrayListOf<String>()
