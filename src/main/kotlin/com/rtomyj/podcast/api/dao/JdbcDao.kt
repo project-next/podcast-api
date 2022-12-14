@@ -4,7 +4,7 @@ import com.rtomyj.podcast.api.util.constant.SqlQueries
 import com.rtomyj.podcast.api.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
 import com.rtomyj.podcast.api.util.enum.PodcastApiTables.PodcastInfoTableColumns
 import com.rtomyj.podcast.api.model.PodcastEpisode
-import com.rtomyj.podcast.api.model.PodcastInfo
+import com.rtomyj.podcast.api.model.Podcast
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -23,13 +23,13 @@ class JdbcDao : Dao {
 	private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
 	// TODO: add exception handling
-	override fun getPodcastInfo(podcastId: String): PodcastInfo? {
+	override fun getPodcastInfo(podcastId: String): Podcast? {
 		val mapSqlParameterSource = MapSqlParameterSource()
 		mapSqlParameterSource.addValue("podcastId", podcastId)
 
-		return namedParameterJdbcTemplate.queryForObject(SqlQueries.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): PodcastInfo {
+		return namedParameterJdbcTemplate.queryForObject(SqlQueries.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): Podcast {
 
-			return PodcastInfo(podcastId).apply {
+			return Podcast(podcastId).apply {
 				podcastTitle = rs.getString(PodcastInfoTableColumns.PODCAST_TITLE.columnName)
 				podcastLink = rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName)
 				podcastDescription = rs.getString(PodcastInfoTableColumns.PODCAST_DESCRIPTION.columnName)

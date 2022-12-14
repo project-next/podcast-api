@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-data class PodcastInfo(val podcastId: String = UUID.randomUUID().toString()) {
+data class Podcast(val podcastId: String = UUID.randomUUID().toString()) {
 	@NotBlank
 	@Size(min = 3, max = 30)
 	@Pattern(regexp = "[\\w\\d ]+")

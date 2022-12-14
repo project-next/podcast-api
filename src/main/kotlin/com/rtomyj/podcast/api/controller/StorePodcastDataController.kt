@@ -1,7 +1,7 @@
 package com.rtomyj.podcast.api.controller
 
 import com.rtomyj.podcast.api.exception.PodcastException
-import com.rtomyj.podcast.api.model.PodcastInfo
+import com.rtomyj.podcast.api.model.Podcast
 import com.rtomyj.podcast.api.service.PodcastService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
@@ -24,7 +24,7 @@ class StorePodcastDataController {
 
 	@PostMapping("/new-podcast")
 	@Throws(PodcastException::class)
-	fun storeNewPodcast(@Valid @RequestBody podcastInfo: PodcastInfo): ResponseEntity<String> {
-		return ResponseEntity.ok(podcastInfo.podcastTitle)
+	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<String> {
+		return ResponseEntity.ok(podcast.podcastTitle)
 	}
 }
