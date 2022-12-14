@@ -15,14 +15,14 @@ class PodcastService {
 	private lateinit var dao: Dao
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
-		val podcastInfo = dao.getPodcastInfo(podcastId) ?: throw Exception()
+		val podcastInfo = dao.getPodcastInfo(podcastId)
 		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
 
 		return RssFeed(podcastInfo, podcastEpisodes)
 	}
 
 	fun getPodcastData(podcastId: String): PodcastData {
-		val podcastInfo = dao.getPodcastInfo(podcastId) ?: throw Exception()
+		val podcastInfo = dao.getPodcastInfo(podcastId)
 		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
 
 		return PodcastData(podcastInfo, podcastEpisodes)

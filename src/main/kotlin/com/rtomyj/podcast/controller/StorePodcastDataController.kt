@@ -29,12 +29,20 @@ class StorePodcastDataController {
 	@PostMapping("/podcast")
 	@Throws(PodcastException::class)
 	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<String> {
+		log.info("Saving info about new podcast w/ name {}. Using ID {}", podcast.podcastTitle, podcast.podcastId)
 		return ResponseEntity.ok(podcast.podcastTitle)
 	}
 
 	@PostMapping("/podcast/{podcastId}/episode")
 	@Throws(PodcastException::class)
 	fun storeNewPodcastEpisode(@PathVariable("podcastId") podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode): ResponseEntity<String> {
+		log.info(
+			"Saving info about new podcast episode w/ name {}. ID of episode will be {}. ID of podcast to associate episode is {}",
+			podcastEpisode.episodeTitle,
+			podcastEpisode.episodeGuid,
+			podcastEpisode.podcastId
+		)
+		log.info("")
 		return ResponseEntity.ok(podcastEpisode.episodeTitle)
 	}
 }

@@ -1,15 +1,17 @@
 package com.rtomyj.podcast.dao
 
+import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.util.constant.SqlQueries
 import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
 import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastInfoTableColumns
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.Podcast
+import com.rtomyj.podcast.util.enum.ErrorType
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
-import java.net.URL
 import java.sql.ResultSet
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,28 +24,31 @@ class JdbcDao : Dao {
 	@Autowired
 	private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
-	// TODO: add exception handling
-	override fun getPodcastInfo(podcastId: String): Podcast? {
+	override fun getPodcastInfo(podcastId: String): Podcast {
 		val mapSqlParameterSource = MapSqlParameterSource()
 		mapSqlParameterSource.addValue("podcastId", podcastId)
 
-		return namedParameterJdbcTemplate.queryForObject(SqlQueries.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): Podcast {
+		try {
+			val desiredPodcast = namedParameterJdbcTemplate.queryForObject(SqlQueries.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): Podcast {
+				return Podcast(podcastId).apply {
+					podcastTitle = rs.getString(PodcastInfoTableColumns.PODCAST_TITLE.columnName)
+					podcastLink = rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName)
+					podcastDescription = rs.getString(PodcastInfoTableColumns.PODCAST_DESCRIPTION.columnName)
+					podcastLanguage = rs.getString(PodcastInfoTableColumns.PODCAST_LANGUAGE.columnName)
+					podcastCopyright = rs.getString(PodcastInfoTableColumns.PODCAST_COPYRIGHT.columnName)
+					podcastLastBuildDate = LocalDateTime.from(dbDate.parse(rs.getString(PodcastInfoTableColumns.PODCAST_LAST_BUILD_DATE.columnName)))
+					podcastEmail = rs.getString(PodcastInfoTableColumns.PODCAST_EMAIL.columnName)
+					podcastCategory = rs.getString(PodcastInfoTableColumns.PODCAST_CATEGORY.columnName)
+					podcastAuthor = rs.getString(PodcastInfoTableColumns.PODCAST_AUTHOR.columnName)
+					isExplicit = rs.getBoolean(PodcastInfoTableColumns.IS_EXPLICIT.columnName)
+					podcastImageUrl = rs.getString(PodcastInfoTableColumns.PODCAST_IMAGE_URL.columnName)
+				}
+			})
 
-			return Podcast(podcastId).apply {
-				podcastTitle = rs.getString(PodcastInfoTableColumns.PODCAST_TITLE.columnName)
-				podcastLink = rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName)
-				podcastDescription = rs.getString(PodcastInfoTableColumns.PODCAST_DESCRIPTION.columnName)
-				podcastLanguage = rs.getString(PodcastInfoTableColumns.PODCAST_LANGUAGE.columnName)
-				podcastCopyright = rs.getString(PodcastInfoTableColumns.PODCAST_COPYRIGHT.columnName)
-				podcastLastBuildDate = LocalDateTime.from(dbDate.parse(rs.getString(PodcastInfoTableColumns.PODCAST_LAST_BUILD_DATE.columnName)))
-				podcastEmail = rs.getString(PodcastInfoTableColumns.PODCAST_EMAIL.columnName)
-				podcastCategory = rs.getString(PodcastInfoTableColumns.PODCAST_CATEGORY.columnName)
-				podcastAuthor = rs.getString(PodcastInfoTableColumns.PODCAST_AUTHOR.columnName)
-				isExplicit = rs.getBoolean(PodcastInfoTableColumns.IS_EXPLICIT.columnName)
-				podcastImageUrl = rs.getString(PodcastInfoTableColumns.PODCAST_IMAGE_URL.columnName)
-			}
-
-		})
+			return desiredPodcast!!
+		} catch (ex: EmptyResultDataAccessException) {
+			throw PodcastException("Podcast not found in DB", ErrorType.DB001)
+		}
 	}
 
 	override fun getPodcastEpisodes(podcastId: String): ArrayList<PodcastEpisode> {

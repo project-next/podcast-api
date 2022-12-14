@@ -78,7 +78,7 @@ data class Podcast(val podcastId: String = Guid().toString()) {
 			ownerEmailAddress = podcastEmail
 			explicit = isExplicit
 			image = URL(podcastImageUrl)
-			categories = Arrays.asList(Category(podcastCategory))
+			categories = listOf(Category(podcastCategory))
 		}
 
 		feed.modules = listOf(feedInformationImpl)
