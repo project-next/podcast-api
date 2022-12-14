@@ -7,26 +7,55 @@ import com.rometools.rome.feed.rss.Enclosure
 import com.rometools.rome.feed.rss.Guid
 import com.rometools.rome.feed.rss.Item
 import com.rtomyj.podcast.api.util.constant.Generic
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 
-class PodcastEpisode(val podcastId: String) {
+class PodcastEpisode(val podcastId: String = Guid().toString()) {
+	@NotBlank
+	@Size(max = 100)
+	@Pattern(regexp = "[\\w\\d\$&+,:;=?@# ]+")
 	lateinit var episodeTitle: String
-	lateinit var episodeLink: URL
-	lateinit var episodeDescription: String
-	lateinit var episodePublicationDate: LocalDateTime
-	lateinit var episodeAuthor: String
-	lateinit var episodeImage: URL
-	var episodeKeywords = arrayListOf<String>()
-	var episodeGuid = Guid()
-	var episodeLength = 0L
-	lateinit var episodeMediaType: String
-	var isEpisodeExplicit = false
-	lateinit var episodeDuration: String
 
+	@NotBlank
+	@Size(max = 255)
+	@org.hibernate.validator.constraints.URL
+	lateinit var episodeLink: String
+
+	@NotBlank
+	@Size(min = 10, max = 1000)
+	lateinit var episodeDescription: String
+
+	lateinit var episodePublicationDate: LocalDateTime
+
+	@NotBlank
+	@Size(min = 3, max = 30)
+	lateinit var episodeAuthor: String
+
+	@NotBlank
+	@Size(max = 255)
+	@org.hibernate.validator.constraints.URL
+	lateinit var episodeImageLink: String
+
+	var episodeKeywords = arrayListOf<String>()
+
+	var episodeGuid = Guid()
+
+	var episodeLength = 0L
+
+	@NotBlank
+	lateinit var episodeMediaType: String
+
+	var isEpisodeExplicit = false
+
+	@NotBlank
+	@Pattern(regexp = "(\\d{2}:?){3}")
+	lateinit var episodeDuration: String
 
 	fun toRssItem(): Item {
 		return Item().apply {
@@ -49,7 +78,7 @@ class PodcastEpisode(val podcastId: String) {
 			guid = episodeGuid
 
 			this.modules = EntryInformationImpl().run {
-				image = episodeImage
+				image = URL(episodeImageLink)
 				keywords = episodeKeywords.toTypedArray()
 
 				val durationTokens = episodeDuration.split(":")

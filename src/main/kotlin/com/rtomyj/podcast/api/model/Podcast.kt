@@ -3,6 +3,7 @@ package com.rtomyj.podcast.api.model
 import com.rometools.modules.itunes.FeedInformationImpl
 import com.rometools.modules.itunes.types.Category
 import com.rometools.rome.feed.rss.Channel
+import com.rometools.rome.feed.rss.Guid
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -12,7 +13,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-data class Podcast(val podcastId: String = UUID.randomUUID().toString()) {
+data class Podcast(val podcastId: String = Guid().toString()) {
 	@NotBlank
 	@Size(min = 3, max = 30)
 	@Pattern(regexp = "[\\w\\d ]+")
@@ -20,7 +21,7 @@ data class Podcast(val podcastId: String = UUID.randomUUID().toString()) {
 
 	@NotBlank
 	@Size(max = 255)
-	@org.hibernate.validator.constraints.URL(message = "Podcast link must be a valid url")
+	@org.hibernate.validator.constraints.URL
 	lateinit var podcastLink: String
 
 	@NotBlank
@@ -53,7 +54,7 @@ data class Podcast(val podcastId: String = UUID.randomUUID().toString()) {
 
 	@NotBlank
 	@Size(max = 255)
-	@org.hibernate.validator.constraints.URL(message = "Podcast link must be a valid url")
+	@org.hibernate.validator.constraints.URL
 	lateinit var podcastImageUrl: String
 
 	override fun toString(): String {

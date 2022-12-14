@@ -54,11 +54,11 @@ class JdbcDao : Dao {
 
 			return PodcastEpisode(podcastId).apply {
 				episodeTitle = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
-				episodeLink = URL(row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName))
+				episodeLink = row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName)
 				episodeDescription = row.getString(PodcastEpisodeTableColumns.EPISODE_DESCRIPTION.columnName)
 				episodePublicationDate = LocalDateTime.from(dbDate.parse(row.getString(PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE.columnName)))
 				episodeAuthor = row.getString(PodcastEpisodeTableColumns.EPISODE_AUTHOR.columnName)
-				episodeImage = URL(row.getString(PodcastEpisodeTableColumns.EPISODE_IMAGE.columnName))
+				episodeImageLink = row.getString(PodcastEpisodeTableColumns.EPISODE_IMAGE.columnName)
 
 				val keywords = row.getString(PodcastEpisodeTableColumns.EPISODE_KEYWORDS.columnName)
 				keywords.split("|").toCollection(episodeKeywords)
