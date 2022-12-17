@@ -77,4 +77,22 @@ class JdbcDao : Dao {
 
 		}) as ArrayList<PodcastEpisode>
 	}
+
+	override fun storeNewPodcast(podcast: Podcast) {
+		val sqlParams = MapSqlParameterSource()
+		sqlParams.addValue("podcast_id", podcast.podcastId)
+		sqlParams.addValue("podcast_title", podcast.podcastTitle)
+		sqlParams.addValue("podcast_link", podcast.podcastLink)
+		sqlParams.addValue("podcast_description", podcast.podcastDescription)
+		sqlParams.addValue("podcast_language", podcast.podcastLanguage)
+		sqlParams.addValue("podcast_copyright", podcast.podcastCopyright)
+		sqlParams.addValue("podcast_email", podcast.podcastEmail)
+		sqlParams.addValue("podcast_category", podcast.podcastCategory)
+		sqlParams.addValue("podcast_author", podcast.podcastAuthor)
+		sqlParams.addValue("is_explicit", podcast.isExplicit)
+		sqlParams.addValue("podcast_image_url", podcast.podcastImageUrl)
+
+
+		namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_QUERY, sqlParams)
+	}
 }

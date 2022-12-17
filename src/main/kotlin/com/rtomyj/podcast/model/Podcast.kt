@@ -3,7 +3,6 @@ package com.rtomyj.podcast.model
 import com.rometools.modules.itunes.FeedInformationImpl
 import com.rometools.modules.itunes.types.Category
 import com.rometools.rome.feed.rss.Channel
-import com.rometools.rome.feed.rss.Guid
 import com.rtomyj.podcast.util.constant.Generic
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -14,7 +13,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-data class Podcast(val podcastId: String = Guid().toString()) {
+data class Podcast(val podcastId: String = UUID.randomUUID().toString()) {
 	@NotBlank
 	@Size(max = 50)
 	@Pattern(regexp = "[\\w\\d ]+")

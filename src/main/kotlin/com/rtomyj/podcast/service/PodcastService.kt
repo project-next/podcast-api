@@ -1,6 +1,7 @@
 package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.Dao
+import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastData
 import com.rtomyj.podcast.model.RssFeed
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,5 +27,9 @@ class PodcastService {
 		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
 
 		return PodcastData(podcastInfo, podcastEpisodes)
+	}
+
+	fun storeNewPodcast(podcast: Podcast) {
+		dao.storeNewPodcast(podcast)
 	}
 }

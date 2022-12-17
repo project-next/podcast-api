@@ -3,6 +3,7 @@ package com.rtomyj.podcast.controller
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
+import com.rtomyj.podcast.model.Status
 import com.rtomyj.podcast.service.PodcastService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
@@ -28,9 +29,10 @@ class StorePodcastDataController {
 
 	@PostMapping("/podcast")
 	@Throws(PodcastException::class)
-	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<String> {
+	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<Status> {
 		log.info("Saving info about new podcast w/ name {}. Using ID {}", podcast.podcastTitle, podcast.podcastId)
-		return ResponseEntity.ok(podcast.podcastTitle)
+		podcastService.storeNewPodcast(podcast)
+		return ResponseEntity.ok(Status("Successfully stored new podcast!"))
 	}
 
 	@PostMapping("/podcast/{podcastId}/episode")
