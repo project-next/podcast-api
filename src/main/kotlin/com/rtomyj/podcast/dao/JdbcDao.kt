@@ -7,22 +7,28 @@ import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastInfoTableColumns
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.util.enum.ErrorType
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
+import java.sql.SQLException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Repository("jdbc")
 class JdbcDao : Dao {
-
 	private val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSS]")
 
 	@Autowired
 	private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
+
+	companion object {
+		private val log = LoggerFactory.getLogger(this::class.java.name)
+	}
 
 	override fun getPodcastInfo(podcastId: String): Podcast {
 		val mapSqlParameterSource = MapSqlParameterSource()
@@ -92,7 +98,14 @@ class JdbcDao : Dao {
 		sqlParams.addValue("is_explicit", podcast.isExplicit)
 		sqlParams.addValue("podcast_image_url", podcast.podcastImageUrl)
 
-
-		namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_QUERY, sqlParams)
+		try {
+			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_QUERY, sqlParams)
+		} catch(ex: DataIntegrityViolationException) {
+			log.error("DataIntegrityViolationException occurred while inserting new podcast info. {}", ex.toString())
+			throw PodcastException("Data constraint issue!", ErrorType.DB002)
+		} catch(ex: SQLException) {
+			log.error("SQLException occurred while inserting new podcast info. {}", ex.toString())
+			throw PodcastException("Something went wrong!", ErrorType.DB002)
+		}
 	}
 }
