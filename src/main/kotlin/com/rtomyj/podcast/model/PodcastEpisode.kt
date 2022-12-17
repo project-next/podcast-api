@@ -16,7 +16,9 @@ import java.time.ZoneId
 import java.util.*
 
 
-class PodcastEpisode(val podcastId: String = Guid().toString()) {
+class PodcastEpisode(
+	@NotBlank @Size(min = 36, max = 36) val podcastId: String, val episodeGuid: Guid = Guid()
+) {
 	@NotBlank
 	@Size(max = 100)
 	@Pattern(regexp = "[\\w\\d\$&+,:;=?@# ]+")
@@ -28,13 +30,13 @@ class PodcastEpisode(val podcastId: String = Guid().toString()) {
 	lateinit var episodeLink: String
 
 	@NotBlank
-	@Size(min = 10, max = 1000)
+	@Size(max = 3000)
 	lateinit var episodeDescription: String
 
 	lateinit var episodePublicationDate: LocalDateTime
 
 	@NotBlank
-	@Size(min = 3, max = 30)
+	@Size(max = 30)
 	lateinit var episodeAuthor: String
 
 	@NotBlank
@@ -44,11 +46,10 @@ class PodcastEpisode(val podcastId: String = Guid().toString()) {
 
 	var episodeKeywords = arrayListOf<String>()
 
-	var episodeGuid = Guid()
-
 	var episodeLength = 0L
 
 	@NotBlank
+	@Size(max = 15)
 	lateinit var episodeMediaType: String
 
 	var isEpisodeExplicit = false

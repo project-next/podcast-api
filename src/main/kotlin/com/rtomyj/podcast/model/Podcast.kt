@@ -16,7 +16,7 @@ import java.util.*
 
 data class Podcast(val podcastId: String = Guid().toString()) {
 	@NotBlank
-	@Size(min = 3, max = 30)
+	@Size(max = 50)
 	@Pattern(regexp = "[\\w\\d ]+")
 	lateinit var podcastTitle: String
 
@@ -26,29 +26,31 @@ data class Podcast(val podcastId: String = Guid().toString()) {
 	lateinit var podcastLink: String
 
 	@NotBlank
-	@Size(min = 10, max = 1000)
+	@Size(max = 3000)
 	lateinit var podcastDescription: String
 
 	@NotBlank
 	@Pattern(regexp = "\\w{2}-\\w{2}")
+	@Size(max = 3000)
 	lateinit var podcastLanguage: String
 
 	@NotBlank
-	@Size(min = 5, max = 40)
+	@Size(max = 40)
 	lateinit var podcastCopyright: String
 
 	lateinit var podcastLastBuildDate: LocalDateTime
 
 	@NotBlank
 	@Email
+	@Size(max = 30)
 	lateinit var podcastEmail: String
 
 	@NotBlank
-	@Size(min = 5, max = 20)
+	@Size(max = 20)
 	lateinit var podcastCategory: String
 
 	@NotBlank
-	@Size(min = 3, max = 30)
+	@Size(max = 30)
 	lateinit var podcastAuthor: String
 
 	var isExplicit: Boolean = true
