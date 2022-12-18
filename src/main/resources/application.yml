@@ -8,6 +8,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    open-in-view: false
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher # fixes spring-fox error on spring-boot >= v2.6
