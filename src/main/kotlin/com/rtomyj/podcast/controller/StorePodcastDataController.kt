@@ -6,6 +6,8 @@ import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.Status
 import com.rtomyj.podcast.service.PodcastService
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Size
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -37,7 +39,9 @@ class StorePodcastDataController {
 
 	@PostMapping("/podcast/{podcastId}/episode")
 	@Throws(PodcastException::class)
-	fun storeNewPodcastEpisode(@PathVariable("podcastId") podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode): ResponseEntity<String> {
+	fun storeNewPodcastEpisode(
+		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode
+	): ResponseEntity<String> {
 		log.info(
 			"Saving info about new podcast episode w/ name {}. ID of episode will be {}. ID of podcast to associate episode is {}",
 			podcastEpisode.episodeTitle,
