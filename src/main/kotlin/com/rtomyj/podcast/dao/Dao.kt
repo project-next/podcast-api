@@ -7,4 +7,5 @@ interface Dao {
 	fun getPodcastInfo(podcastId: String): Podcast
 	fun getPodcastEpisodes(podcastId: String): ArrayList<PodcastEpisode>
 	fun storeNewPodcast(podcast: Podcast)
+	fun updatePodcast(podcastId: String, podcast: Podcast)
 }

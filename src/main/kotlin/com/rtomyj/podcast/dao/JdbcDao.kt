@@ -108,4 +108,31 @@ class JdbcDao : Dao {
 			throw PodcastException("Something went wrong!", ErrorType.DB002)
 		}
 	}
+
+	override fun updatePodcast(podcastId: String, podcast: Podcast) {
+		val sqlParams = MapSqlParameterSource()
+		sqlParams.addValue("podcast_id", podcast.podcastId)
+		sqlParams.addValue("podcast_title", podcast.podcastTitle)
+		sqlParams.addValue("podcast_link", podcast.podcastLink)
+		sqlParams.addValue("podcast_description", podcast.podcastDescription)
+		sqlParams.addValue("podcast_language", podcast.podcastLanguage)
+		sqlParams.addValue("podcast_copyright", podcast.podcastCopyright)
+		sqlParams.addValue("podcast_email", podcast.podcastEmail)
+		sqlParams.addValue("podcast_category", podcast.podcastCategory)
+		sqlParams.addValue("podcast_author", podcast.podcastAuthor)
+		sqlParams.addValue("is_explicit", podcast.isExplicit)
+		sqlParams.addValue("podcast_image_url", podcast.podcastImageUrl)
+
+		try {
+			if (namedParameterJdbcTemplate.update(SqlQueries.UPDATE_PODCAST_QUERY, sqlParams) == 0) {
+				throw PodcastException("No rows updated!", ErrorType.DB004)
+			}
+		} catch(ex: DataIntegrityViolationException) {
+			log.error("DataIntegrityViolationException occurred while inserting new podcast info. {}", ex.toString())
+			throw PodcastException("Data constraint issue!", ErrorType.DB002)
+		} catch(ex: SQLException) {
+			log.error("SQLException occurred while inserting new podcast info. {}", ex.toString())
+			throw PodcastException("Something went wrong!", ErrorType.DB002)
+		}
+	}
 }
