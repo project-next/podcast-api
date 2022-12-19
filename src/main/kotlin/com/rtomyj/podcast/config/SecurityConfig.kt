@@ -1,6 +1,7 @@
 package com.rtomyj.podcast.config
 
 import com.rtomyj.podcast.util.constant.Generic
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -17,6 +18,12 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 class TutorialSecurityConfiguration {
+	@Autowired
+	private lateinit var accessDeniedHandler: RestAccessDeniedHandler
+
+	@Autowired
+	private lateinit var authenticationEntryPoint: RestAuthenticationEntryPoint
+
 	@Bean
 	@Throws(Exception::class)
 	fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -24,13 +31,14 @@ class TutorialSecurityConfiguration {
 		http.authorizeHttpRequests().requestMatchers( HttpMethod.PUT, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
 		http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, Generic.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
 
+		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
 		return http.build()
 	}
 
 	@Bean
 	fun userDetailsService(): UserDetailsService {
 		val manager = InMemoryUserDetailsManager()
-		val encodedPassword: String = passwordEncoder().encode("Changeme!")
+		val encodedPassword: String = passwordEncoder().encode("Changeme!") // todo: change me - maybe put it in DB???
 
 		manager.createUser(
 			User.withUsername("Javi").password(encodedPassword).roles("ADMIN").build()
