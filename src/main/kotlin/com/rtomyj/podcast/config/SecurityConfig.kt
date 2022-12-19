@@ -31,7 +31,7 @@ class TutorialSecurityConfiguration {
 		http.authorizeHttpRequests().requestMatchers( HttpMethod.PUT, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
 		http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, Generic.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
 
-		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
 		return http.build()
 	}
 
