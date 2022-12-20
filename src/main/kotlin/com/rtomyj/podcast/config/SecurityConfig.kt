@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class TutorialSecurityConfiguration {
+class SecurityConfig {
 	@Autowired
 	private lateinit var accessDeniedHandler: RestAccessDeniedHandler
 

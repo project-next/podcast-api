@@ -18,7 +18,7 @@ internal class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
 
 	@Throws(IOException::class)
 	override fun commence(request: HttpServletRequest, response: HttpServletResponse, e: AuthenticationException) {
-		val body = PodcastError("Unauthorised", ErrorType.G003.name)
+		val body = PodcastError("Unauthorized", ErrorType.G003.name)
 
 		response.contentType = "application/json;charset=UTF-8"
 		response.status = HttpServletResponse.SC_UNAUTHORIZED
