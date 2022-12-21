@@ -6,7 +6,7 @@ dependencies {
 
 	"testImplementation"("com.nhaarman:mockito-kotlin:$mockitKotlinVersion")    // provides helper functions needed for mockito to work in Kotlin
 	"testImplementation"("org.springframework.boot:spring-boot-starter-test:$springVersion")
-	"testImplementation"("org.springframework.security:spring-security-test:6.0.0")
+	"testImplementation"("org.springframework.security:spring-security-test:6.0.1")
 }
 
 
