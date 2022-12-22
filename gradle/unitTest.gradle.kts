@@ -1,4 +1,4 @@
-val springVersion = "3.0.0"
+val springVersion = "3.0.1"
 val mockitKotlinVersion = "1.6.0"
 
 dependencies {
