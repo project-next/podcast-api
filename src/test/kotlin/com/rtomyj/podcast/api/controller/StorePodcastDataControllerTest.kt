@@ -1,6 +1,7 @@
 package com.rtomyj.podcast.api.controller
 
 import com.nhaarman.mockito_kotlin.any
+import com.rtomyj.podcast.api.TestConstants
 import com.rtomyj.podcast.config.RestAccessDeniedHandler
 import com.rtomyj.podcast.config.RestAuthenticationEntryPoint
 import com.rtomyj.podcast.config.SecurityConfig
@@ -8,6 +9,7 @@ import com.rtomyj.podcast.controller.StorePodcastDataController
 import com.rtomyj.podcast.exception.PodcastExceptionAdvice
 import com.rtomyj.podcast.service.PodcastService
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.startsWith
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -45,14 +47,11 @@ class StorePodcastDataControllerTest {
 
 	@Nested
 	inner class StoreNewPodcastAuthenticationIssue {
-		private val endpoint = "/podcast"
-		private val emptyBody = "{}"
-		private val emptyBodyLength = emptyBody.length
-
 		@Test
 		fun `Authorization Header Is Missing - With CSRF`() {
-			mockMvc.perform(post(endpoint).contentType(contentType).content(emptyBody).header("Content-Type", emptyBodyLength).with(csrf()))
-				.andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
+			mockMvc.perform(
+				post(TestConstants.PODCAST_ENDPOINT).contentType(contentType).content(TestConstants.EMPTY_BODY).header("Content-Type", TestConstants.EMPTY_BODY_LENGTH).with(csrf())
+			).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 			// verify mocks are called
 			Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
@@ -60,7 +59,7 @@ class StorePodcastDataControllerTest {
 
 		@Test
 		fun `Authorization Header Is Missing - Without CSRF`() {
-			mockMvc.perform(post(endpoint).contentType(contentType).content(emptyBody).header("Content-Type", emptyBodyLength))
+			mockMvc.perform(post(TestConstants.PODCAST_ENDPOINT).contentType(contentType).content(TestConstants.EMPTY_BODY).header("Content-Type", TestConstants.EMPTY_BODY_LENGTH))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 			// verify mocks are called
@@ -70,8 +69,8 @@ class StorePodcastDataControllerTest {
 		@Test
 		fun `User is not admin`() {
 			mockMvc.perform(
-				post(endpoint).contentType(contentType).content(emptyBody).header("Content-Type", emptyBodyLength).header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh")
-					.with(csrf())
+				post(TestConstants.PODCAST_ENDPOINT).contentType(contentType).content(TestConstants.EMPTY_BODY).header("Content-Type", TestConstants.EMPTY_BODY_LENGTH)
+					.header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
 			).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
 
 			// verify mocks are called
@@ -81,11 +80,12 @@ class StorePodcastDataControllerTest {
 		@Test
 		fun `User is admin - Body is empty`() {
 			mockMvc.perform(
-				post(endpoint).contentType(contentType).content(emptyBody).header("Content-Length", emptyBodyLength).header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+				post(TestConstants.PODCAST_ENDPOINT).contentType(contentType).content(TestConstants.EMPTY_BODY).header("Content-Length", TestConstants.EMPTY_BODY_LENGTH)
+					.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
 			).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
 				jsonPath(
-					"message", `is`(
-						"Body is missing data or fields do not conform to spec. Errors: {podcastEmail=must not be blank, podcastLanguage=must not be blank, podcastImageUrl=must not be blank, podcastLink=must not be blank, podcastDescription=must not be blank, podcastCategory=must not be blank, podcastTitle=must not be blank, podcastCopyright=must not be blank, podcastAuthor=must not be blank}"
+					"message", startsWith(
+						"Body is missing data or fields do not conform to spec."
 					)
 				)
 			).andExpect(jsonPath("$.code", `is`("G002")))
@@ -97,12 +97,10 @@ class StorePodcastDataControllerTest {
 
 	@Nested
 	inner class StoreNewPodcastEpisodeAuthenticationIssue {
-		private val endpoint = "/podcast/{podcastId}/episode"
-
 		@Test
 		fun `Authorization Header Is Missing - With CSRF`() {
-			mockMvc.perform(post(endpoint, "16e2094c-1bbc-4de4-a6fd-ee6b730b77e2").with(csrf())).andExpect(MockMvcResultMatchers.status().isUnauthorized)
-				.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
+			mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, "16e2094c-1bbc-4de4-a6fd-ee6b730b77e2").with(csrf()))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 			// verify mocks are called
 			Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
@@ -110,7 +108,7 @@ class StorePodcastDataControllerTest {
 
 		@Test
 		fun `Authorization Header Is Missing - Without CSRF`() {
-			mockMvc.perform(post(endpoint, "16e2094c-1bbc-4de4-a6fd-ee6b730b77e2")).andExpect(MockMvcResultMatchers.status().isUnauthorized)
+			mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, "16e2094c-1bbc-4de4-a6fd-ee6b730b77e2")).andExpect(MockMvcResultMatchers.status().isUnauthorized)
 				.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 			// verify mocks are called

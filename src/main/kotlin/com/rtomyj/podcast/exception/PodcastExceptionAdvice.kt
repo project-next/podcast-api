@@ -34,7 +34,7 @@ class PodcastExceptionAdvice {
 	fun onValidationFail(exception: MethodArgumentNotValidException): PodcastError {
 		log.error("Request body did not conform to spec. Constraints violated: {}", exception.allErrors.toString())
 
-		val errorMap = hashMapOf<String, String>()
+		val errorMap = linkedMapOf<String, String>()
 
 		exception.bindingResult.fieldErrors.forEach {
 			errorMap[it.field] = it.defaultMessage as String
