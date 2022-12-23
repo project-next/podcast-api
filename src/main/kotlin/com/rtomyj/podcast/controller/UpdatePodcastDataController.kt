@@ -30,7 +30,7 @@ class UpdatePodcastDataController {
 
 	@PutMapping("/podcast/{podcastId}")
 	@Throws(PodcastException::class)
-	fun storeNewPodcast(
+	fun updatePodcast(
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcast: Podcast
 	): ResponseEntity<Status> {
 		log.info("Updating info of existing podcast w/ ID {}", podcastId)
@@ -40,7 +40,7 @@ class UpdatePodcastDataController {
 
 //	@PutMapping("/podcast/{podcastId}/episode")
 //	@Throws(PodcastException::class)
-//	fun storeNewPodcastEpisode(@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode): ResponseEntity<String> {
+//	fun updatePodcastEpisode(@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode): ResponseEntity<String> {
 //		log.info(
 //			"Saving info about new podcast episode w/ name {}. ID of episode will be {}. ID of podcast to associate episode is {}",
 //			podcastEpisode.episodeTitle,

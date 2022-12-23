@@ -5,7 +5,7 @@ import com.rtomyj.podcast.api.TestConstants
 import com.rtomyj.podcast.config.RestAccessDeniedHandler
 import com.rtomyj.podcast.config.RestAuthenticationEntryPoint
 import com.rtomyj.podcast.config.SecurityConfig
-import com.rtomyj.podcast.controller.StorePodcastDataController
+import com.rtomyj.podcast.controller.UpdatePodcastDataController
 import com.rtomyj.podcast.exception.PodcastExceptionAdvice
 import com.rtomyj.podcast.service.PodcastService
 import org.hamcrest.Matchers.`is`
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 
@@ -32,9 +32,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 	Controller needs to be imported here and not in @WebMvcTest or else 404 errors is all that will be returned.
 	ControllerAdvice should be imported, so it can handle the errors correctly.
  */
-@Import(value = [SecurityConfig::class, StorePodcastDataController::class, PodcastExceptionAdvice::class])
+@Import(value = [SecurityConfig::class, UpdatePodcastDataController::class, PodcastExceptionAdvice::class])
 @Tag("Controller")
-class StorePodcastDataControllerTest {
+class UpdatePodcastDataControllerTest {
 	@MockBean
 	private lateinit var service: PodcastService
 
@@ -42,11 +42,11 @@ class StorePodcastDataControllerTest {
 	private lateinit var mockMvc: MockMvc
 
 	@Nested
-	inner class StoreNewPodcastAuthenticationIssue {
+	inner class UpdateExistingPodcastAuthenticationIssue {
 		@Test
 		fun `Authorization Header Is Missing - With CSRF`() {
 			mockMvc.perform(
-				post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+				put(TestConstants.UPDATE_PODCAST_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 					.header("Content-Type", TestConstants.EMPTY_BODY_LENGTH).with(csrf())
 			).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
@@ -57,7 +57,7 @@ class StorePodcastDataControllerTest {
 		@Test
 		fun `Authorization Header Is Missing - Without CSRF`() {
 			mockMvc.perform(
-				post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+				put(TestConstants.UPDATE_PODCAST_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 					.header("Content-Type", TestConstants.EMPTY_BODY_LENGTH)
 			).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
@@ -68,7 +68,7 @@ class StorePodcastDataControllerTest {
 		@Test
 		fun `User is not admin`() {
 			mockMvc.perform(
-				post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+				put(TestConstants.UPDATE_PODCAST_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 					.header("Content-Type", TestConstants.EMPTY_BODY_LENGTH).header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
 			).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
 
@@ -79,7 +79,7 @@ class StorePodcastDataControllerTest {
 		@Test
 		fun `User is admin - Body is empty`() {
 			mockMvc.perform(
-				post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+				put(TestConstants.UPDATE_PODCAST_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 					.header("Content-Length", TestConstants.EMPTY_BODY_LENGTH).header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
 			).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
 				jsonPath(
@@ -88,27 +88,6 @@ class StorePodcastDataControllerTest {
 					)
 				)
 			).andExpect(jsonPath("$.code", `is`("G002")))
-
-			// verify mocks are called
-			Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-		}
-	}
-
-	@Nested
-	inner class StoreNewPodcastEpisodeAuthenticationIssue {
-		@Test
-		fun `Authorization Header Is Missing - With CSRF`() {
-			mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).with(csrf())).andExpect(MockMvcResultMatchers.status().isUnauthorized)
-				.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
-
-			// verify mocks are called
-			Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-		}
-
-		@Test
-		fun `Authorization Header Is Missing - Without CSRF`() {
-			mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID)).andExpect(MockMvcResultMatchers.status().isUnauthorized)
-				.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 			// verify mocks are called
 			Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
