@@ -1,13 +1,12 @@
-package com.rtomyj.podcast.api.controller
+package com.rtomyj.podcast.controller
 
 import com.nhaarman.mockito_kotlin.any
-import com.rtomyj.podcast.api.TestConstants
 import com.rtomyj.podcast.config.RestAccessDeniedHandler
 import com.rtomyj.podcast.config.RestAuthenticationEntryPoint
 import com.rtomyj.podcast.config.SecurityConfig
-import com.rtomyj.podcast.controller.UpdatePodcastDataController
 import com.rtomyj.podcast.exception.PodcastExceptionAdvice
 import com.rtomyj.podcast.service.PodcastService
+import com.rtomyj.podcast.util.TestConstants
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.startsWith
 import org.junit.jupiter.api.Nested
