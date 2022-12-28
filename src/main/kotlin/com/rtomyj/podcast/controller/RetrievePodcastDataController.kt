@@ -16,9 +16,13 @@ class RetrievePodcastDataController {
 	@Autowired
 	private lateinit var podcastService: PodcastService
 
+	// Legacy support
 	@GetMapping("/podcast/{podcastId}")
 	fun getPodcastInfoUsingPodcastId(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
 
+	@GetMapping("/podcast/feed/{podcastId}")
+	fun getPodcastFeedUsingPodcastId(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
+
 	@GetMapping("/podcast/json/{podcastId}")
-	fun getPodcastInfoUsingPodcastIdAsJson(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getPodcastData(podcastId)
+	fun getPodcastJSONUsingPodcastIdAsJson(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getPodcastData(podcastId)
 }
