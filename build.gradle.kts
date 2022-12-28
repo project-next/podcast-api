@@ -21,8 +21,8 @@ plugins {
 	id("com.adarshr.test-logger") version "3.2.0"	// printing for JUnits
 //	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
-	kotlin("jvm") version "1.7.22"
-	kotlin("plugin.spring") version "1.7.22"
+	kotlin("jvm") version "1.8.0"
+	kotlin("plugin.spring") version "1.8.0"
 
 	jacoco
 }
