@@ -33,8 +33,9 @@ class UpdatePodcastDataController {
 	fun updatePodcast(
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcast: Podcast
 	): ResponseEntity<Status> {
-		log.info("Updating info of existing podcast w/ ID {}", podcastId)
+		log.info("Updating info of an existing podcast using ID {}", podcastId)
 		podcastService.updatePodcast(podcastId, podcast)
+
 		return ResponseEntity.ok(Status("Successfully updated podcast!"))
 	}
 

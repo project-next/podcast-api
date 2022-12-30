@@ -1,12 +1,12 @@
 package com.rtomyj.podcast.dao
 
 import com.rtomyj.podcast.exception.PodcastException
+import com.rtomyj.podcast.model.Podcast
+import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.constant.SqlQueries
+import com.rtomyj.podcast.util.enum.ErrorType
 import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
 import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastInfoTableColumns
-import com.rtomyj.podcast.model.PodcastEpisode
-import com.rtomyj.podcast.model.Podcast
-import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
@@ -28,6 +28,12 @@ class JdbcDao : Dao {
 
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
+
+		private const val DataIntegrityViolationExceptionLog = "DataIntegrityViolationException occurred while inserting new podcast info. {}"
+		private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
+
+		private const val SOMETHING_WENT_WRONG = "Something went wrong!"
+		private const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
 	}
 
 	override fun getPodcastInfo(podcastId: String): Podcast {
@@ -63,7 +69,7 @@ class JdbcDao : Dao {
 
 		return namedParameterJdbcTemplate.query(SqlQueries.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
 
-			return PodcastEpisode(podcastId).apply {
+			return PodcastEpisode(podcastId, row.getString(PodcastEpisodeTableColumns.EPISODE_GUID.columnName)).apply {
 				episodeTitle = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
 				episodeLink = row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName)
 				episodeDescription = row.getString(PodcastEpisodeTableColumns.EPISODE_DESCRIPTION.columnName)
@@ -74,9 +80,8 @@ class JdbcDao : Dao {
 				val keywords = row.getString(PodcastEpisodeTableColumns.EPISODE_KEYWORDS.columnName)
 				keywords.split("|").toCollection(episodeKeywords)
 
-				episodeGuid.value = row.getString(PodcastEpisodeTableColumns.EPISODE_GUID.columnName)
 				episodeLength = row.getLong(PodcastEpisodeTableColumns.EPISODE_LENGTH.columnName)
-				episodeMediaType = row.getString(PodcastEpisodeTableColumns.EPISODE__MEDIA_TYPE.columnName)
+				episodeMediaType = row.getString(PodcastEpisodeTableColumns.EPISODE_MEDIA_TYPE.columnName)
 				isEpisodeExplicit = row.getBoolean(PodcastEpisodeTableColumns.IS_EXPLICIT.columnName)
 				episodeDuration = row.getString(PodcastEpisodeTableColumns.EPISODE_DURATION.columnName)
 			}
@@ -100,18 +105,44 @@ class JdbcDao : Dao {
 
 		try {
 			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_QUERY, sqlParams)
-		} catch(ex: DataIntegrityViolationException) {
-			log.error("DataIntegrityViolationException occurred while inserting new podcast info. {}", ex.toString())
-			throw PodcastException("Data constraint issue!", ErrorType.DB002)
-		} catch(ex: SQLException) {
-			log.error("SQLException occurred while inserting new podcast info. {}", ex.toString())
-			throw PodcastException("Something went wrong!", ErrorType.DB002)
+		} catch (ex: DataIntegrityViolationException) {
+			log.error(DataIntegrityViolationExceptionLog, ex.toString())
+			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
+		} catch (ex: SQLException) {
+			log.error(SQLExceptionLog, ex.toString())
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
+		}
+	}
+
+	override fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode, delimitedKeywords: String) {
+		val sqlParams = MapSqlParameterSource()
+		sqlParams.addValue("podcast_id", podcastEpisode.podcastId)
+		sqlParams.addValue("episode_title", podcastEpisode.episodeTitle)
+		sqlParams.addValue("episode_link", podcastEpisode.episodeLink)
+		sqlParams.addValue("episode_description", podcastEpisode.episodeDescription)
+		sqlParams.addValue("episode_author", podcastEpisode.episodeAuthor)
+		sqlParams.addValue("episode_image", podcastEpisode.episodeImageLink)
+		sqlParams.addValue("episode_keywords", delimitedKeywords)   // keywords should be delimited correctly in service layer
+		sqlParams.addValue("episode_guid", podcastEpisode.episodeGuid)
+		sqlParams.addValue("episode_length", podcastEpisode.episodeLength)
+		sqlParams.addValue("episode_media_type", podcastEpisode.episodeMediaType)
+		sqlParams.addValue("is_episode_explicit", podcastEpisode.isEpisodeExplicit)
+		sqlParams.addValue("episode_duration", podcastEpisode.episodeDuration)
+
+		try {
+			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_EPISODE_QUERY, sqlParams)
+		} catch (ex: DataIntegrityViolationException) {
+			log.error(DataIntegrityViolationExceptionLog, ex.toString())
+			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
+		} catch (ex: SQLException) {
+			log.error(SQLExceptionLog, ex.toString())
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
 		}
 	}
 
 	override fun updatePodcast(podcastId: String, podcast: Podcast) {
 		val sqlParams = MapSqlParameterSource()
-		sqlParams.addValue("podcast_id", podcast.podcastId)
+		sqlParams.addValue("podcast_id", podcastId)
 		sqlParams.addValue("podcast_title", podcast.podcastTitle)
 		sqlParams.addValue("podcast_link", podcast.podcastLink)
 		sqlParams.addValue("podcast_description", podcast.podcastDescription)
@@ -127,12 +158,12 @@ class JdbcDao : Dao {
 			if (namedParameterJdbcTemplate.update(SqlQueries.UPDATE_PODCAST_QUERY, sqlParams) == 0) {
 				throw PodcastException("No rows updated!", ErrorType.DB004)
 			}
-		} catch(ex: DataIntegrityViolationException) {
-			log.error("DataIntegrityViolationException occurred while inserting new podcast info. {}", ex.toString())
-			throw PodcastException("Data constraint issue!", ErrorType.DB002)
-		} catch(ex: SQLException) {
-			log.error("SQLException occurred while inserting new podcast info. {}", ex.toString())
-			throw PodcastException("Something went wrong!", ErrorType.DB002)
+		} catch (ex: DataIntegrityViolationException) {
+			log.error(DataIntegrityViolationExceptionLog, ex.toString())
+			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
+		} catch (ex: SQLException) {
+			log.error(SQLExceptionLog, ex.toString())
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
 		}
 	}
 }

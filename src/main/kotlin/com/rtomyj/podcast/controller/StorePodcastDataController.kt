@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
@@ -32,9 +33,10 @@ class StorePodcastDataController {
 	@PostMapping("/podcast")
 	@Throws(PodcastException::class)
 	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<Status> {
-		log.info("Saving info about new podcast w/ name {}. Using ID {}", podcast.podcastTitle, podcast.podcastId)
+		log.info("Attempting to store new podcast w/ name {}. ID of podcast will be {} if storage is successful", podcast.podcastTitle, podcast.podcastId)
 		podcastService.storeNewPodcast(podcast)
-		return ResponseEntity.ok(Status("Successfully stored new podcast!"))
+		log.info("Successfully added new podcast!")
+		return ResponseEntity(Status("Successfully stored new podcast!"), HttpStatus.CREATED)
 	}
 
 	@PostMapping("/podcast/{podcastId}/episode")
@@ -43,12 +45,13 @@ class StorePodcastDataController {
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode
 	): ResponseEntity<String> {
 		log.info(
-			"Saving info about new podcast episode w/ name {}. ID of episode will be {}. ID of podcast to associate episode is {}",
+			"Attempting to store new episode w/ name {}. ID of episode will be {} if storage is successful. ID of podcast to associate episode is {}",
 			podcastEpisode.episodeTitle,
 			podcastEpisode.episodeGuid,
 			podcastEpisode.podcastId
 		)
-		log.info("")
-		return ResponseEntity.ok(podcastEpisode.episodeTitle)
+		podcastService.storeNewPodcastEpisode(podcastEpisode)
+		log.info("Successfully added new episode!")
+		return ResponseEntity(podcastEpisode.episodeTitle, HttpStatus.CREATED)
 	}
 }

@@ -4,8 +4,10 @@ import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastData
+import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.enum.ErrorType
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class PodcastService {
+	companion object {
+		private val log = LoggerFactory.getLogger(this::class.java.name)
+	}
+
 	@Autowired
 	@Qualifier("jdbc")
 	private lateinit var dao: Dao
@@ -44,5 +50,12 @@ class PodcastService {
 
 		// podcast exists in DB, therefore we can update it
 		dao.updatePodcast(podcastId, podcast)
+	}
+
+	fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode) {
+		val delimitedKeywords = podcastEpisode.episodeKeywords.joinToString(separator = "|")
+		log.info("Using the following keywords: {}", delimitedKeywords)
+
+		dao.storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)
 	}
 }

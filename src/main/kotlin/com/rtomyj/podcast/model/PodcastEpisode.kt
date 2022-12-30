@@ -17,7 +17,7 @@ import java.util.*
 
 
 class PodcastEpisode(
-	@NotBlank @Size(min = 36, max = 36) val podcastId: String, val episodeGuid: Guid = Guid()
+	@NotBlank @Size(min = 36, max = 36) val podcastId: String, val episodeGuid: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 100)
@@ -76,7 +76,8 @@ class PodcastEpisode(
 			author = episodeAuthor
 			link = episodeLink
 			pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
-			guid = episodeGuid
+			guid = Guid()
+			guid.value = episodeGuid
 
 			this.modules = EntryInformationImpl().run {
 				image = URL(episodeImageLink)
