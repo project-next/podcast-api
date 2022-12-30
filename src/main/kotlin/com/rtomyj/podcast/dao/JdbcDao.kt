@@ -43,17 +43,17 @@ class JdbcDao : Dao {
 		try {
 			val desiredPodcast = namedParameterJdbcTemplate.queryForObject(SqlQueries.PODCAST_INFO_QUERY, mapSqlParameterSource, fun(rs: ResultSet, _: Int): Podcast {
 				return Podcast(podcastId).apply {
-					podcastTitle = rs.getString(PodcastInfoTableColumns.PODCAST_TITLE.columnName)
-					podcastLink = rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName)
-					podcastDescription = rs.getString(PodcastInfoTableColumns.PODCAST_DESCRIPTION.columnName)
-					podcastLanguage = rs.getString(PodcastInfoTableColumns.PODCAST_LANGUAGE.columnName)
-					podcastCopyright = rs.getString(PodcastInfoTableColumns.PODCAST_COPYRIGHT.columnName)
-					podcastLastBuildDate = LocalDateTime.from(dbDate.parse(rs.getString(PodcastInfoTableColumns.PODCAST_LAST_BUILD_DATE.columnName)))
-					podcastEmail = rs.getString(PodcastInfoTableColumns.PODCAST_EMAIL.columnName)
-					podcastCategory = rs.getString(PodcastInfoTableColumns.PODCAST_CATEGORY.columnName)
-					podcastAuthor = rs.getString(PodcastInfoTableColumns.PODCAST_AUTHOR.columnName)
+					title = rs.getString(PodcastInfoTableColumns.PODCAST_TITLE.columnName)
+					link = rs.getString(PodcastInfoTableColumns.PODCAST_LINK.columnName)
+					description = rs.getString(PodcastInfoTableColumns.PODCAST_DESCRIPTION.columnName)
+					language = rs.getString(PodcastInfoTableColumns.PODCAST_LANGUAGE.columnName)
+					copyright = rs.getString(PodcastInfoTableColumns.PODCAST_COPYRIGHT.columnName)
+					lastBuildDate = LocalDateTime.from(dbDate.parse(rs.getString(PodcastInfoTableColumns.PODCAST_LAST_BUILD_DATE.columnName)))
+					email = rs.getString(PodcastInfoTableColumns.PODCAST_EMAIL.columnName)
+					category = rs.getString(PodcastInfoTableColumns.PODCAST_CATEGORY.columnName)
+					author = rs.getString(PodcastInfoTableColumns.PODCAST_AUTHOR.columnName)
 					isExplicit = rs.getBoolean(PodcastInfoTableColumns.IS_EXPLICIT.columnName)
-					podcastImageUrl = rs.getString(PodcastInfoTableColumns.PODCAST_IMAGE_URL.columnName)
+					imageUrl = rs.getString(PodcastInfoTableColumns.PODCAST_IMAGE_URL.columnName)
 				}
 			})
 
@@ -91,17 +91,17 @@ class JdbcDao : Dao {
 
 	override fun storeNewPodcast(podcast: Podcast) {
 		val sqlParams = MapSqlParameterSource()
-		sqlParams.addValue("podcast_id", podcast.podcastId)
-		sqlParams.addValue("podcast_title", podcast.podcastTitle)
-		sqlParams.addValue("podcast_link", podcast.podcastLink)
-		sqlParams.addValue("podcast_description", podcast.podcastDescription)
-		sqlParams.addValue("podcast_language", podcast.podcastLanguage)
-		sqlParams.addValue("podcast_copyright", podcast.podcastCopyright)
-		sqlParams.addValue("podcast_email", podcast.podcastEmail)
-		sqlParams.addValue("podcast_category", podcast.podcastCategory)
-		sqlParams.addValue("podcast_author", podcast.podcastAuthor)
+		sqlParams.addValue("podcast_id", podcast.id)
+		sqlParams.addValue("podcast_title", podcast.title)
+		sqlParams.addValue("podcast_link", podcast.link)
+		sqlParams.addValue("podcast_description", podcast.description)
+		sqlParams.addValue("podcast_language", podcast.language)
+		sqlParams.addValue("podcast_copyright", podcast.copyright)
+		sqlParams.addValue("podcast_email", podcast.email)
+		sqlParams.addValue("podcast_category", podcast.category)
+		sqlParams.addValue("podcast_author", podcast.author)
 		sqlParams.addValue("is_explicit", podcast.isExplicit)
-		sqlParams.addValue("podcast_image_url", podcast.podcastImageUrl)
+		sqlParams.addValue("podcast_image_url", podcast.imageUrl)
 
 		try {
 			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_QUERY, sqlParams)
@@ -143,16 +143,16 @@ class JdbcDao : Dao {
 	override fun updatePodcast(podcastId: String, podcast: Podcast) {
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("podcast_id", podcastId)
-		sqlParams.addValue("podcast_title", podcast.podcastTitle)
-		sqlParams.addValue("podcast_link", podcast.podcastLink)
-		sqlParams.addValue("podcast_description", podcast.podcastDescription)
-		sqlParams.addValue("podcast_language", podcast.podcastLanguage)
-		sqlParams.addValue("podcast_copyright", podcast.podcastCopyright)
-		sqlParams.addValue("podcast_email", podcast.podcastEmail)
-		sqlParams.addValue("podcast_category", podcast.podcastCategory)
-		sqlParams.addValue("podcast_author", podcast.podcastAuthor)
+		sqlParams.addValue("podcast_title", podcast.title)
+		sqlParams.addValue("podcast_link", podcast.link)
+		sqlParams.addValue("podcast_description", podcast.description)
+		sqlParams.addValue("podcast_language", podcast.language)
+		sqlParams.addValue("podcast_copyright", podcast.copyright)
+		sqlParams.addValue("podcast_email", podcast.email)
+		sqlParams.addValue("podcast_category", podcast.category)
+		sqlParams.addValue("podcast_author", podcast.author)
 		sqlParams.addValue("is_explicit", podcast.isExplicit)
-		sqlParams.addValue("podcast_image_url", podcast.podcastImageUrl)
+		sqlParams.addValue("podcast_image_url", podcast.imageUrl)
 
 		try {
 			if (namedParameterJdbcTemplate.update(SqlQueries.UPDATE_PODCAST_QUERY, sqlParams) == 0) {

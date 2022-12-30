@@ -33,7 +33,7 @@ class StorePodcastDataController {
 	@PostMapping("/podcast")
 	@Throws(PodcastException::class)
 	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<Status> {
-		log.info("Attempting to store new podcast w/ name {}. ID of podcast will be {} if storage is successful", podcast.podcastTitle, podcast.podcastId)
+		log.info("Attempting to store new podcast w/ name {}. ID of podcast will be {} if storage is successful", podcast.title, podcast.id)
 		podcastService.storeNewPodcast(podcast)
 		log.info("Successfully added new podcast!")
 		return ResponseEntity(Status("Successfully stored new podcast!"), HttpStatus.CREATED)
