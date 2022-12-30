@@ -50,7 +50,7 @@ class StorePodcastDataController {
 			podcastEpisode.episodeId,
 			podcastEpisode.podcastId
 		)
-		podcastService.storeNewPodcastEpisode(podcastEpisode)
+		podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
 		log.info("Successfully added new episode!")
 		return ResponseEntity(podcastEpisode.title, HttpStatus.CREATED)
 	}

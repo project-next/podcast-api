@@ -52,7 +52,11 @@ class PodcastService {
 		dao.updatePodcast(podcastId, podcast)
 	}
 
-	fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode) {
+	fun storeNewPodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
+		if (podcastId != podcastEpisode.podcastId) {
+			throw PodcastException("Podcast ID from URL and the one from the body do not match!", ErrorType.G005)
+		}
+
 		val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
 		log.info("Using the following keywords: {}", delimitedKeywords)
 
