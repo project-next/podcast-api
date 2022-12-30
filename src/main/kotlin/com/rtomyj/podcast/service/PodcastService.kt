@@ -53,7 +53,7 @@ class PodcastService {
 	}
 
 	fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode) {
-		val delimitedKeywords = podcastEpisode.episodeKeywords.joinToString(separator = "|")
+		val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
 		log.info("Using the following keywords: {}", delimitedKeywords)
 
 		dao.storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)

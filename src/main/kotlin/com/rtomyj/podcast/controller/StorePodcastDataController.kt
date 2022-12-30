@@ -46,12 +46,12 @@ class StorePodcastDataController {
 	): ResponseEntity<String> {
 		log.info(
 			"Attempting to store new episode w/ name {}. ID of episode will be {} if storage is successful. ID of podcast to associate episode is {}",
-			podcastEpisode.episodeTitle,
-			podcastEpisode.episodeGuid,
+			podcastEpisode.title,
+			podcastEpisode.episodeId,
 			podcastEpisode.podcastId
 		)
 		podcastService.storeNewPodcastEpisode(podcastEpisode)
 		log.info("Successfully added new episode!")
-		return ResponseEntity(podcastEpisode.episodeTitle, HttpStatus.CREATED)
+		return ResponseEntity(podcastEpisode.title, HttpStatus.CREATED)
 	}
 }

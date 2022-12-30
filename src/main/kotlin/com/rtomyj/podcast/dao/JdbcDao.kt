@@ -70,20 +70,20 @@ class JdbcDao : Dao {
 		return namedParameterJdbcTemplate.query(SqlQueries.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
 
 			return PodcastEpisode(podcastId, row.getString(PodcastEpisodeTableColumns.EPISODE_GUID.columnName)).apply {
-				episodeTitle = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
-				episodeLink = row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName)
-				episodeDescription = row.getString(PodcastEpisodeTableColumns.EPISODE_DESCRIPTION.columnName)
-				episodePublicationDate = LocalDateTime.from(dbDate.parse(row.getString(PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE.columnName)))
-				episodeAuthor = row.getString(PodcastEpisodeTableColumns.EPISODE_AUTHOR.columnName)
-				episodeImageLink = row.getString(PodcastEpisodeTableColumns.EPISODE_IMAGE.columnName)
+				title = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
+				link = row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName)
+				description = row.getString(PodcastEpisodeTableColumns.EPISODE_DESCRIPTION.columnName)
+				publicationDate = LocalDateTime.from(dbDate.parse(row.getString(PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE.columnName)))
+				author = row.getString(PodcastEpisodeTableColumns.EPISODE_AUTHOR.columnName)
+				imageLink = row.getString(PodcastEpisodeTableColumns.EPISODE_IMAGE.columnName)
 
 				val keywords = row.getString(PodcastEpisodeTableColumns.EPISODE_KEYWORDS.columnName)
-				keywords.split("|").toCollection(episodeKeywords)
+				keywords.split("|").toCollection(this.keywords)
 
-				episodeLength = row.getLong(PodcastEpisodeTableColumns.EPISODE_LENGTH.columnName)
-				episodeMediaType = row.getString(PodcastEpisodeTableColumns.EPISODE_MEDIA_TYPE.columnName)
-				isEpisodeExplicit = row.getBoolean(PodcastEpisodeTableColumns.IS_EXPLICIT.columnName)
-				episodeDuration = row.getString(PodcastEpisodeTableColumns.EPISODE_DURATION.columnName)
+				length = row.getLong(PodcastEpisodeTableColumns.EPISODE_LENGTH.columnName)
+				mediaType = row.getString(PodcastEpisodeTableColumns.EPISODE_MEDIA_TYPE.columnName)
+				isExplicit = row.getBoolean(PodcastEpisodeTableColumns.IS_EXPLICIT.columnName)
+				duration = row.getString(PodcastEpisodeTableColumns.EPISODE_DURATION.columnName)
 			}
 
 		}) as ArrayList<PodcastEpisode>
@@ -117,17 +117,17 @@ class JdbcDao : Dao {
 	override fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode, delimitedKeywords: String) {
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("podcast_id", podcastEpisode.podcastId)
-		sqlParams.addValue("episode_title", podcastEpisode.episodeTitle)
-		sqlParams.addValue("episode_link", podcastEpisode.episodeLink)
-		sqlParams.addValue("episode_description", podcastEpisode.episodeDescription)
-		sqlParams.addValue("episode_author", podcastEpisode.episodeAuthor)
-		sqlParams.addValue("episode_image", podcastEpisode.episodeImageLink)
+		sqlParams.addValue("episode_title", podcastEpisode.title)
+		sqlParams.addValue("episode_link", podcastEpisode.link)
+		sqlParams.addValue("episode_description", podcastEpisode.description)
+		sqlParams.addValue("episode_author", podcastEpisode.author)
+		sqlParams.addValue("episode_image", podcastEpisode.imageLink)
 		sqlParams.addValue("episode_keywords", delimitedKeywords)   // keywords should be delimited correctly in service layer
-		sqlParams.addValue("episode_guid", podcastEpisode.episodeGuid)
-		sqlParams.addValue("episode_length", podcastEpisode.episodeLength)
-		sqlParams.addValue("episode_media_type", podcastEpisode.episodeMediaType)
-		sqlParams.addValue("is_episode_explicit", podcastEpisode.isEpisodeExplicit)
-		sqlParams.addValue("episode_duration", podcastEpisode.episodeDuration)
+		sqlParams.addValue("episode_guid", podcastEpisode.episodeId)
+		sqlParams.addValue("episode_length", podcastEpisode.length)
+		sqlParams.addValue("episode_media_type", podcastEpisode.mediaType)
+		sqlParams.addValue("is_episode_explicit", podcastEpisode.isExplicit)
+		sqlParams.addValue("episode_duration", podcastEpisode.duration)
 
 		try {
 			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_EPISODE_QUERY, sqlParams)

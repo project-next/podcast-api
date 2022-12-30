@@ -17,73 +17,73 @@ import java.util.*
 
 
 class PodcastEpisode(
-	@NotBlank @Size(min = 36, max = 36) val podcastId: String, val episodeGuid: String = UUID.randomUUID().toString()
+	@NotBlank @Size(min = 36, max = 36) val podcastId: String, val episodeId: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 100)
 	@Pattern(regexp = "[\\w\\d\$&+,:;=?@# ]+")
-	lateinit var episodeTitle: String
+	lateinit var title: String
 
 	@NotBlank
 	@Size(max = 255)
 	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
-	lateinit var episodeLink: String
+	lateinit var link: String
 
 	@NotBlank
 	@Size(max = 3000)
-	lateinit var episodeDescription: String
+	lateinit var description: String
 
-	lateinit var episodePublicationDate: LocalDateTime
+	lateinit var publicationDate: LocalDateTime
 
 	@NotBlank
 	@Size(max = 30)
-	lateinit var episodeAuthor: String
+	lateinit var author: String
 
 	@NotBlank
 	@Size(max = 255)
 	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
-	lateinit var episodeImageLink: String
+	lateinit var imageLink: String
 
-	var episodeKeywords = arrayListOf<String>()
+	var keywords = arrayListOf<String>()
 
-	var episodeLength = 0L
+	var length = 0L
 
 	@NotBlank
 	@Size(max = 15)
-	lateinit var episodeMediaType: String
+	lateinit var mediaType: String
 
-	var isEpisodeExplicit = false
+	var isExplicit = false
 
 	@NotBlank
 	@Pattern(regexp = "(\\d{2}:?){3}")
-	lateinit var episodeDuration: String
+	lateinit var duration: String
 
 	fun toRssItem(): Item {
 		return Item().apply {
 			// Set description
 			this.description = Description().apply {
-				value = episodeDescription
+				value = this@PodcastEpisode.description
 			}
 
 			this.enclosures = Enclosure().run {
-				length = episodeLength
+				length = this@PodcastEpisode.length
 				type = Generic.MEDIA_TYPE
-				url = episodeLink
+				url = this@PodcastEpisode.link
 				listOf(this)
 			}
 
-			title = episodeTitle
-			author = episodeAuthor
-			link = episodeLink
-			pubDate = Date.from(episodePublicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+			title = this@PodcastEpisode.title
+			author = this@PodcastEpisode.author
+			link = this@PodcastEpisode.link
+			pubDate = Date.from(publicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
 			guid = Guid()
-			guid.value = episodeGuid
+			guid.value = episodeId
 
 			this.modules = EntryInformationImpl().run {
-				image = URL(episodeImageLink)
-				keywords = episodeKeywords.toTypedArray()
+				image = URL(imageLink)
+				keywords = this@PodcastEpisode.keywords.toTypedArray()
 
-				val durationTokens = episodeDuration.split(":")
+				val durationTokens = this@PodcastEpisode.duration.split(":")
 				duration = Duration(durationTokens[0].toInt(), durationTokens[1].toInt(), durationTokens[2].toFloat())
 				listOf(this)
 			}
