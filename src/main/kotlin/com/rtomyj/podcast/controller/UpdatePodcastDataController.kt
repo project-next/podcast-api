@@ -2,6 +2,7 @@ package com.rtomyj.podcast.controller
 
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
+import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.Status
 import com.rtomyj.podcast.service.PodcastService
 import jakarta.validation.Valid
@@ -39,16 +40,20 @@ class UpdatePodcastDataController {
 		return ResponseEntity.ok(Status("Successfully updated podcast!"))
 	}
 
-//	@PutMapping("/podcast/{podcastId}/episode")
-//	@Throws(PodcastException::class)
-//	fun updatePodcastEpisode(@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode): ResponseEntity<String> {
-//		log.info(
-//			"Saving info about new podcast episode w/ name {}. ID of episode will be {}. ID of podcast to associate episode is {}",
-//			podcastEpisode.episodeTitle,
-//			podcastEpisode.episodeGuid,
-//			podcastEpisode.podcastId
-//		)
-//		log.info("")
-//		return ResponseEntity.ok(podcastEpisode.episodeTitle)
-//	}
+	@PutMapping("/podcast/{podcastId}/episode")
+	@Throws(PodcastException::class)
+	fun updatePodcastEpisode(
+		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode
+	): ResponseEntity<String> {
+		log.info(
+			"Attempting to update episode w/ name [{}]. ID of podcast is {} and the episode ID is {}",
+			podcastEpisode.title,
+			podcastEpisode.podcastId,
+					podcastEpisode.episodeId
+		)
+		podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+
+		log.info("Successfully added new episode!")
+		return ResponseEntity.ok("Successfully updated podcast.")
+	}
 }
