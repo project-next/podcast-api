@@ -149,3 +149,7 @@ pitest {
 
 	avoidCallsTo.set(setOf("kotlin.jvm.internal", "org.springframework.util.StopWatch", "org.slf4j.Logger"))
 }
+
+jacoco {
+	toolVersion = "0.8.8"
+}

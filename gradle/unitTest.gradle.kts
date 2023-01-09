@@ -9,11 +9,51 @@ dependencies {
 	"testImplementation"("org.springframework.security:spring-security-test:6.0.1")
 }
 
-
-tasks.withType<Test> {
+tasks.withType<Test>  {
 	useJUnitPlatform()
 
 	minHeapSize = "256m"
 	maxHeapSize = "896m"
 	maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 ?: 1
+
+	finalizedBy(tasks.withType<JacocoReport>())
+}
+
+tasks.withType<JacocoReport> {
+	dependsOn(tasks.withType<Test>())
+
+	reports {
+		xml.required.set(false)
+		csv.required.set(false)
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(classDirectories.files.map {
+			fileTree(it).matching {
+				exclude("com/rtomyj/podcast/model/**", "com/rtomyj/podcast/Application.kt", "com/rtomyj/podcast/util/enum/**", "com/rtomyj/podcast/util/constant/**")
+			}
+		})
+	}
+
+	finalizedBy(tasks.withType<JacocoCoverageVerification>())
+}
+
+tasks.withType<JacocoCoverageVerification> {
+	violationRules {
+		rule {
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = "0.2".toBigDecimal()
+			}
+		}
+
+		rule {
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = "0.1".toBigDecimal()
+			}
+		}
+	}
 }
