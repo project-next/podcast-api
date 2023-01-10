@@ -138,7 +138,13 @@ class StorePodcastDataControllerTest {
 				mockMvc.perform(
 					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-				).andExpect(MockMvcResultMatchers.status().isBadRequest)
+				).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+					jsonPath(
+						"message", startsWith(
+							"Body is missing data or fields do not conform to spec."
+						)
+					)
+				).andExpect(jsonPath("$.code", `is`("G002")))
 
 				// verify mocks are called
 				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
