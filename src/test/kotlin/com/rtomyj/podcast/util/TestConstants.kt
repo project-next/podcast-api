@@ -16,7 +16,6 @@ object TestConstants {
 	const val PODCAST_DATA_RES_1_ID = "1712103d-14ee-4679-8e9d-d6d277257b8b"
 
 	const val EMPTY_BODY = "{}"
-	const val EMPTY_BODY_LENGTH = EMPTY_BODY.length
 
 	val CONTENT_TYPE = MediaType(MediaType.APPLICATION_JSON.type, MediaType.APPLICATION_JSON.subtype, Charset.forName("utf8"))
 }

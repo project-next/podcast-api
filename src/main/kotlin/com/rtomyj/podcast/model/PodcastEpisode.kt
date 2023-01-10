@@ -17,7 +17,7 @@ import java.util.*
 
 
 class PodcastEpisode(
-	@NotBlank @Size(min = 36, max = 36) val podcastId: String, val episodeId: String = UUID.randomUUID().toString()
+	@Size(min = 36, max = 36) val podcastId: String, val episodeId: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 100)
