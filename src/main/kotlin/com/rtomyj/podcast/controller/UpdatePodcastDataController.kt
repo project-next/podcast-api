@@ -44,7 +44,7 @@ class UpdatePodcastDataController {
 	@Throws(PodcastException::class)
 	fun updatePodcastEpisode(
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode
-	): ResponseEntity<String> {
+	): ResponseEntity<Status> {
 		log.info(
 			"Attempting to update episode w/ name [{}]. ID of podcast is {} and the episode ID is {}",
 			podcastEpisode.title,
@@ -54,6 +54,6 @@ class UpdatePodcastDataController {
 		podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
 
 		log.info("Successfully added new episode!")
-		return ResponseEntity.ok("Successfully updated podcast.")
+		return ResponseEntity.ok(Status("Successfully updated podcast episode!"))
 	}
 }
