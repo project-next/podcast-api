@@ -1,7 +1,6 @@
 package com.rtomyj.podcast.controller
 
 import com.rtomyj.podcast.service.PodcastService
-import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
@@ -18,11 +17,11 @@ class RetrievePodcastDataController {
 
 	// Legacy support
 	@GetMapping("/podcast/{podcastId}")
-	fun getPodcastInfoUsingPodcastId(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
+	fun getPodcastInfoUsingPodcastId(@PathVariable @Size(min = 36, max = 36) podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
 
 	@GetMapping("/podcast/feed/{podcastId}")
-	fun getPodcastFeedUsingPodcastId(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
+	fun getPodcastFeedUsingPodcastId(@PathVariable @Size(min = 36, max = 36) podcastId: String) = podcastService.getRssFeedForPodcast(podcastId)
 
 	@GetMapping("/podcast/json/{podcastId}")
-	fun getPodcastJSONUsingPodcastIdAsJson(@PathVariable @NotBlank @Size(min = 36, max = 36) podcastId: String) = podcastService.getPodcastData(podcastId)
+	fun getPodcastJSONUsingPodcastIdAsJson(@PathVariable @Size(min = 36, max = 36) podcastId: String) = podcastService.getPodcastData(podcastId)
 }
