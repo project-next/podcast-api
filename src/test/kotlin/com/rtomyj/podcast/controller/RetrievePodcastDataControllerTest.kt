@@ -231,7 +231,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.author", Matchers.`is`(mockData.podcast.author)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.isExplicit", Matchers.`is`(mockData.podcast.isExplicit)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.imageUrl", Matchers.`is`(mockData.podcast.imageUrl)))
-					.andExpect(MockMvcResultMatchers.jsonPath("$.podcastEpisodes").isEmpty)
+					.andExpect(MockMvcResultMatchers.jsonPath("$.podcastEpisodes").isNotEmpty)
 
 				// verify mocks are called
 				Mockito.verify(service).getPodcastData(TestConstants.PODCAST_DATA_RES_1_ID)
@@ -259,7 +259,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.author", Matchers.`is`(mockData.podcast.author)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.isExplicit", Matchers.`is`(mockData.podcast.isExplicit)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.imageUrl", Matchers.`is`(mockData.podcast.imageUrl)))
-					.andExpect(MockMvcResultMatchers.jsonPath("$.podcastEpisodes").isEmpty)
+					.andExpect(MockMvcResultMatchers.jsonPath("$.podcastEpisodes").isNotEmpty)
 
 				// verify mocks are called
 				Mockito.verify(service).getPodcastData(TestConstants.PODCAST_DATA_RES_1_ID)

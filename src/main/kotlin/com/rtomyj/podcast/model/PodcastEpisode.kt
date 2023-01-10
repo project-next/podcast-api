@@ -16,7 +16,7 @@ import java.time.ZoneId
 import java.util.*
 
 
-class PodcastEpisode(
+data class PodcastEpisode(
 	@Size(min = 36, max = 36) val podcastId: String = "", val episodeId: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank

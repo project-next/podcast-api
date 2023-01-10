@@ -43,7 +43,7 @@ class StorePodcastDataController {
 	@Throws(PodcastException::class)
 	fun storeNewPodcastEpisode(
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode
-	): ResponseEntity<String> {
+	): ResponseEntity<Status> {
 		log.info(
 			"Attempting to store new episode w/ name {}. ID of episode will be {} if storage is successful. ID of podcast to associate episode is {}",
 			podcastEpisode.title,
@@ -52,6 +52,6 @@ class StorePodcastDataController {
 		)
 		podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
 		log.info("Successfully added new episode!")
-		return ResponseEntity(podcastEpisode.title, HttpStatus.CREATED)
+		return ResponseEntity(Status("Successfully stored new podcast episode!"), HttpStatus.CREATED)
 	}
 }

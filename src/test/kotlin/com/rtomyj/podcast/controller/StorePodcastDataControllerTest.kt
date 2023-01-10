@@ -6,7 +6,9 @@ import com.rtomyj.podcast.config.RestAuthenticationEntryPoint
 import com.rtomyj.podcast.config.SecurityConfig
 import com.rtomyj.podcast.exception.PodcastExceptionAdvice
 import com.rtomyj.podcast.service.PodcastService
+import com.rtomyj.podcast.util.Helpers
 import com.rtomyj.podcast.util.TestConstants
+import com.rtomyj.podcast.util.TestObjectsFromFile
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.startsWith
 import org.junit.jupiter.api.Nested
@@ -95,6 +97,30 @@ class StorePodcastDataControllerTest {
 				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
 			}
 		}
+
+		@Nested
+		inner class HappyPath {
+			@Test
+			fun `User is admin - Body Is Valid`() {
+				// setup mocks
+				val mockData = TestObjectsFromFile.podcastData1.podcast
+				Mockito.doNothing().`when`(service).storeNewPodcast(mockData)
+
+				mockMvc.perform(
+					post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(Helpers.mapper.writeValueAsString(mockData))
+						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+				).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
+					jsonPath(
+						"message", `is`(
+							"Successfully stored new podcast!"
+						)
+					)
+				)
+
+				// verify mocks are called
+				Mockito.verify(service).storeNewPodcast(mockData)
+			}
+		}
 	}
 
 	@Nested
@@ -148,6 +174,30 @@ class StorePodcastDataControllerTest {
 
 				// verify mocks are called
 				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+			}
+		}
+
+		@Nested
+		inner class HappyPath {
+			@Test
+			fun `User is admin - Body Is Valid`() {
+				// setup mocks
+				val mockData = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+				Mockito.doNothing().`when`(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+
+				mockMvc.perform(
+					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(TestConstants.CONTENT_TYPE)
+						.content(Helpers.mapper.writeValueAsString(mockData)).header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+				).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
+					jsonPath(
+						"message", `is`(
+							"Successfully stored new podcast episode!"
+						)
+					)
+				)
+
+				// verify mocks are called
+				Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
 			}
 		}
 	}
