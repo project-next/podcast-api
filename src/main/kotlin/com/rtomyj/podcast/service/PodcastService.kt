@@ -9,19 +9,14 @@ import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 
 @Service
-class PodcastService {
+class PodcastService @Autowired constructor(val dao: Dao) {
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
 	}
-
-	@Autowired
-	@Qualifier("jdbc")
-	private lateinit var dao: Dao
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
 		val podcastInfo = dao.getPodcastInfo(podcastId)
@@ -42,13 +37,6 @@ class PodcastService {
 	}
 
 	fun updatePodcast(podcastId: String, podcast: Podcast) {
-		try {
-			dao.getPodcastInfo(podcastId)
-		} catch (ex: PodcastException) {
-			throw PodcastException("Failed to update as there is no podcast with given ID: $podcast", ErrorType.DB003)
-		}
-
-		// podcast exists in DB, therefore we can update it
 		dao.updatePodcast(podcastId, podcast)
 	}
 
