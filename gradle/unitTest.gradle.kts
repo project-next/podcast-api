@@ -1,5 +1,6 @@
 val springVersion = "3.0.1"
 val mockitKotlinVersion = "1.6.0"
+val h2Version = "2.1.214"
 
 dependencies {
 	"testImplementation"(kotlin("test"))
@@ -7,6 +8,8 @@ dependencies {
 	"testImplementation"("com.nhaarman:mockito-kotlin:$mockitKotlinVersion")    // provides helper functions needed for mockito to work in Kotlin
 	"testImplementation"("org.springframework.boot:spring-boot-starter-test:$springVersion")
 	"testImplementation"("org.springframework.security:spring-security-test:6.0.1")
+
+	"testRuntimeOnly"("com.h2database:h2:$h2Version")
 }
 
 tasks.withType<Test>  {

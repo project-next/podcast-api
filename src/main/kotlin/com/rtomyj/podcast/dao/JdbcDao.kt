@@ -20,11 +20,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Repository("jdbc")
-class JdbcDao : Dao {
+class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : Dao {
 	private val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSS]")
-
-	@Autowired
-	private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
