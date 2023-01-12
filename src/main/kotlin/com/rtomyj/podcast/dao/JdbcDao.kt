@@ -29,8 +29,8 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		private const val DataIntegrityViolationExceptionLog = "DataIntegrityViolationException occurred while inserting new podcast info. {}"
 		private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
 
-		private const val SOMETHING_WENT_WRONG = "Something went wrong!"
-		private const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
+		const val SOMETHING_WENT_WRONG = "Something went wrong!"
+		const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
 	}
 
 	override fun getPodcastInfo(podcastId: String): Podcast {
@@ -65,7 +65,6 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		sqlParams.addValue("podcastId", podcastId)
 
 		return namedParameterJdbcTemplate.query(SqlQueries.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
-
 			return PodcastEpisode(podcastId, row.getString(PodcastEpisodeTableColumns.EPISODE_GUID.columnName)).apply {
 				title = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
 				link = row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName)
