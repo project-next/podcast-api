@@ -31,6 +31,7 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 
 		const val SOMETHING_WENT_WRONG = "Something went wrong!"
 		const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
+		const val NO_ROWS_UPDATED = "No rows updated!"
 	}
 
 	override fun getPodcastInfo(podcastId: String): Podcast {
@@ -152,7 +153,7 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 
 		try {
 			if (namedParameterJdbcTemplate.update(SqlQueries.UPDATE_PODCAST_QUERY, sqlParams) == 0) {
-				throw PodcastException("No rows updated!", ErrorType.DB004)
+				throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
 			}
 		} catch (ex: DataIntegrityViolationException) {
 			log.error(DataIntegrityViolationExceptionLog, ex.toString())
@@ -179,7 +180,7 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 
 		try {
 			if (namedParameterJdbcTemplate.update(SqlQueries.UPDATE_PODCAST_EPISODE_QUERY, sqlParams) == 0) {
-				throw PodcastException("No rows updated!", ErrorType.DB004)
+				throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
 			}
 		} catch (ex: DataIntegrityViolationException) {
 			log.error(DataIntegrityViolationExceptionLog, ex.toString())

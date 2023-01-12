@@ -171,4 +171,154 @@ class JdbcDaoTest {
 			}
 		}
 	}
+
+	@Nested
+	inner class UpdatePodcast {
+		@Nested
+		inner class HappyPath {
+			@Test
+			fun `Successfully Update Existing Podcast`() {
+				// Mock
+				val podcast = TestObjectsFromFile.podcastData1.podcast  // this object has values different from what is currently in mock DB
+
+				// Call
+				dao.updatePodcast(TestConstants.PODCAST_ID_FROM_SQL_QUERY, podcast)
+			}
+		}
+
+		@Nested
+		inner class UserError {
+			@Test
+			fun `User Tries To Update A Podcast That DNE`() {
+				// Mock
+				val podcast = TestObjectsFromFile.podcastData1.podcast  // this object has values different from what is currently in mock DB
+
+				// Call
+				val err = Assertions.assertThrows(
+					PodcastException::class.java,
+					{ dao.updatePodcast(podcast.id, podcast) },
+					"Trying to update a podcast using an ID that DNE exist in DB - since no rows are effected, DAO will throw an exception"
+				)
+
+				// Assert
+				Assertions.assertNotNull(err)
+				Assertions.assertEquals(PodcastException(JdbcDao.NO_ROWS_UPDATED, ErrorType.DB004), err)
+			}
+		}
+
+		@Nested
+		inner class DatabaseErrors {
+			@Test
+			fun `Data Integrity Error`() {
+				// Mock
+				val podcast = Podcast(TestConstants.PODCAST_ID_FROM_SQL_QUERY).apply {
+					this.title = TestObjectsFromFile.podcastData1.podcast.title
+					this.link = TestObjectsFromFile.podcastData1.podcast.link
+					this.description = TestObjectsFromFile.podcastData1.podcast.description
+					this.language = "SOMETHING THAT WILL TRIGGER AN INTEGRITY ISSUE"    // triggers integrity issue
+					this.copyright = TestObjectsFromFile.podcastData1.podcast.copyright
+					this.email = TestObjectsFromFile.podcastData1.podcast.email
+					this.category = TestObjectsFromFile.podcastData1.podcast.category
+					this.author = TestObjectsFromFile.podcastData1.podcast.author
+					this.imageUrl = TestObjectsFromFile.podcastData1.podcast.imageUrl
+				}
+
+				// Call
+				val err = Assertions.assertThrows(
+					PodcastException::class.java,
+					{ dao.updatePodcast(TestConstants.PODCAST_ID_FROM_SQL_QUERY, podcast) },
+					"Trying to update a record with integrity issue - as such an exception should be thrown"
+				)
+
+				// Assert
+				Assertions.assertNotNull(err)
+				Assertions.assertEquals(PodcastException(JdbcDao.DATA_CONSTRAINT_ISSUE, ErrorType.DB002), err)
+			}
+		}
+	}
+
+	@Nested
+	inner class UpdateEpisode {
+		@Nested
+		inner class HappyPath {
+			@Test
+			fun `Successfully Update Existing Episode`() {
+				// Mock
+				val sampleEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+				val episode = PodcastEpisode(
+					podcastId = TestConstants.PODCAST_ID_FROM_SQL_QUERY, episodeId = TestConstants.EPISODE_ID_FROM_SQL_QUERY
+				).apply {  // using mock object value but will use mock DB IDs
+					this.title = sampleEpisode.title
+					this.link = sampleEpisode.link
+					this.description = sampleEpisode.description
+					this.publicationDate = sampleEpisode.publicationDate
+					this.author = sampleEpisode.author
+					this.imageLink = sampleEpisode.imageLink
+					this.keywords = sampleEpisode.keywords
+					this.length = sampleEpisode.length
+					this.mediaType = sampleEpisode.mediaType
+					this.isExplicit = sampleEpisode.isExplicit
+					this.duration = sampleEpisode.duration
+				}
+
+				// Call
+				dao.updatePodcastEpisode(episode, "")
+			}
+		}
+
+		@Nested
+		inner class UserError {
+			@Test
+			fun `User Tries To Update An Episode That DNE`() {
+				// Mock
+				val episode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]   // IDs found in this object DNE in mock DB
+
+				// Call
+				val err = Assertions.assertThrows(
+					PodcastException::class.java,
+					{ dao.updatePodcastEpisode(episode, "") },
+					"Trying to update a podcast episode using an ID that DNE exist in DB - since no rows are effected, DAO will throw an exception"
+				)
+
+				// Assert
+				Assertions.assertNotNull(err)
+				Assertions.assertEquals(PodcastException(JdbcDao.NO_ROWS_UPDATED, ErrorType.DB004), err)
+			}
+		}
+
+		@Nested
+		inner class DatabaseErrors {
+			@Test
+			fun `Data Integrity Error`() {
+				// Mock
+				val sampleEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+				val episode = PodcastEpisode(
+					podcastId = TestConstants.PODCAST_ID_FROM_SQL_QUERY, episodeId = TestConstants.EPISODE_ID_FROM_SQL_QUERY
+				).apply {  // using mock object value but will use mock DB IDs
+					this.title = sampleEpisode.title
+					this.link = sampleEpisode.link
+					this.description = sampleEpisode.description
+					this.publicationDate = sampleEpisode.publicationDate
+					this.author = sampleEpisode.author
+					this.imageLink = sampleEpisode.imageLink
+					this.keywords = sampleEpisode.keywords
+					this.length = sampleEpisode.length
+					this.mediaType = "SOMETHING THAT WILL TRIGGER AN INTEGRITY ISSUE"    // triggers integrity issue
+					this.isExplicit = sampleEpisode.isExplicit
+					this.duration = sampleEpisode.duration
+				}
+
+				// Call
+				val err = Assertions.assertThrows(
+					PodcastException::class.java, {
+						dao.updatePodcastEpisode(episode, "")
+					}, "Trying to update a record with integrity issue - as such an exception should be thrown"
+				)
+
+				// Assert
+				Assertions.assertNotNull(err)
+				Assertions.assertEquals(PodcastException(JdbcDao.DATA_CONSTRAINT_ISSUE, ErrorType.DB002), err)
+			}
+		}
+	}
 }
