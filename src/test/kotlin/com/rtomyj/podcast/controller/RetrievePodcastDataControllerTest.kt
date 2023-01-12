@@ -54,10 +54,10 @@ class RetrievePodcastDataControllerTest {
 				val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
 				// setup mocks
-				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)).thenReturn(feed)
+				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)).thenReturn(feed)
 
 				mockMvc.perform(
-					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_DATA_RES_1_ID).with(csrf())
+					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isOk)
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
@@ -74,7 +74,7 @@ class RetrievePodcastDataControllerTest {
 
 
 				// verify mocks are called
-				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 
 			@Test
@@ -84,10 +84,10 @@ class RetrievePodcastDataControllerTest {
 				val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
 				// setup mocks
-				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)).thenReturn(feed)
+				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)).thenReturn(feed)
 
 				mockMvc.perform(
-					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_DATA_RES_1_ID)
+					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 				).andExpect(MockMvcResultMatchers.status().isOk)
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
@@ -103,7 +103,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:image/@href", namespace).string(mockData.podcast.imageUrl))
 
 				// verify mocks are called
-				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 		}
 		@Nested
@@ -135,10 +135,10 @@ class RetrievePodcastDataControllerTest {
 				val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
 				// setup mocks
-				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)).thenReturn(feed)
+				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)).thenReturn(feed)
 
 				mockMvc.perform(
-					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_DATA_RES_1_ID).with(csrf())
+					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isOk)
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
@@ -154,7 +154,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:image/@href", namespace).string(mockData.podcast.imageUrl))
 
 				// verify mocks are called
-				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 
 			@Test
@@ -164,10 +164,10 @@ class RetrievePodcastDataControllerTest {
 				val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
 				// setup mocks
-				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)).thenReturn(feed)
+				`when`(service.getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)).thenReturn(feed)
 
 				mockMvc.perform(
-					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_DATA_RES_1_ID)
+					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 				).andExpect(MockMvcResultMatchers.status().isOk)
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
@@ -183,7 +183,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:image/@href", namespace).string(mockData.podcast.imageUrl))
 
 				// verify mocks are called
-				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_DATA_RES_1_ID)
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 		}
 
@@ -214,10 +214,10 @@ class RetrievePodcastDataControllerTest {
 				val mockData = TestObjectsFromFile.podcastData1
 
 				// setup mocks
-				`when`(service.getPodcastData(TestConstants.PODCAST_DATA_RES_1_ID)).thenReturn(mockData)
+				`when`(service.getPodcastData(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)).thenReturn(mockData)
 
 				mockMvc.perform(
-					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, TestConstants.PODCAST_DATA_RES_1_ID).with(csrf())
+					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isOk)
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.id", Matchers.`is`(mockData.podcast.id)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.title", Matchers.`is`(mockData.podcast.title)))
@@ -234,7 +234,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcastEpisodes").isNotEmpty)
 
 				// verify mocks are called
-				Mockito.verify(service).getPodcastData(TestConstants.PODCAST_DATA_RES_1_ID)
+				Mockito.verify(service).getPodcastData(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 
 			@Test
@@ -242,10 +242,10 @@ class RetrievePodcastDataControllerTest {
 				val mockData = TestObjectsFromFile.podcastData1
 
 				// setup mocks
-				`when`(service.getPodcastData(TestConstants.PODCAST_DATA_RES_1_ID)).thenReturn(mockData)
+				`when`(service.getPodcastData(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)).thenReturn(mockData)
 
 				mockMvc.perform(
-					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, TestConstants.PODCAST_DATA_RES_1_ID)
+					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 				).andExpect(MockMvcResultMatchers.status().isOk)
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.id", Matchers.`is`(mockData.podcast.id)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.title", Matchers.`is`(mockData.podcast.title)))
@@ -262,7 +262,7 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcastEpisodes").isNotEmpty)
 
 				// verify mocks are called
-				Mockito.verify(service).getPodcastData(TestConstants.PODCAST_DATA_RES_1_ID)
+				Mockito.verify(service).getPodcastData(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 		}
 

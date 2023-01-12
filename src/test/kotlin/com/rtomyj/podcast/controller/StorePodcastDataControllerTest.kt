@@ -129,7 +129,7 @@ class StorePodcastDataControllerTest {
 		inner class AuthenticationIssue {
 			@Test
 			fun `Authorization Header Is Missing - With CSRF`() {
-				mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).with(csrf())).andExpect(MockMvcResultMatchers.status().isUnauthorized)
+				mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).with(csrf())).andExpect(MockMvcResultMatchers.status().isUnauthorized)
 					.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 				// verify mocks are called
@@ -138,7 +138,7 @@ class StorePodcastDataControllerTest {
 
 			@Test
 			fun `Authorization Header Is Missing - Without CSRF`() {
-				mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID)).andExpect(MockMvcResultMatchers.status().isUnauthorized)
+				mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY)).andExpect(MockMvcResultMatchers.status().isUnauthorized)
 					.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 				// verify mocks are called
@@ -148,7 +148,7 @@ class StorePodcastDataControllerTest {
 			@Test
 			fun `User is not admin`() {
 				mockMvc.perform(
-					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
 
@@ -162,7 +162,7 @@ class StorePodcastDataControllerTest {
 			@Test
 			fun `User is admin - Body is empty`() {
 				mockMvc.perform(
-					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
 				).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
 					jsonPath(

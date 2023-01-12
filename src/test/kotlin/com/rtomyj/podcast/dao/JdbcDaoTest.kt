@@ -2,6 +2,7 @@ package com.rtomyj.podcast.dao
 
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
+import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestConstants
 import com.rtomyj.podcast.util.TestObjectsFromFile
 import com.rtomyj.podcast.util.enum.ErrorType
@@ -39,7 +40,7 @@ class JdbcDaoTest {
 			@Test
 			fun `Retrieve Podcast Info From DB`() {
 				// Call
-				val podcast = dao.getPodcastInfo(TestConstants.VALID_PODCAST_ID)
+				val podcast = dao.getPodcastInfo(TestConstants.PODCAST_ID_FROM_SQL_QUERY)
 
 				// Assert
 				Assertions.assertNotNull(podcast)
@@ -69,7 +70,7 @@ class JdbcDaoTest {
 			@Test
 			fun `Retrieve Episodes From DB`() {
 				// Call
-				val episodes = dao.getPodcastEpisodes(TestConstants.VALID_PODCAST_ID)
+				val episodes = dao.getPodcastEpisodes(TestConstants.PODCAST_ID_FROM_SQL_QUERY)
 
 				// Assert
 				Assertions.assertNotNull(episodes)
@@ -128,6 +129,45 @@ class JdbcDaoTest {
 		inner class HappyPath {
 			@Test
 			fun `Successfully Store Episode`() {
+				// Mock
+				val sampleEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+				val episode = PodcastEpisode(podcastId = TestConstants.PODCAST_ID_FROM_SQL_QUERY).apply {
+					this.title = sampleEpisode.title
+					this.link = sampleEpisode.link
+					this.description = sampleEpisode.description
+					this.publicationDate = sampleEpisode.publicationDate
+					this.author = sampleEpisode.author
+					this.imageLink = sampleEpisode.imageLink
+					this.keywords = sampleEpisode.keywords
+					this.length = sampleEpisode.length
+					this.mediaType = sampleEpisode.mediaType
+					this.isExplicit = sampleEpisode.isExplicit
+					this.duration = sampleEpisode.duration
+				}
+
+				// Call
+				dao.storeNewPodcastEpisode(episode, "")
+			}
+		}
+
+		@Nested
+		inner class DatabaseErrors {
+			@Test
+			fun `Data Integrity Error`() {
+				// Mock
+				val episode =
+					TestObjectsFromFile.podcastData1.podcastEpisodes[0]   // this test data has a podcast ID that doesn't currently exist in podcast table, therefore it will throw an integrity error on the foreign key
+
+				// Call
+				val err = Assertions.assertThrows(
+					PodcastException::class.java,
+					{ dao.storeNewPodcastEpisode(episode, "") },
+					"Trying to store a record with integrity issue - as such an exception should be thrown"
+				)
+
+				// Assert
+				Assertions.assertNotNull(err)
+				Assertions.assertEquals(PodcastException(JdbcDao.DATA_CONSTRAINT_ISSUE, ErrorType.DB002), err)
 			}
 		}
 	}

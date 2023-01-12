@@ -49,7 +49,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `Authorization Header Is Missing - With CSRF`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
@@ -60,7 +60,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `Authorization Header Is Missing - Without CSRF`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 				).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 				// verify mocks are called
@@ -70,7 +70,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `User is not admin`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
 
@@ -84,7 +84,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `User is admin - Body is empty`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
 				).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
 					jsonPath(
@@ -131,7 +131,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `Authorization Header Is Missing - With CSRF`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
@@ -142,7 +142,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `Authorization Header Is Missing - Without CSRF`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 				).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
 				// verify mocks are called
@@ -152,7 +152,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `User is not admin`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
 				).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
 
@@ -166,7 +166,7 @@ class UpdatePodcastDataControllerTest {
 			@Test
 			fun `User is admin - Body is empty`() {
 				mockMvc.perform(
-					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.VALID_PODCAST_ID).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
+					put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
 						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
 				).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
 					jsonPath(
