@@ -8,6 +8,7 @@ import com.rtomyj.podcast.util.TestObjectsFromFile
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [PodcastService::class])
+@Tag("Service")
 class PodcastServiceTest {
 	@MockBean
 	private lateinit var daoMock: Dao

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import java.io.IOException
 
 @Component
-internal class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
+class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
 	@Autowired
 	private lateinit var mapper: ObjectMapper
 

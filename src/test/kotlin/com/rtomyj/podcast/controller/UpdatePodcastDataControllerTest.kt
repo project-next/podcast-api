@@ -20,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
@@ -34,6 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 	ControllerAdvice should be imported, so it can handle the errors correctly.
  */
 @Import(value = [SecurityConfig::class, UpdatePodcastDataController::class, PodcastExceptionAdvice::class])
+@ActiveProfiles("test") // Loading test props with H2 in memory DB configurations
 @Tag("Controller")
 class UpdatePodcastDataControllerTest {
 	@MockBean

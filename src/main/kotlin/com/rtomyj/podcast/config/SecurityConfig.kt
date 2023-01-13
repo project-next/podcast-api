@@ -2,6 +2,7 @@ package com.rtomyj.podcast.config
 
 import com.rtomyj.podcast.util.constant.Generic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -17,18 +18,19 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
-	@Autowired
-	private lateinit var accessDeniedHandler: RestAccessDeniedHandler
-
-	@Autowired
-	private lateinit var authenticationEntryPoint: RestAuthenticationEntryPoint
-
+class SecurityConfig @Autowired constructor(
+	var accessDeniedHandler: RestAccessDeniedHandler,
+	val authenticationEntryPoint: RestAuthenticationEntryPoint,
+	@Value("\${auth.admin.username}") val adminUsername: String,
+	@Value("\${auth.admin.password}") val adminPassword: String,
+	@Value("\${auth.generic-user.username}") val genericUserUsername: String,
+	@Value("\${auth.generic-user.password}") val genericUserPassword: String
+) {
 	@Bean
 	@Throws(Exception::class)
 	fun filterChain(http: HttpSecurity): SecurityFilterChain {
-		http.authorizeHttpRequests().requestMatchers( HttpMethod.POST, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers( HttpMethod.PUT, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
+		http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
+		http.authorizeHttpRequests().requestMatchers(HttpMethod.PUT, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
 		http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, Generic.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
 
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
@@ -38,13 +40,14 @@ class SecurityConfig {
 	@Bean
 	fun userDetailsService(): UserDetailsService {
 		val manager = InMemoryUserDetailsManager()
-		val encodedPassword: String = passwordEncoder().encode("Changeme!") // todo: change me - maybe put it in DB???
+		val adminEncodedPassword: String = passwordEncoder().encode(adminPassword)
+		val genericUserEncodedPassword: String = passwordEncoder().encode(genericUserPassword)
 
 		manager.createUser(
-			User.withUsername("Javi").password(encodedPassword).roles("ADMIN").build()
+			User.withUsername(adminUsername).password(adminEncodedPassword).roles("ADMIN").build()
 		)
 		manager.createUser(
-			User.withUsername("Tyler").password(encodedPassword).roles("USER").build()
+			User.withUsername(genericUserUsername).password(genericUserEncodedPassword).roles("USER").build()
 		)
 		return manager
 	}

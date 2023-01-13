@@ -9,3 +9,11 @@ spring:
   h2:
     console:
       enabled: false
+
+auth:
+  admin:
+    username: Javi
+    password: Changeme!
+  generic-user:
+    username: Tyler
+    password: Changeme!
