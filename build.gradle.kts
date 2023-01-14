@@ -127,6 +127,8 @@ tasks {
 		description = "Renames JAR (removes version number) which makes it easier to deploy via Docker"
 		group = "Util"
 
+		dependsOn(bootJar)
+
 		from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
 		into("${buildDir}/libs")
 
