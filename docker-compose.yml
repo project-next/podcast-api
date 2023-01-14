@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   podcast-api:
-    image: "openjdk:16.0-jdk-slim"
+    image: "openjdk:17.0.2-jdk-slim"
     ports:
       - "8080:8080"
     volumes:
@@ -20,6 +20,10 @@ services:
       - PODCAST_API_DB_URI=${PODCAST_API_DB_URI}
       - PODCAST_API_DB_USERNAME=${PODCAST_API_DB_USERNAME}
       - PODCAST_API_DB_PASSWORD=${PODCAST_API_DB_PASSWORD}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GENERIC_USER_USERNAME=${GENERIC_USER_USERNAME}
+      - GENERIC_USER_PASSWORD=${GENERIC_USER_PASSWORD}
 
 networks:
   podcast-api:
