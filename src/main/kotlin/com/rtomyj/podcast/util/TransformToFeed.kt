@@ -11,7 +11,6 @@ import com.rometools.rome.feed.rss.Guid
 import com.rometools.rome.feed.rss.Item
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
-import com.rtomyj.podcast.util.constant.Generic
 import java.net.URL
 import java.time.ZoneId
 import java.util.*
@@ -51,7 +50,7 @@ class TransformToFeed {
 
 				this.enclosures = Enclosure().run {
 					length = episode.length
-					type = Generic.MEDIA_TYPE
+					type = episode.mediaType
 					url = episode.link
 					listOf(this)
 				}
