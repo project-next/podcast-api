@@ -21,7 +21,7 @@ VALUES
 INSERT INTO podcast_episode
 (
 	episode_title, podcast_id
-	, episode_link
+	, episode_audio_link
 	, episode_description
 	, episode_pub_date, episode_author
 	, episode_image

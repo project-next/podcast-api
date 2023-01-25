@@ -26,7 +26,7 @@ enum class PodcastApiTables(
 		val columnName: String
 	) {
 
-		EPISODE_TITLE("episode_title"), PODCAST_ID("podcast_id"), EPISODE_LINK("episode_link"), EPISODE_DESCRIPTION("episode_description"), EPISODE_PUBLICATION_DATE("episode_pub_date"), EPISODE_AUTHOR(
+		EPISODE_TITLE("episode_title"), PODCAST_ID("podcast_id"), EPISODE_AUDIO_LINK("episode_audio_link"), EPISODE_DESCRIPTION("episode_description"), EPISODE_PUBLICATION_DATE("episode_pub_date"), EPISODE_AUTHOR(
 			"episode_author"
 		),
 		EPISODE_IMAGE("episode_image"), EPISODE_KEYWORDS("episode_keywords"), EPISODE_GUID("episode_guid"), EPISODE_LENGTH("episode_length"), EPISODE_MEDIA_TYPE("episode_media_type"), IS_EXPLICIT(

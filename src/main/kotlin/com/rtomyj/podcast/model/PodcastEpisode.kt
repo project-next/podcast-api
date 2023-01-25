@@ -19,7 +19,7 @@ data class PodcastEpisode(
 	@NotBlank
 	@Size(max = 255)
 	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
-	lateinit var link: String
+	lateinit var episodeAudioLink: String
 
 	@NotBlank
 	@Size(max = 3000)

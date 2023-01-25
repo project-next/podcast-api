@@ -20,7 +20,7 @@ CREATE TABLE podcast_episode
 		episode_id SERIAL
 		, podcast_id CHAR(36) NOT NULL
 		, episode_title VARCHAR(100) NOT NULL
-		, episode_link VARCHAR(255) NOT NULL
+		, episode_audio_link VARCHAR(255) NOT NULL
 		, episode_description VARCHAR(3000) NOT NULL
 		, episode_pub_date TIMESTAMP NOT NULL
 		, episode_author VARCHAR(30) NOT NULL

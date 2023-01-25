@@ -68,7 +68,7 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		return namedParameterJdbcTemplate.query(SqlQueries.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
 			return PodcastEpisode(podcastId, row.getString(PodcastEpisodeTableColumns.EPISODE_GUID.columnName)).apply {
 				title = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
-				link = row.getString(PodcastEpisodeTableColumns.EPISODE_LINK.columnName)
+				episodeAudioLink = row.getString(PodcastEpisodeTableColumns.EPISODE_AUDIO_LINK.columnName)
 				description = row.getString(PodcastEpisodeTableColumns.EPISODE_DESCRIPTION.columnName)
 				publicationDate = LocalDateTime.from(dbDate.parse(row.getString(PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE.columnName)))
 				author = row.getString(PodcastEpisodeTableColumns.EPISODE_AUTHOR.columnName)
@@ -115,7 +115,7 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("podcast_id", podcastEpisode.podcastId)
 		sqlParams.addValue("episode_title", podcastEpisode.title)
-		sqlParams.addValue("episode_link", podcastEpisode.link)
+		sqlParams.addValue("episode_link", podcastEpisode.episodeAudioLink)
 		sqlParams.addValue("episode_description", podcastEpisode.description)
 		sqlParams.addValue("episode_author", podcastEpisode.author)
 		sqlParams.addValue("episode_image", podcastEpisode.imageLink)
@@ -167,7 +167,7 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 	override fun updatePodcastEpisode(podcastEpisode: PodcastEpisode, delimitedKeywords: String) {
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("episode_title", podcastEpisode.title)
-		sqlParams.addValue("episode_link", podcastEpisode.link)
+		sqlParams.addValue("episode_link", podcastEpisode.episodeAudioLink)
 		sqlParams.addValue("episode_description", podcastEpisode.description)
 		sqlParams.addValue("episode_author", podcastEpisode.author)
 		sqlParams.addValue("episode_image", podcastEpisode.imageLink)

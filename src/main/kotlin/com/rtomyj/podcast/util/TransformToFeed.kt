@@ -51,7 +51,7 @@ class TransformToFeed {
 				this.enclosures = Enclosure().run {
 					length = episode.length
 					type = episode.mediaType
-					url = episode.link
+					url = episode.episodeAudioLink
 					listOf(this)
 				}
 
