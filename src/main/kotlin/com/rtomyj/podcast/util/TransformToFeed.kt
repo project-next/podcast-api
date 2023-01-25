@@ -57,7 +57,7 @@ class TransformToFeed {
 
 				title = episode.title
 				author = episode.author
-				link = "https://twitter.com/SeedTheRNG" // todo dont hard code this
+				link = episode.episodeWebpageLink
 				pubDate = Date.from(episode.publicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
 				guid = Guid()
 				guid.value = episode.episodeId

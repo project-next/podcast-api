@@ -21,6 +21,7 @@ VALUES
 INSERT INTO podcast_episode
 (
 	episode_title, podcast_id
+	, episode_webpage_link
 	, episode_audio_link
 	, episode_description
 	, episode_pub_date, episode_author
@@ -31,6 +32,7 @@ INSERT INTO podcast_episode
 ) VALUES
 	(
 		'#1', '41c4e54d-bee9-43c9-b34b-d4eb87c1a377'
+		, 'https://www.thesupremekingscastle.com'
 		, 'https://www.thesupremekingscastle.com'
 		, 'The first episode!'
 		, '2020-06-15 17:36:00', 'NEXT'
