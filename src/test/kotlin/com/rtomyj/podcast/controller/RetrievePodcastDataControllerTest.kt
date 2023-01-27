@@ -26,6 +26,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest
@@ -60,13 +61,12 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
-				).andExpect(MockMvcResultMatchers.status().isOk)
-					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/description").string(mockData.podcast.description))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/language").string(mockData.podcast.language))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/copyright").string(mockData.podcast.copyright))
-//				.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").string(mockData.podcast.podcastLastBuildDate))
+					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").exists())
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:email", namespace).string(mockData.podcast.email))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:name", namespace).string(mockData.podcast.author))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:category/@text", namespace).string(mockData.podcast.category))
@@ -76,6 +76,16 @@ class RetrievePodcastDataControllerTest {
 
 
 				// verify mocks are called
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
+			}
+
+			@Test
+			fun `HEAD Request - Retrieve Podcast Data XML - Authorization Header Is Missing - With CSRF`() {
+				mockMvc.perform(
+					head(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.content().string(""))
+
+				// verify
 				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 
@@ -90,13 +100,12 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
-				).andExpect(MockMvcResultMatchers.status().isOk)
-					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/description").string(mockData.podcast.description))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/language").string(mockData.podcast.language))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/copyright").string(mockData.podcast.copyright))
-//				.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").string(mockData.podcast.podcastLastBuildDate))
+					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").exists())
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:email", namespace).string(mockData.podcast.email))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:name", namespace).string(mockData.podcast.author))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:category/@text", namespace).string(mockData.podcast.category))
@@ -107,7 +116,18 @@ class RetrievePodcastDataControllerTest {
 				// verify mocks are called
 				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
+
+			@Test
+			fun `HEAD Request - Retrieve Podcast Data XML - Authorization Header Is Missing - Without CSRF`() {
+				mockMvc.perform(
+					head(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.content().string(""))
+
+				// verify
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
+			}
 		}
+
 		@Nested
 		inner class UnHappyPath {
 			@Test
@@ -116,11 +136,23 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_WITH_ID_ENDPOINT, "NOT_ENOUGH_CHARS")
-				).andExpect(MockMvcResultMatchers.status().isBadRequest)
-					.andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
+				).andExpect(MockMvcResultMatchers.status().isBadRequest).andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.code", Matchers.`is`(body.code)))
 
 				// verify mocks are not called
+				Mockito.verify(service, Mockito.times(0)).getRssFeedForPodcast(any())
+			}
+
+			@Test
+			fun `HEAD Request - Retrieve Podcast Data XML - With Incorrectly Formatted Podcast ID`() {
+				val body = PodcastError(ErrorType.G001.error, ErrorType.G001.name)
+
+				mockMvc.perform(
+					head(TestConstants.PODCAST_WITH_ID_ENDPOINT, "NOT_ENOUGH_CHARS")
+				).andExpect(MockMvcResultMatchers.status().isBadRequest).andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
+					.andExpect(MockMvcResultMatchers.jsonPath("$.code", Matchers.`is`(body.code)))
+
+				// verify
 				Mockito.verify(service, Mockito.times(0)).getRssFeedForPodcast(any())
 			}
 		}
@@ -141,13 +173,12 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
-				).andExpect(MockMvcResultMatchers.status().isOk)
-					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/description").string(mockData.podcast.description))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/language").string(mockData.podcast.language))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/copyright").string(mockData.podcast.copyright))
-//				.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").string(mockData.podcast.podcastLastBuildDate))
+					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").exists())
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:email", namespace).string(mockData.podcast.email))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:name", namespace).string(mockData.podcast.author))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:category/@text", namespace).string(mockData.podcast.category))
@@ -156,6 +187,16 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:image/@href", namespace).string(mockData.podcast.imageUrl))
 
 				// verify mocks are called
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
+			}
+
+			@Test
+			fun `HEAD Request - Retrieve Podcast Data XML - Authorization Header Is Missing - With CSRF`() {
+				mockMvc.perform(
+					head(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.content().string(""))
+
+				// verify
 				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 
@@ -170,13 +211,12 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
-				).andExpect(MockMvcResultMatchers.status().isOk)
-					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.xpath("/rss/channel/title").string(mockData.podcast.title))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/link").string(mockData.podcast.link))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/description").string(mockData.podcast.description))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/language").string(mockData.podcast.language))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/copyright").string(mockData.podcast.copyright))
-//				.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").string(mockData.podcast.podcastLastBuildDate))
+					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/lastBuildDate").exists())
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:email", namespace).string(mockData.podcast.email))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:owner/itunes:name", namespace).string(mockData.podcast.author))
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:category/@text", namespace).string(mockData.podcast.category))
@@ -185,6 +225,16 @@ class RetrievePodcastDataControllerTest {
 					.andExpect(MockMvcResultMatchers.xpath("/rss/channel/itunes:image/@href", namespace).string(mockData.podcast.imageUrl))
 
 				// verify mocks are called
+				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
+			}
+
+			@Test
+			fun `HEAD Request - Retrieve Podcast Data XML - Authorization Header Is Missing - Without CSRF`() {
+				mockMvc.perform(
+					head(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.content().string(""))
+
+				// verify
 				Mockito.verify(service).getRssFeedForPodcast(TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
 			}
 		}
@@ -197,11 +247,23 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, "NOT_ENOUGH_CHARS")
-				).andExpect(MockMvcResultMatchers.status().isBadRequest)
-					.andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
+				).andExpect(MockMvcResultMatchers.status().isBadRequest).andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.code", Matchers.`is`(body.code)))
 
 				// verify mocks are not called
+				Mockito.verify(service, Mockito.times(0)).getRssFeedForPodcast(any())
+			}
+
+			@Test
+			fun `HEAD Request - Retrieve Podcast Data XML - With Incorrectly Formatted Podcast ID`() {
+				val body = PodcastError(ErrorType.G001.error, ErrorType.G001.name)
+
+				mockMvc.perform(
+					head(TestConstants.PODCAST_DATA_AS_FEED_ENDPOINT, "NOT_ENOUGH_CHARS")
+				).andExpect(MockMvcResultMatchers.status().isBadRequest).andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
+					.andExpect(MockMvcResultMatchers.jsonPath("$.code", Matchers.`is`(body.code)))
+
+				// verify
 				Mockito.verify(service, Mockito.times(0)).getRssFeedForPodcast(any())
 			}
 		}
@@ -220,8 +282,7 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1).with(csrf())
-				).andExpect(MockMvcResultMatchers.status().isOk)
-					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.id", Matchers.`is`(mockData.podcast.id)))
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.jsonPath("$.podcast.id", Matchers.`is`(mockData.podcast.id)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.title", Matchers.`is`(mockData.podcast.title)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.link", Matchers.`is`(mockData.podcast.link)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.description", Matchers.`is`(mockData.podcast.description)))
@@ -248,8 +309,7 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, TestConstants.PODCAST_ID_FROM_MOCK_RES_1)
-				).andExpect(MockMvcResultMatchers.status().isOk)
-					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.id", Matchers.`is`(mockData.podcast.id)))
+				).andExpect(MockMvcResultMatchers.status().isOk).andExpect(MockMvcResultMatchers.jsonPath("$.podcast.id", Matchers.`is`(mockData.podcast.id)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.title", Matchers.`is`(mockData.podcast.title)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.link", Matchers.`is`(mockData.podcast.link)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.podcast.description", Matchers.`is`(mockData.podcast.description)))
@@ -276,8 +336,7 @@ class RetrievePodcastDataControllerTest {
 
 				mockMvc.perform(
 					get(TestConstants.PODCAST_DATA_AS_JSON_ENDPOINT, "NOT_ENOUGH_CHARS")
-				).andExpect(MockMvcResultMatchers.status().isBadRequest)
-					.andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
+				).andExpect(MockMvcResultMatchers.status().isBadRequest).andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.`is`(body.message)))
 					.andExpect(MockMvcResultMatchers.jsonPath("$.code", Matchers.`is`(body.code)))
 
 				// verify mocks are not called

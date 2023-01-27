@@ -133,7 +133,8 @@ class JdbcDaoTest {
 				val sampleEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
 				val episode = PodcastEpisode(podcastId = TestConstants.PODCAST_ID_FROM_SQL_QUERY).apply {
 					this.title = sampleEpisode.title
-					this.link = sampleEpisode.link
+					this.episodeWebpageLink = sampleEpisode.episodeWebpageLink
+					this.episodeAudioLink = sampleEpisode.episodeAudioLink
 					this.description = sampleEpisode.description
 					this.publicationDate = sampleEpisode.publicationDate
 					this.author = sampleEpisode.author
@@ -249,7 +250,8 @@ class JdbcDaoTest {
 					podcastId = TestConstants.PODCAST_ID_FROM_SQL_QUERY, episodeId = TestConstants.EPISODE_ID_FROM_SQL_QUERY
 				).apply {  // using mock object value but will use mock DB IDs
 					this.title = sampleEpisode.title
-					this.link = sampleEpisode.link
+					this.episodeWebpageLink = sampleEpisode.episodeWebpageLink
+					this.episodeAudioLink = sampleEpisode.episodeAudioLink
 					this.description = sampleEpisode.description
 					this.publicationDate = sampleEpisode.publicationDate
 					this.author = sampleEpisode.author
@@ -296,7 +298,8 @@ class JdbcDaoTest {
 					podcastId = TestConstants.PODCAST_ID_FROM_SQL_QUERY, episodeId = TestConstants.EPISODE_ID_FROM_SQL_QUERY
 				).apply {  // using mock object value but will use mock DB IDs
 					this.title = sampleEpisode.title
-					this.link = sampleEpisode.link
+					this.episodeWebpageLink = sampleEpisode.episodeWebpageLink
+					this.episodeAudioLink = sampleEpisode.episodeAudioLink
 					this.description = sampleEpisode.description
 					this.publicationDate = sampleEpisode.publicationDate
 					this.author = sampleEpisode.author
