@@ -7,7 +7,7 @@ val jacksonDatabindVersion = "2.14.2"
 val jacksonKotlinVersion = "2.14.2"
 val jacksonCoreVersion = "2.14.2"
 val kotlinVersion = "1.7.22"
-val postgresqlVersion = "42.5.1"
+val postgresqlVersion = "42.5.2"
 val slf4jVersion = "2.0.6"
 val guavaVersion = "31.1-jre"
 
