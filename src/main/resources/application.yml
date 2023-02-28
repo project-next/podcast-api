@@ -14,7 +14,7 @@ spring:
       matching-strategy: ant-path-matcher # fixes spring-fox error on spring-boot >= v2.6
 
 server:
-  port: 9000
+  port: 9010
   servlet:
     contextPath: /api/v1
   compression:

@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val romeToolsVersion = "1.18.0"
-val springBootVersion = "3.0.2"
-val jacksonDatabindVersion = "2.14.1"
-val jacksonKotlinVersion = "2.14.1"
-val jacksonCoreVersion = "2.14.1"
+val romeToolsVersion = "2.0.0"
+val springBootVersion = "3.0.3"
+val jacksonDatabindVersion = "2.14.2"
+val jacksonKotlinVersion = "2.14.2"
+val jacksonCoreVersion = "2.14.2"
 val kotlinVersion = "1.7.22"
-val postgresqlVersion = "42.5.1"
+val postgresqlVersion = "42.5.4"
 val slf4jVersion = "2.0.6"
 val guavaVersion = "31.1-jre"
 
@@ -15,21 +15,21 @@ val archivesBaseName = "podcast-api"
 
 
 plugins {
-	id("org.springframework.boot") version "3.0.2"
+	id("org.springframework.boot") version "3.0.3"
 	id("io.spring.dependency-management") version "1.1.0"
 	id("info.solidsoft.pitest") version "1.9.11"
 	id("com.adarshr.test-logger") version "3.2.0"	// printing for JUnits
 //	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
-	kotlin("jvm") version "1.8.0"
-	kotlin("plugin.spring") version "1.8.0"
+	kotlin("jvm") version "1.8.10"
+	kotlin("plugin.spring") version "1.8.10"
 
 	jacoco
 }
 
 
 group = "com.rtomyj.next"
-version = "1.3.0"
+version = "1.3.1"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 
