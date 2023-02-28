@@ -8,4 +8,6 @@ object Generic {
 	const val URL_VALIDATOR_MESSAGE = "URL must be in correct format ex: https://im-awesome.com"
 
 	const val PODCAST_URI = "/**"
+
+	var APP_VERSION: String = Generic::class.java.getPackage().implementationVersion ?: "LOCAL"
 }
