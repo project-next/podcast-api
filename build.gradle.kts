@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val romeToolsVersion = "2.0.0"
+val romeToolsVersion = "2.1.0"
 val springBootVersion = "3.0.4"
 val jacksonDatabindVersion = "2.14.2"
 val jacksonKotlinVersion = "2.14.2"
