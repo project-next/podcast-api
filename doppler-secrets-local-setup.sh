@@ -2,15 +2,15 @@ echo "Setting up environment variables retrieved from Doppler"
 echo
 
 # DB Creds
-PODCAST_API_DB_PASSWORD="`doppler secrets get DB_PASSWORD --plain`"
-PODCAST_API_DB_USERNAME="`doppler secrets get DB_USERNAME --plain`"
-PODCAST_API_DB_URI="`doppler secrets get DB_URI --plain`"
+PODCAST_API_DB_PASSWORD="`doppler secrets get -p podcast-api -c prod DB_PASSWORD --plain`"
+PODCAST_API_DB_USERNAME="`doppler secrets get -p podcast-api -c prod DB_USERNAME --plain`"
+PODCAST_API_DB_URI="`doppler secrets get -p podcast-api -c prod DB_URI --plain`"
 
 # Users for in memory DB
-ADMIN_USERNAME="`doppler secrets get ADMIN_USERNAME --plain`"
-ADMIN_PASSWORD="`doppler secrets get ADMIN_PASSWORD --plain`"
-GENERIC_USER_USERNAME="`doppler secrets get GENERIC_USER_USERNAME --plain`"
-GENERIC_USER_PASSWORD="`doppler secrets get GENERIC_USER_PASSWORD --plain`"
+ADMIN_USERNAME="`doppler secrets get -p podcast-api -c prod ADMIN_USERNAME --plain`"
+ADMIN_PASSWORD="`doppler secrets get -p podcast-api -c prod ADMIN_PASSWORD --plain`"
+GENERIC_USER_USERNAME="`doppler secrets -p podcast-api -c prod get GENERIC_USER_USERNAME --plain`"
+GENERIC_USER_PASSWORD="`doppler secrets -p podcast-api -c prod get GENERIC_USER_PASSWORD --plain`"
 
 echo "Environment set up!"
 echo "PODCAST_API_DB_USERNAME=$PODCAST_API_DB_USERNAME"
