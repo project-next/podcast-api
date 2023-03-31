@@ -18,10 +18,18 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+
+
+
 
 @Repository("jdbc")
 class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : Dao {
-	private val dbDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSS]")
+	private val dbDate = DateTimeFormatterBuilder()
+		.append(DateTimeFormatter.ISO_LOCAL_DATE)
+		.appendLiteral(' ')
+		.append(DateTimeFormatter.ISO_LOCAL_TIME)
+		.toFormatter()
 
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)

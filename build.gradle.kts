@@ -1,21 +1,21 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val romeToolsVersion = "2.0.0"
-val springBootVersion = "3.0.3"
+val romeToolsVersion = "2.1.0"
+val springBootVersion = "3.0.5"
 val jacksonDatabindVersion = "2.14.2"
 val jacksonKotlinVersion = "2.14.2"
 val jacksonCoreVersion = "2.14.2"
 val kotlinVersion = "1.7.22"
-val postgresqlVersion = "42.5.4"
-val slf4jVersion = "2.0.6"
+val postgresqlVersion = "42.6.0"
+val slf4jVersion = "2.0.7"
 val guavaVersion = "31.1-jre"
 
 val archivesBaseName = "podcast-api"
 
 
 plugins {
-	id("org.springframework.boot") version "3.0.3"
+	id("org.springframework.boot") version "3.0.5"
 	id("io.spring.dependency-management") version "1.1.0"
 	id("info.solidsoft.pitest") version "1.9.11"
 	id("com.adarshr.test-logger") version "3.2.0"	// printing for JUnits
@@ -29,7 +29,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.3.1"
+version = "1.3.2"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 
