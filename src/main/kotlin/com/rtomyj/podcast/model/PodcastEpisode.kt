@@ -12,8 +12,8 @@ data class PodcastEpisode(
 	@Size(min = 36, max = 36) val podcastId: String = "", val episodeId: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
-	@Size(max = 100)
-	@Pattern(regexp = "[\\w\\d\$&+,:;=?@# ]+")
+	@Size(min = 3, max = 100)
+	@Pattern(regexp = "[\\w\$&+,:?.!@#\\-• ]+")
 	lateinit var title: String
 
 	@NotBlank
