@@ -1,7 +1,7 @@
 package com.rtomyj.podcast.util.enum
 
 enum class PodcastApiTables(
-	val tableName: String
+	private val tableName: String
 ) {
 	PODCAST_INFO_TABLE("podcast_info"), PODCAST_EPISODES_TABLE("podcast_episode");
 
