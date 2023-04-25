@@ -1,18 +1,18 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
+// main
 val romeToolsVersion = "2.1.0"
 val springBootVersion = "3.0.6"
-val jacksonDatabindVersion = "2.14.2"
 val jacksonKotlinVersion = "2.15.0"
 val jacksonCoreVersion = "2.15.0"
+val snakeYamlVersion = "2.0"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.6.0"
 val slf4jVersion = "2.0.7"
 val guavaVersion = "31.1-jre"
 
 val archivesBaseName = "podcast-api"
-
 
 plugins {
 	id("org.springframework.boot") version "3.0.6"
@@ -52,9 +52,9 @@ dependencies {
 
 	implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
-	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion")
 	implementation("com.fasterxml.jackson.core:jackson-core:$jacksonCoreVersion")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
+	implementation("org.yaml:snakeyaml:$snakeYamlVersion")
 
 	// below are needed for native???
 //	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -69,6 +69,14 @@ dependencies {
 }
 
 configurations {
+	all {
+		resolutionStrategy.eachDependency {
+			if (this.requested.group == ("com.fasterxml.jackson.core")) {
+				this.useVersion(jacksonCoreVersion)
+			}
+		}
+	}
+
 	implementation {
 		exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
 		exclude(module = "spring-boot-starter-tomcat")
