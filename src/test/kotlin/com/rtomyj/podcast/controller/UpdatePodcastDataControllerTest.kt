@@ -18,7 +18,6 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -28,13 +27,19 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 
 @WebMvcTest
-@ContextConfiguration(classes = [RestAccessDeniedHandler::class, RestAuthenticationEntryPoint::class])  // import classes as beans - these are needed by SecurityConfig
+/*
+	Normally, UpdatePodcastDataController would not need to be imported in @ContextConfiguration but instead in the @WebMvcTest.
+		However, since we are using @ContextConfiguration, we have to include UpdatePodcastDataController here
+		 which will correctly configure our tests - else we will see 404 errors when using MockMvc.
+	ControllerAdvice should be imported, so it can handle the errors correctly.
+ */
+@ContextConfiguration(classes = [SecurityConfig::class, UpdatePodcastDataController::class, PodcastExceptionAdvice::class,
+	RestAccessDeniedHandler::class, RestAuthenticationEntryPoint::class])  // import classes as beans - these are needed by SecurityConfig
 /*
 	Import security beans defined in SecurityConfig.
 	Controller needs to be imported here and not in @WebMvcTest or else 404 errors is all that will be returned.
 	ControllerAdvice should be imported, so it can handle the errors correctly.
  */
-@Import(value = [SecurityConfig::class, UpdatePodcastDataController::class, PodcastExceptionAdvice::class])
 @ActiveProfiles("test") // Loading test props with H2 in memory DB configurations
 @Tag("Controller")
 class UpdatePodcastDataControllerTest {
