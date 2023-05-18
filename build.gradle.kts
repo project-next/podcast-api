@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.0.6"
+val springBootVersion = "3.0.7"
 val jacksonKotlinVersion = "2.15.1"
 val jacksonCoreVersion = "2.15.1"
 val snakeYamlVersion = "2.0"
@@ -15,7 +15,7 @@ val guavaVersion = "31.1-jre"
 val archivesBaseName = "podcast-api"
 
 plugins {
-	id("org.springframework.boot") version "3.0.6"
+	id("org.springframework.boot") version "3.0.7"
 	id("io.spring.dependency-management") version "1.1.0"
 	id("info.solidsoft.pitest") version "1.9.11"
 	id("com.adarshr.test-logger") version "3.2.0"	// printing for JUnits
