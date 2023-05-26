@@ -2,6 +2,7 @@ package com.rtomyj.podcast.service
 
 import com.nhaarman.mockito_kotlin.any
 import com.rtomyj.podcast.dao.Dao
+import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestObjectsFromFile
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [PodcastService::class])
@@ -23,6 +25,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class PodcastServiceTest {
 	@MockBean
 	private lateinit var daoMock: Dao
+	@MockBean
+	private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
 
 	@Autowired
 	private lateinit var podcastService: PodcastService
@@ -39,7 +43,7 @@ class PodcastServiceTest {
 				val mockedPodcast = mockPodcastData.podcast
 				val mockedEpisodes = mockPodcastData.podcastEpisodes
 
-				Mockito.`when`(daoMock.getPodcastInfo(podcastId)).thenReturn(mockedPodcast)
+				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
 				Mockito.`when`(daoMock.getPodcastEpisodes(podcastId)).thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
 				// Call
@@ -48,7 +52,7 @@ class PodcastServiceTest {
 				// Assert
 				Assertions.assertNotNull(feed)
 
-				Mockito.verify(daoMock).getPodcastInfo(podcastId)
+				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
 				Mockito.verify(daoMock).getPodcastEpisodes(podcastId)
 			}
 		}
@@ -66,7 +70,7 @@ class PodcastServiceTest {
 				val mockedPodcast = mockPodcastData.podcast
 				val mockedEpisodes = mockPodcastData.podcastEpisodes
 
-				Mockito.`when`(daoMock.getPodcastInfo(podcastId)).thenReturn(mockedPodcast)
+				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
 				Mockito.`when`(daoMock.getPodcastEpisodes(podcastId)).thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
 				// Call
@@ -76,7 +80,7 @@ class PodcastServiceTest {
 				Assertions.assertNotNull(data)
 				Assertions.assertEquals(mockPodcastData, data)
 
-				Mockito.verify(daoMock).getPodcastInfo(podcastId)
+				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
 				Mockito.verify(daoMock).getPodcastEpisodes(podcastId)
 			}
 		}

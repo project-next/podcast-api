@@ -6,11 +6,7 @@ import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestConstants
 import com.rtomyj.podcast.util.TestObjectsFromFile
 import com.rtomyj.podcast.util.enum.ErrorType
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Tag
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
@@ -32,36 +28,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class JdbcDaoTest {
 	@Autowired
 	private lateinit var dao: Dao
-
-	@Nested
-	inner class RetrievePodcastInfo {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Retrieve Podcast Info From DB`() {
-				// Call
-				val podcast = dao.getPodcastInfo(TestConstants.PODCAST_ID_FROM_SQL_QUERY)
-
-				// Assert
-				Assertions.assertNotNull(podcast)
-			}
-		}
-
-		@Nested
-		inner class DatabaseErrors {
-			@Test
-			fun `Podcast ID Does Not Exist In DB`() {
-				// Call
-				val err = Assertions.assertThrows(
-					PodcastException::class.java, { dao.getPodcastInfo("INVALID") }, "Expected an error thrown as there should be no records for ID."
-				)
-
-				// Assert
-				Assertions.assertNotNull(err)
-				Assertions.assertEquals(PodcastException("Podcast not found in DB", ErrorType.DB001), err)
-			}
-		}
-	}
 
 	@Nested
 	inner class RetrieveEpisodes {

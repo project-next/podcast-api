@@ -1,6 +1,7 @@
 package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.Dao
+import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastData
@@ -10,27 +11,31 @@ import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrNull
 
 
 @Service
-class PodcastService @Autowired constructor(val dao: Dao) {
+class PodcastService @Autowired constructor(val dao: Dao, val podcastCrudRepository: PodcastCrudRepository) {
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
 	}
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
-		val podcastInfo = dao.getPodcastInfo(podcastId)
+		val podcastInfo = getPodcastInfo(podcastId)
 		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
 
 		return RssFeed(podcastInfo, podcastEpisodes)
 	}
 
 	fun getPodcastData(podcastId: String): PodcastData {
-		val podcastInfo = dao.getPodcastInfo(podcastId)
+		val podcastInfo = getPodcastInfo(podcastId)
 		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
 
 		return PodcastData(podcastInfo, podcastEpisodes)
 	}
+
+	private fun getPodcastInfo(podcastId: String) =
+		podcastCrudRepository.findById(podcastId).getOrNull() ?: throw PodcastException("Podcast not found in DB", ErrorType.DB001)
 
 	fun storeNewPodcast(podcast: Podcast) {
 		dao.storeNewPodcast(podcast)

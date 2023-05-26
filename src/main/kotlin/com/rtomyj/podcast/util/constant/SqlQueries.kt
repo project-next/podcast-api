@@ -1,13 +1,8 @@
 package com.rtomyj.podcast.util.constant
 
-import com.rtomyj.podcast.util.enum.PodcastApiTables.PODCAST_EPISODES_TABLE
-import com.rtomyj.podcast.util.enum.PodcastApiTables.PODCAST_INFO_TABLE
-import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
-import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastInfoTableColumns
+import com.rtomyj.podcast.util.enum.PodcastApiTables.*
 
 object SqlQueries {
-	val PODCAST_INFO_QUERY =
-		"SELECT ${PodcastInfoTableColumns.PODCAST_ID}, ${PodcastInfoTableColumns.PODCAST_TITLE}, ${PodcastInfoTableColumns.PODCAST_LINK}, ${PodcastInfoTableColumns.PODCAST_DESCRIPTION}, ${PodcastInfoTableColumns.PODCAST_LANGUAGE}, ${PodcastInfoTableColumns.PODCAST_COPYRIGHT}, ${PodcastInfoTableColumns.PODCAST_LAST_BUILD_DATE}, ${PodcastInfoTableColumns.PODCAST_EMAIL}, ${PodcastInfoTableColumns.PODCAST_CATEGORY}, ${PodcastInfoTableColumns.PODCAST_AUTHOR}, ${PodcastInfoTableColumns.IS_EXPLICIT}, ${PodcastInfoTableColumns.PODCAST_IMAGE_URL} FROM $PODCAST_INFO_TABLE WHERE ${PodcastInfoTableColumns.PODCAST_ID} = :podcastId"
 	val PODCAST_EPISODES_QUERY =
 		"SELECT ${PodcastEpisodeTableColumns.EPISODE_TITLE}, ${PodcastEpisodeTableColumns.PODCAST_ID}, ${PodcastEpisodeTableColumns.EPISODE_WEBPAGE_LINK}, ${PodcastEpisodeTableColumns.EPISODE_AUDIO_LINK}, ${PodcastEpisodeTableColumns.EPISODE_DESCRIPTION}, ${PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE}, ${PodcastEpisodeTableColumns.EPISODE_AUTHOR}, ${PodcastEpisodeTableColumns.EPISODE_IMAGE}, ${PodcastEpisodeTableColumns.EPISODE_KEYWORDS}, ${PodcastEpisodeTableColumns.EPISODE_GUID}, ${PodcastEpisodeTableColumns.EPISODE_LENGTH}, ${PodcastEpisodeTableColumns.EPISODE_MEDIA_TYPE}, ${PodcastEpisodeTableColumns.IS_EXPLICIT}, ${PodcastEpisodeTableColumns.EPISODE_DURATION} from $PODCAST_EPISODES_TABLE WHERE ${PodcastInfoTableColumns.PODCAST_ID} = :podcastId ORDER BY ${PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE}"
 
