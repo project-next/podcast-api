@@ -3,6 +3,7 @@ package com.rtomyj.podcast.service
 import com.nhaarman.mockito_kotlin.any
 import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
+import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestObjectsFromFile
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.data.domain.Sort
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
@@ -25,8 +27,12 @@ import java.util.*
 class PodcastServiceTest {
 	@MockBean
 	private lateinit var daoMock: Dao
+
 	@MockBean
 	private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
+
+	@MockBean
+	private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
 
 	@Autowired
 	private lateinit var podcastService: PodcastService
@@ -44,7 +50,8 @@ class PodcastServiceTest {
 				val mockedEpisodes = mockPodcastData.podcastEpisodes
 
 				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(daoMock.getPodcastEpisodes(podcastId)).thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
+				Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(podcastId, Sort.by("publicationDate")))
+					.thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
 				// Call
 				val feed = podcastService.getRssFeedForPodcast(podcastId)
@@ -53,7 +60,7 @@ class PodcastServiceTest {
 				Assertions.assertNotNull(feed)
 
 				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-				Mockito.verify(daoMock).getPodcastEpisodes(podcastId)
+				Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 			}
 		}
 	}
@@ -71,7 +78,8 @@ class PodcastServiceTest {
 				val mockedEpisodes = mockPodcastData.podcastEpisodes
 
 				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(daoMock.getPodcastEpisodes(podcastId)).thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
+				Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(podcastId, Sort.by("publicationDate")))
+					.thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
 				// Call
 				val data = podcastService.getPodcastData(podcastId)
@@ -81,7 +89,7 @@ class PodcastServiceTest {
 				Assertions.assertEquals(mockPodcastData, data)
 
 				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-				Mockito.verify(daoMock).getPodcastEpisodes(podcastId)
+				Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 			}
 		}
 	}

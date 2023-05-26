@@ -5,26 +5,16 @@ import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.constant.SqlQueries
 import com.rtomyj.podcast.util.enum.ErrorType
-import com.rtomyj.podcast.util.enum.PodcastApiTables.PodcastEpisodeTableColumns
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
-import java.sql.ResultSet
 import java.sql.SQLException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
 
 @Repository("jdbc")
 class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : Dao {
-	private val dbDate = DateTimeFormatterBuilder()
-		.append(DateTimeFormatter.ISO_LOCAL_DATE)
-		.appendLiteral(' ')
-		.append(DateTimeFormatter.ISO_LOCAL_TIME)
-		.toFormatter()
 
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
@@ -35,32 +25,6 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		const val SOMETHING_WENT_WRONG = "Something went wrong!"
 		const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
 		const val NO_ROWS_UPDATED = "No rows updated!"
-	}
-
-	override fun getPodcastEpisodes(podcastId: String): ArrayList<PodcastEpisode> {
-		val sqlParams = MapSqlParameterSource()
-		sqlParams.addValue("podcastId", podcastId)
-
-		return namedParameterJdbcTemplate.query(SqlQueries.PODCAST_EPISODES_QUERY, sqlParams, fun(row: ResultSet, _: Int): PodcastEpisode {
-			return PodcastEpisode(podcastId, row.getString(PodcastEpisodeTableColumns.EPISODE_GUID.columnName)).apply {
-				title = row.getString(PodcastEpisodeTableColumns.EPISODE_TITLE.columnName)
-				episodeWebpageLink = row.getString(PodcastEpisodeTableColumns.EPISODE_WEBPAGE_LINK.columnName)
-				episodeAudioLink = row.getString(PodcastEpisodeTableColumns.EPISODE_AUDIO_LINK.columnName)
-				description = row.getString(PodcastEpisodeTableColumns.EPISODE_DESCRIPTION.columnName)
-				publicationDate = LocalDateTime.from(dbDate.parse(row.getString(PodcastEpisodeTableColumns.EPISODE_PUBLICATION_DATE.columnName)))
-				author = row.getString(PodcastEpisodeTableColumns.EPISODE_AUTHOR.columnName)
-				imageLink = row.getString(PodcastEpisodeTableColumns.EPISODE_IMAGE.columnName)
-
-				val keywords = row.getString(PodcastEpisodeTableColumns.EPISODE_KEYWORDS.columnName)
-				keywords.split("|").toCollection(this.keywords)
-
-				length = row.getLong(PodcastEpisodeTableColumns.EPISODE_LENGTH.columnName)
-				mediaType = row.getString(PodcastEpisodeTableColumns.EPISODE_MEDIA_TYPE.columnName)
-				isExplicit = row.getBoolean(PodcastEpisodeTableColumns.IS_EXPLICIT.columnName)
-				duration = row.getString(PodcastEpisodeTableColumns.EPISODE_DURATION.columnName)
-			}
-
-		}) as ArrayList<PodcastEpisode>
 	}
 
 	override fun storeNewPodcast(podcast: Podcast) {

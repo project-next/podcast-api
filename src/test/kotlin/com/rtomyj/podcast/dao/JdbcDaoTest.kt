@@ -30,22 +30,6 @@ class JdbcDaoTest {
 	private lateinit var dao: Dao
 
 	@Nested
-	inner class RetrieveEpisodes {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Retrieve Episodes From DB`() {
-				// Call
-				val episodes = dao.getPodcastEpisodes(TestConstants.PODCAST_ID_FROM_SQL_QUERY)
-
-				// Assert
-				Assertions.assertNotNull(episodes)
-				Assertions.assertEquals(1, episodes.size)
-			}
-		}
-	}
-
-	@Nested
 	inner class StorePodcast {
 		@Nested
 		inner class HappyPath {

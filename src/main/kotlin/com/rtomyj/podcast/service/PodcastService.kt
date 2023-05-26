@@ -2,6 +2,7 @@ package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
+import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastData
@@ -10,26 +11,31 @@ import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
 
 @Service
-class PodcastService @Autowired constructor(val dao: Dao, val podcastCrudRepository: PodcastCrudRepository) {
+class PodcastService @Autowired constructor(
+	val dao: Dao,
+	val podcastCrudRepository: PodcastCrudRepository,
+	val podcastEpisodePagingAndSortingRepository: PodcastEpisodePagingAndSortingRepository
+) {
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
 	}
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
 		val podcastInfo = getPodcastInfo(podcastId)
-		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
+		val podcastEpisodes = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
 		return RssFeed(podcastInfo, podcastEpisodes)
 	}
 
 	fun getPodcastData(podcastId: String): PodcastData {
 		val podcastInfo = getPodcastInfo(podcastId)
-		val podcastEpisodes = dao.getPodcastEpisodes(podcastId)
+		val podcastEpisodes = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
 		return PodcastData(podcastInfo, podcastEpisodes)
 	}
