@@ -4,19 +4,19 @@ import com.rometools.modules.itunes.EntryInformationImpl
 import com.rometools.modules.itunes.FeedInformationImpl
 import com.rometools.modules.itunes.types.Category
 import com.rometools.modules.itunes.types.Duration
-import com.rometools.rome.feed.rss.Channel
-import com.rometools.rome.feed.rss.Description
-import com.rometools.rome.feed.rss.Enclosure
-import com.rometools.rome.feed.rss.Guid
-import com.rometools.rome.feed.rss.Item
+import com.rometools.rome.feed.rss.*
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
 import java.net.URL
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 class TransformToFeed {
 	companion object {
+		@JvmStatic
+		fun localDateToDate(localDateTime: LocalDateTime): Date = Date.from(localDateTime.atZone(ZoneId.of("GMT")).toInstant())
+
 		@JvmStatic
 		fun populateChannelInfo(feed: Channel, podcast: Podcast) {
 			with(feed) {
@@ -25,7 +25,7 @@ class TransformToFeed {
 				description = podcast.description
 				language = podcast.language
 				copyright = podcast.copyright
-				lastBuildDate = Date.from(podcast.lastBuildDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+				lastBuildDate = localDateToDate(podcast.lastBuildDate)
 			}
 
 			val feedInformationImpl = FeedInformationImpl().apply {
@@ -40,7 +40,7 @@ class TransformToFeed {
 			feed.modules = listOf(feedInformationImpl)
 		}
 
-
+		@JvmStatic
 		fun episodeToFeed(episode: PodcastEpisode): Item {
 			return Item().apply {
 				// Set description
@@ -58,7 +58,7 @@ class TransformToFeed {
 				title = episode.title
 				author = episode.author
 				link = episode.episodeWebpageLink
-				pubDate = Date.from(episode.publicationDate.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+				pubDate = localDateToDate(episode.publicationDate)
 				guid = Guid()
 				guid.value = episode.episodeId
 
