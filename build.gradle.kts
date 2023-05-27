@@ -10,7 +10,7 @@ val snakeYamlVersion = "2.0"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.6.0"
 val slf4jVersion = "2.0.7"
-val guavaVersion = "31.1-jre"
+val guavaVersion = "32.0.0-jre"
 val jCacheVersion = "6.2.3.Final"
 val ehCacheVersion = "3.10.8"
 
