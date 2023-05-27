@@ -1,6 +1,5 @@
 package com.rtomyj.podcast.service
 
-import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
@@ -21,7 +20,6 @@ import kotlin.jvm.optionals.getOrNull
 
 @Service
 class PodcastService @Autowired constructor(
-	val dao: Dao,
 	val podcastCrudRepository: PodcastCrudRepository,
 	val podcastEpisodePagingAndSortingRepository: PodcastEpisodePagingAndSortingRepository,
 	val podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
@@ -96,10 +94,17 @@ class PodcastService @Autowired constructor(
 			throw PodcastException("Podcast ID from URL and the one from the body do not match!", ErrorType.G005)
 		}
 
-		val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
-		log.info("Using the following keywords: {}", delimitedKeywords)
+		if (podcastCrudRepository.findById(podcastId).isEmpty) {
+			log.error("Podcast with ID {} not found in DB", podcastId)
+			throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
+		}
 
-		dao.updatePodcastEpisode(podcastEpisode, delimitedKeywords)
+		if (podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId).isEmpty) {
+			log.error("Podcast episode with ID {} not found in DB", podcastEpisode.episodeId)
+			throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
+		}
+
+		savePodcastEpisode(podcastEpisode)
 	}
 
 	private fun savePodcastEpisode(podcastEpisode: PodcastEpisode) {

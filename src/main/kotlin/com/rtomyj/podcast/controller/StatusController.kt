@@ -1,7 +1,7 @@
 package com.rtomyj.podcast.controller
 
 import com.rtomyj.podcast.model.StatusResponse
-import com.rtomyj.podcast.util.constant.Generic
+import com.rtomyj.podcast.util.Constants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -30,7 +30,7 @@ class StatusController {
 		log.info("Status of API was requested")
 
 		return ResponseEntity.ok(
-			StatusResponse("API is online and functional.", Generic.APP_VERSION)
+			StatusResponse("API is online and functional.", Constants.APP_VERSION)
 		)
 	}
 }

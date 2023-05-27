@@ -1,7 +1,6 @@
 package com.rtomyj.podcast.service
 
 import com.nhaarman.mockito_kotlin.any
-import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
@@ -26,9 +25,6 @@ import java.util.*
 @ContextConfiguration(classes = [PodcastService::class])
 @Tag("Service")
 class PodcastServiceTest {
-	@MockBean
-	private lateinit var daoMock: Dao
-
 	@MockBean
 	private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
 
@@ -200,17 +196,23 @@ class PodcastServiceTest {
 			@Test
 			fun `Successfully Update Episode`() {
 				// Mock
-				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
 				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
+				val mockPodcastData = TestObjectsFromFile.podcastData1
+				val podcastId = mockPodcastData.podcast.id
+				val mockedPodcast = mockPodcastData.podcast
 
-				Mockito.doNothing().`when`(daoMock).updatePodcastEpisode(podcastEpisode, delimitedKeywords)
+				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+				Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId)).thenReturn(Optional.of(podcastEpisode))
+				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+					.thenReturn(podcastEpisode)
 
 				// Call
 				podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
 
 				// Assert
-				Mockito.verify(daoMock).updatePodcastEpisode(podcastEpisode, delimitedKeywords)
+				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+				Mockito.verify(podcastEpisodeCrudRepository).findById(podcastEpisode.episodeId)
+				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
 			}
 		}
 
@@ -220,8 +222,14 @@ class PodcastServiceTest {
 			fun `Podcast IDs Differ`() {
 				// Mock
 				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+				val mockPodcastData = TestObjectsFromFile.podcastData1
+				val podcastId = mockPodcastData.podcast.id
+				val mockedPodcast = mockPodcastData.podcast
 
-				Mockito.doNothing().`when`(daoMock).updatePodcastEpisode(any(), any())
+				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+				Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastId)).thenReturn(Optional.of(podcastEpisode))
+				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+					.thenReturn(podcastEpisode)
 
 				// Call
 				val err = Assertions.assertThrows(
@@ -235,7 +243,9 @@ class PodcastServiceTest {
 				Assertions.assertEquals("Podcast ID from URL and the one from the body do not match!", err.message)
 				Assertions.assertEquals(ErrorType.G005, err.errorType)
 
-				Mockito.verify(daoMock, Mockito.times(0)).updatePodcastEpisode(any(), any())
+				Mockito.verify(podcastCrudRepositoryMock, Mockito.times(0)).findById(any())
+				Mockito.verify(podcastEpisodeCrudRepository, Mockito.times(0)).findById(any())
+				Mockito.verify(podcastEpisodeCrudRepository, Mockito.times(0)).save(any())
 			}
 		}
 	}

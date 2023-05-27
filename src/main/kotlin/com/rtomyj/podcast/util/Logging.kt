@@ -1,7 +1,6 @@
 package com.rtomyj.podcast.util
 
 import com.google.common.net.HttpHeaders
-import com.rtomyj.podcast.util.constant.Generic
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.MDC
 import java.util.*
@@ -25,7 +24,7 @@ class Logging private constructor() {
 			val queryParams = if (httpServletRequest.queryString == null) "" else "?" + httpServletRequest.queryString
 
 			// proxies and load balancers will forward client IP address in HTTP_X_FORWARDED_FOR header. If header exists, use value. Otherwise, use requests IP
-			MDC.put(Generic.CLIENT_IP_MDC, clientIP.replace("[", "").replace("]", ""))
+			MDC.put(Constants.CLIENT_IP_MDC, clientIP.replace("[", "").replace("]", ""))
 			MDC.put("reqPath", httpServletRequest.servletPath + queryParams)
 			MDC.put("reqUUID", UUID.randomUUID().toString())
 			MDC.put("clientID", httpServletRequest.getHeader(CLIENT_ID_NAME))

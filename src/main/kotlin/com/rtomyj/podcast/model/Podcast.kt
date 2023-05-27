@@ -1,6 +1,6 @@
 package com.rtomyj.podcast.model
 
-import com.rtomyj.podcast.util.constant.Generic
+import com.rtomyj.podcast.util.Constants
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -26,7 +26,7 @@ data class Podcast(
 
 	@NotBlank
 	@Size(max = 255)
-	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
+	@Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
 	@Column(name = "podcast_link")
 	lateinit var link: String
 
@@ -71,7 +71,7 @@ data class Podcast(
 
 	@NotBlank
 	@Size(max = 255)
-	@Pattern(regexp = Generic.URL_REGEX, message = Generic.URL_VALIDATOR_MESSAGE)
+	@Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
 	@Column(name = "podcast_image_url")
 	lateinit var imageUrl: String
 

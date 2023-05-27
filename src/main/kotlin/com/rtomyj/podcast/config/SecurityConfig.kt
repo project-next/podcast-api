@@ -1,6 +1,6 @@
 package com.rtomyj.podcast.config
 
-import com.rtomyj.podcast.util.constant.Generic
+import com.rtomyj.podcast.util.Constants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -29,10 +29,10 @@ class SecurityConfig @Autowired constructor(
 	@Bean
 	@Throws(Exception::class)
 	fun filterChain(http: HttpSecurity): SecurityFilterChain {
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.PUT, Generic.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, Generic.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.HEAD, Generic.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
+		http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, Constants.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
+		http.authorizeHttpRequests().requestMatchers(HttpMethod.PUT, Constants.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
+		http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, Constants.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
+		http.authorizeHttpRequests().requestMatchers(HttpMethod.HEAD, Constants.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
 
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
 		return http.build()

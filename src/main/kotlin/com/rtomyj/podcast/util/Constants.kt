@@ -1,6 +1,6 @@
-package com.rtomyj.podcast.util.constant
+package com.rtomyj.podcast.util
 
-object Generic {
+object Constants {
 	const val CLIENT_IP_MDC = "reqIp"
 	const val EXCEPTION_PROVIDER_LOG = "Exception occurred w/ message: {}, with ErrorType: {}, responding with: {}"
 
@@ -9,5 +9,5 @@ object Generic {
 
 	const val PODCAST_URI = "/**"
 
-	var APP_VERSION: String = Generic::class.java.getPackage().implementationVersion ?: "LOCAL"
+	var APP_VERSION: String = Constants::class.java.getPackage().implementationVersion ?: "LOCAL"
 }
