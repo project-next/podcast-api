@@ -29,12 +29,21 @@ class SecurityConfig @Autowired constructor(
 	@Bean
 	@Throws(Exception::class)
 	fun filterChain(http: HttpSecurity): SecurityFilterChain {
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, Constants.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.PUT, Constants.PODCAST_URI).hasRole("ADMIN").and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, Constants.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
-		http.authorizeHttpRequests().requestMatchers(HttpMethod.HEAD, Constants.PODCAST_URI).permitAll().and().httpBasic().and().csrf().disable()
-
-		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
+		http.authorizeHttpRequests {
+			it
+				.requestMatchers(HttpMethod.POST, Constants.PODCAST_URI).hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PUT, Constants.PODCAST_URI).hasRole("ADMIN")
+				.requestMatchers(HttpMethod.GET, Constants.PODCAST_URI).permitAll()
+				.requestMatchers(HttpMethod.HEAD, Constants.PODCAST_URI).permitAll()
+		}
+		http.csrf {
+			it.disable()
+		}
+		http.httpBasic {  }
+		http.exceptionHandling {
+			it.authenticationEntryPoint(authenticationEntryPoint)
+			it.accessDeniedHandler(accessDeniedHandler)
+		}
 		return http.build()
 	}
 
