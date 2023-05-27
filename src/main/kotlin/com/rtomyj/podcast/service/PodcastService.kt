@@ -1,7 +1,6 @@
 package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.Dao
-import com.rtomyj.podcast.dao.JdbcDao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
@@ -30,6 +29,10 @@ class PodcastService @Autowired constructor(
 
 		private const val DataIntegrityViolationExceptionLog = "DataIntegrityViolationException occurred while inserting new podcast info. {}"
 		private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
+
+		private const val SOMETHING_WENT_WRONG = "Something went wrong!"
+		private const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
+		private const val NO_ROWS_UPDATED = "No rows updated!"
 	}
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
@@ -54,10 +57,10 @@ class PodcastService @Autowired constructor(
 			podcastCrudRepository.save(podcast)
 		} catch (ex: DataIntegrityViolationException) {
 			log.error(DataIntegrityViolationExceptionLog, ex.toString())
-			throw PodcastException(JdbcDao.DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
+			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
 		} catch (ex: SQLException) {
 			log.error(SQLExceptionLog, ex.toString())
-			throw PodcastException(JdbcDao.SOMETHING_WENT_WRONG, ErrorType.DB002)
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
 		}
 	}
 
