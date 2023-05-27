@@ -8,13 +8,16 @@ spring:
   jpa:
     properties:
       hibernate:
+        javax:
+          cache:
+            missing_cache_strategy: create
         generate_statistics: false # debugging purposes
         cache:
           use_second_level_cache: true
           use_query_cache: true
           region:
             factory_class: org.hibernate.cache.jcache.JCacheRegionFactory # gradle dependency
-      javax:
+      jakarta:
         persistence:
           sharedCache:
             mode: ENABLE_SELECTIVE  # need to explicitly add @Cacheable to Entity object

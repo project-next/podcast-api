@@ -36,16 +36,20 @@ class PodcastService @Autowired constructor(
 	}
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
+		log.info("Retrieving feed for podcast w/ ID: {}", podcastId)
 		val podcastInfo = getPodcastInfo(podcastId)
 		val podcastEpisodes = getPodcastEpisodes(podcastId)
 
+		log.info("Found podcast w/ ID: {}. Total episodes: {}", podcastId, podcastEpisodes.size)
 		return RssFeed(podcastInfo, podcastEpisodes)
 	}
 
 	fun getPodcastData(podcastId: String): PodcastData {
+		log.info("Retrieving data for podcast w/ ID: {}", podcastId)
 		val podcastInfo = getPodcastInfo(podcastId)
 		val podcastEpisodes = getPodcastEpisodes(podcastId)
 
+		log.info("Found podcast w/ ID: {}. Total episodes: {}", podcastId, podcastEpisodes.size)
 		return PodcastData(podcastInfo, podcastEpisodes)
 	}
 
