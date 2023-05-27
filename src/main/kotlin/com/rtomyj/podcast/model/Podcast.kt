@@ -6,11 +6,15 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 import java.util.*
 
 @Entity(name = "podcast_info")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class Podcast(
 	@Id @Column(name = "podcast_id", columnDefinition="bpchar", updatable = false, nullable = false) var id: String = UUID.randomUUID().toString()
 ) {

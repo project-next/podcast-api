@@ -11,6 +11,8 @@ val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.6.0"
 val slf4jVersion = "2.0.7"
 val guavaVersion = "31.1-jre"
+val jCacheVersion = "6.2.3.Final"
+val ehCacheVersion = "3.10.8"
 
 val archivesBaseName = "podcast-api"
 
@@ -64,6 +66,9 @@ dependencies {
 	implementation("com.rometools:rome-modules:$romeToolsVersion")
 
 	runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+	// below are needed for Hibernate L2 caching - https://www.baeldung.com/hibernate-second-level-cache
+	runtimeOnly("org.hibernate.orm:hibernate-jcache:$jCacheVersion")
+	runtimeOnly("org.ehcache:ehcache:$ehCacheVersion")
 
 	implementation("com.google.guava:guava:$guavaVersion")
 }

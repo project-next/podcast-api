@@ -1,11 +1,23 @@
 spring:
   datasource:
     hikari:
-      maximum-pool-size: 30
+      maximum-pool-size: 10
     url: "jdbc:postgresql://${PODCAST_API_DB_URI}"
     username: "${PODCAST_API_DB_USERNAME}"
     password: "${PODCAST_API_DB_PASSWORD}"
   jpa:
+    properties:
+      hibernate:
+        generate_statistics: false # debugging purposes
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory # gradle dependency
+      javax:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE  # need to explicitly add @Cacheable to Entity object
     hibernate:
       ddl-auto: validate
     open-in-view: false
