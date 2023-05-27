@@ -7,10 +7,14 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import org.hibernate.Hibernate
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import java.time.LocalDateTime
 import java.util.*
 
 @Entity(name = "podcast_episode")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class PodcastEpisode(
 	@Size(min = 36, max = 36) @Column(name = "podcast_id", columnDefinition="bpchar") val podcastId: String = "",
 	@Id @Column(name = "episode_guid", columnDefinition="bpchar") val episodeId: String = UUID.randomUUID().toString()
