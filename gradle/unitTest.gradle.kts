@@ -33,7 +33,7 @@ tasks.withType<JacocoReport> {
 	afterEvaluate {
 		classDirectories.setFrom(classDirectories.files.map {
 			fileTree(it).matching {
-				exclude("com/rtomyj/podcast/model/**", "com/rtomyj/podcast/Application.kt", "com/rtomyj/podcast/util/enum/**", "com/rtomyj/podcast/util/constant/**")
+				exclude("com/rtomyj/podcast/model/**", "com/rtomyj/podcast/Application**", "com/rtomyj/podcast/util/enum/**", "com/rtomyj/podcast/util/constant/**")
 			}
 		})
 	}
