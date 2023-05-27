@@ -1,19 +1,18 @@
 package com.rtomyj.podcast.model
 
 import com.rtomyj.podcast.util.constant.Generic
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 import java.util.*
 
 @Entity(name = "podcast_info")
 data class Podcast(
-	@Id @Column(name = "podcast_id") val id: String = UUID.randomUUID().toString()
+	@Id @Column(name = "podcast_id", columnDefinition="bpchar") val id: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 50)
@@ -34,7 +33,7 @@ data class Podcast(
 
 	@NotBlank
 	@Pattern(regexp = "\\w{2}-\\w{2}")
-	@Size(max = 3000)
+	@Size(max = 5)
 	@Column(name = "podcast_language")
 	lateinit var language: String
 
@@ -43,7 +42,9 @@ data class Podcast(
 	@Column(name = "podcast_copyright")
 	lateinit var copyright: String
 
-	@Column(name = "podcast_last_build_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "podcast_last_build_date", nullable = false, updatable = false)
+	@CreationTimestamp
 	lateinit var lastBuildDate: LocalDateTime
 
 	@NotBlank

@@ -7,7 +7,7 @@ spring:
     password: "${PODCAST_API_DB_PASSWORD}"
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: false
   mvc:
     pathmatch:

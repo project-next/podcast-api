@@ -15,7 +15,7 @@ import java.util.*
 class TransformToFeed {
 	companion object {
 		@JvmStatic
-		fun localDateToDate(localDateTime: LocalDateTime): Date = Date.from(localDateTime.atZone(ZoneId.of("GMT")).toInstant())
+		fun localDateToDate(localDateTime: LocalDateTime): Date = Date.from(localDateTime.atZone(ZoneId.of("America/Chicago")).toInstant())
 
 		@JvmStatic
 		fun populateChannelInfo(feed: Channel, podcast: Podcast) {

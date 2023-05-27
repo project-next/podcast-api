@@ -103,13 +103,14 @@ class PodcastServiceTest {
 				// Mock
 				val podcast = TestObjectsFromFile.podcastData1.podcast
 
-				Mockito.doNothing().`when`(daoMock).storeNewPodcast(podcast)
+				Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+					.thenReturn(podcast)
 
 				// Call
 				podcastService.storeNewPodcast(podcast)
 
 				// Assert
-				Mockito.verify(daoMock).storeNewPodcast(podcast)
+				Mockito.verify(podcastCrudRepositoryMock).save(podcast)
 			}
 		}
 	}

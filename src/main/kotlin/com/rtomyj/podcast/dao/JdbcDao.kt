@@ -27,31 +27,6 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		const val NO_ROWS_UPDATED = "No rows updated!"
 	}
 
-	override fun storeNewPodcast(podcast: Podcast) {
-		val sqlParams = MapSqlParameterSource()
-		sqlParams.addValue("podcast_id", podcast.id)
-		sqlParams.addValue("podcast_title", podcast.title)
-		sqlParams.addValue("podcast_link", podcast.link)
-		sqlParams.addValue("podcast_description", podcast.description)
-		sqlParams.addValue("podcast_language", podcast.language)
-		sqlParams.addValue("podcast_copyright", podcast.copyright)
-		sqlParams.addValue("podcast_email", podcast.email)
-		sqlParams.addValue("podcast_category", podcast.category)
-		sqlParams.addValue("podcast_author", podcast.author)
-		sqlParams.addValue("is_explicit", podcast.isExplicit)
-		sqlParams.addValue("podcast_image_url", podcast.imageUrl)
-
-		try {
-			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_QUERY, sqlParams)
-		} catch (ex: DataIntegrityViolationException) {
-			log.error(DataIntegrityViolationExceptionLog, ex.toString())
-			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
-		} catch (ex: SQLException) {
-			log.error(SQLExceptionLog, ex.toString())
-			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
-		}
-	}
-
 	override fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode, delimitedKeywords: String) {
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("podcast_id", podcastEpisode.podcastId)

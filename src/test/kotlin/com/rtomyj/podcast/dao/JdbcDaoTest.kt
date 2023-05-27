@@ -30,50 +30,6 @@ class JdbcDaoTest {
 	private lateinit var dao: Dao
 
 	@Nested
-	inner class StorePodcast {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Store New Podcast`() {
-				// Mock
-				val podcast = TestObjectsFromFile.podcastData1.podcast
-
-				// Call
-				dao.storeNewPodcast(podcast)
-			}
-		}
-
-		@Nested
-		inner class DatabaseErrors {
-			@Test
-			fun `Data Integrity Error`() {
-				// Mock
-				val podcast = Podcast(TestObjectsFromFile.podcastData1.podcast.id + "longer!!!!!!!!!!!").apply {
-					this.title = TestObjectsFromFile.podcastData1.podcast.title
-					this.link = TestObjectsFromFile.podcastData1.podcast.link
-					this.description = TestObjectsFromFile.podcastData1.podcast.description
-					this.language = TestObjectsFromFile.podcastData1.podcast.language
-					this.copyright = TestObjectsFromFile.podcastData1.podcast.copyright
-					this.lastBuildDate = TestObjectsFromFile.podcastData1.podcast.lastBuildDate
-					this.email = TestObjectsFromFile.podcastData1.podcast.email
-					this.category = TestObjectsFromFile.podcastData1.podcast.category
-					this.author = TestObjectsFromFile.podcastData1.podcast.author
-					this.imageUrl = TestObjectsFromFile.podcastData1.podcast.imageUrl
-				}
-
-				// Call
-				val err = Assertions.assertThrows(
-					PodcastException::class.java, { dao.storeNewPodcast(podcast) }, "Trying to store a record with integrity issue - as such an exception should be thrown"
-				)
-
-				// Assert
-				Assertions.assertNotNull(err)
-				Assertions.assertEquals(PodcastException(JdbcDao.DATA_CONSTRAINT_ISSUE, ErrorType.DB002), err)
-			}
-		}
-	}
-
-	@Nested
 	inner class StoreEpisode {
 		@Nested
 		inner class HappyPath {

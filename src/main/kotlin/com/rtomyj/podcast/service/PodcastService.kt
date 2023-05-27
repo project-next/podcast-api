@@ -1,6 +1,7 @@
 package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.Dao
+import com.rtomyj.podcast.dao.JdbcDao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
@@ -11,8 +12,10 @@ import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import java.sql.SQLException
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -24,6 +27,9 @@ class PodcastService @Autowired constructor(
 ) {
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
+
+		private const val DataIntegrityViolationExceptionLog = "DataIntegrityViolationException occurred while inserting new podcast info. {}"
+		private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
 	}
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
@@ -44,7 +50,15 @@ class PodcastService @Autowired constructor(
 		podcastCrudRepository.findById(podcastId).getOrNull() ?: throw PodcastException("Podcast not found in DB", ErrorType.DB001)
 
 	fun storeNewPodcast(podcast: Podcast) {
-		dao.storeNewPodcast(podcast)
+		try {
+			podcastCrudRepository.save(podcast)
+		} catch (ex: DataIntegrityViolationException) {
+			log.error(DataIntegrityViolationExceptionLog, ex.toString())
+			throw PodcastException(JdbcDao.DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
+		} catch (ex: SQLException) {
+			log.error(SQLExceptionLog, ex.toString())
+			throw PodcastException(JdbcDao.SOMETHING_WENT_WRONG, ErrorType.DB002)
+		}
 	}
 
 	fun updatePodcast(podcastId: String, podcast: Podcast) {
