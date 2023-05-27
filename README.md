@@ -16,7 +16,8 @@ To speed up read queries, an L2 cache is being used when reading from the databa
 
 **Note:** L2 cache is only desirable if there are far more reads than there are writes to a particular DB, else the Cache might be counter-productive.
 
-**Limitations:** L2 cache is a local cache, meaning any updates done to DB from outside the application won't invalidate that field in the cache. If you want to keep cache in sync, minimize writes outside of App instance.
+**Limitations:** L2 cache is a local cache, meaning any updates done to DB from outside the application won't invalidate that field in the cache. If you want to keep cache in sync, minimize writes outside of App instance. You can also evict the cache using
+sessionFactory.cache.evictAll()
 
 1. Setup dependencies - `org.hibernate.orm:hibernate-jcache` and `org.hibernate.orm:hibernate-jcache` are needed.
 2. Enable L2 cache in [application props file](https://github.com/project-next/podcast-api/blob/750e83591fa72d5c0d04c6bedde60b10bb2af26f/src/main/resources/application.yml#L10-L20)
