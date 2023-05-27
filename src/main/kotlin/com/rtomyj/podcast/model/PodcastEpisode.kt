@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size
 import org.hibernate.Hibernate
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 import java.util.*
 
@@ -43,7 +44,8 @@ data class PodcastEpisode(
 	lateinit var description: String
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "episode_pub_date")
+	@Column(name = "episode_pub_date", nullable = false)
+	@CreationTimestamp
 	lateinit var publicationDate: LocalDateTime
 
 	@NotBlank

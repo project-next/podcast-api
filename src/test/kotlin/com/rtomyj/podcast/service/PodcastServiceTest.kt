@@ -3,6 +3,7 @@ package com.rtomyj.podcast.service
 import com.nhaarman.mockito_kotlin.any
 import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
+import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.PodcastEpisode
@@ -30,6 +31,9 @@ class PodcastServiceTest {
 
 	@MockBean
 	private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
+
+	@MockBean
+	private lateinit var podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 
 	@MockBean
 	private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
@@ -150,15 +154,15 @@ class PodcastServiceTest {
 				// Mock
 				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
 				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
 
-				Mockito.doNothing().`when`(daoMock).storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)
+				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+					.thenReturn(podcastEpisode)
 
 				// Call
 				podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
 
 				// Assert
-				Mockito.verify(daoMock).storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)
+				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
 			}
 		}
 
@@ -169,7 +173,8 @@ class PodcastServiceTest {
 				// Mock
 				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
 
-				Mockito.doNothing().`when`(daoMock).storeNewPodcastEpisode(any(), any())
+				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+					.thenReturn(podcastEpisode)
 
 				// Call
 				val err = Assertions.assertThrows(
@@ -183,7 +188,7 @@ class PodcastServiceTest {
 				Assertions.assertEquals("Podcast ID from URL and the one from the body do not match!", err.message)
 				Assertions.assertEquals(ErrorType.G005, err.errorType)
 
-				Mockito.verify(daoMock, Mockito.times(0)).storeNewPodcastEpisode(any(), any())
+				Mockito.verify(podcastEpisodeCrudRepository, Mockito.times(0)).save(any())
 			}
 		}
 	}

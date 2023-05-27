@@ -26,33 +26,6 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 		const val NO_ROWS_UPDATED = "No rows updated!"
 	}
 
-	override fun storeNewPodcastEpisode(podcastEpisode: PodcastEpisode, delimitedKeywords: String) {
-		val sqlParams = MapSqlParameterSource()
-		sqlParams.addValue("podcast_id", podcastEpisode.podcastId)
-		sqlParams.addValue("episode_title", podcastEpisode.title)
-		sqlParams.addValue("episode_webpage_link", podcastEpisode.episodeWebpageLink)
-		sqlParams.addValue("episode_audio_link", podcastEpisode.episodeAudioLink)
-		sqlParams.addValue("episode_description", podcastEpisode.description)
-		sqlParams.addValue("episode_author", podcastEpisode.author)
-		sqlParams.addValue("episode_image", podcastEpisode.imageLink)
-		sqlParams.addValue("episode_keywords", delimitedKeywords)   // keywords should be delimited correctly in service layer
-		sqlParams.addValue("episode_guid", podcastEpisode.episodeId)
-		sqlParams.addValue("episode_length", podcastEpisode.length)
-		sqlParams.addValue("episode_media_type", podcastEpisode.mediaType)
-		sqlParams.addValue("is_episode_explicit", podcastEpisode.isExplicit)
-		sqlParams.addValue("episode_duration", podcastEpisode.duration)
-
-		try {
-			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_EPISODE_QUERY, sqlParams)
-		} catch (ex: DataIntegrityViolationException) {
-			log.error(DataIntegrityViolationExceptionLog, ex.toString())
-			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
-		} catch (ex: SQLException) {
-			log.error(SQLExceptionLog, ex.toString())
-			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
-		}
-	}
-
 	override fun updatePodcastEpisode(podcastEpisode: PodcastEpisode, delimitedKeywords: String) {
 		val sqlParams = MapSqlParameterSource()
 		sqlParams.addValue("episode_title", podcastEpisode.title)

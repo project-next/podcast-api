@@ -2,6 +2,7 @@ package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.Dao
 import com.rtomyj.podcast.dao.PodcastCrudRepository
+import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
@@ -22,7 +23,8 @@ import kotlin.jvm.optionals.getOrNull
 class PodcastService @Autowired constructor(
 	val dao: Dao,
 	val podcastCrudRepository: PodcastCrudRepository,
-	val podcastEpisodePagingAndSortingRepository: PodcastEpisodePagingAndSortingRepository
+	val podcastEpisodePagingAndSortingRepository: PodcastEpisodePagingAndSortingRepository,
+	val podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 ) {
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
@@ -86,10 +88,7 @@ class PodcastService @Autowired constructor(
 			throw PodcastException("Podcast ID from URL and the one from the body do not match!", ErrorType.G005)
 		}
 
-		val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
-		log.info("Using the following keywords: {}", delimitedKeywords)
-
-		dao.storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)
+		savePodcastEpisode(podcastEpisode)
 	}
 
 	fun updatePodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
@@ -101,5 +100,17 @@ class PodcastService @Autowired constructor(
 		log.info("Using the following keywords: {}", delimitedKeywords)
 
 		dao.updatePodcastEpisode(podcastEpisode, delimitedKeywords)
+	}
+
+	private fun savePodcastEpisode(podcastEpisode: PodcastEpisode) {
+		try {
+			podcastEpisodeCrudRepository.save(podcastEpisode)
+		} catch (ex: DataIntegrityViolationException) {
+			log.error(DataIntegrityViolationExceptionLog, ex.toString())
+			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
+		} catch (ex: SQLException) {
+			log.error(SQLExceptionLog, ex.toString())
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
+		}
 	}
 }
