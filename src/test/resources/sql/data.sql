@@ -11,7 +11,7 @@ VALUES
 	(
 		'41c4e54d-bee9-43c9-b34b-d4eb87c1a377'
 		, 'Random Podcast Name', 'https://www.thesupremekingscastle.com'
-		, 'The BEST test podcast in the workd!'
+		, 'The BEST test podcast in the world!'
 		, 'en-us', 'Test 2022', NOW(), 'whoami@gmail.com'
 		, 'Comedy', 'NEXT', true
 		, 'https://www.thesupremekingscastle.com'
