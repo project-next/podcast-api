@@ -37,14 +37,14 @@ class PodcastService @Autowired constructor(
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
 		val podcastInfo = getPodcastInfo(podcastId)
-		val podcastEpisodes = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+		val podcastEpisodes = getPodcastEpisodes(podcastId)
 
 		return RssFeed(podcastInfo, podcastEpisodes)
 	}
 
 	fun getPodcastData(podcastId: String): PodcastData {
 		val podcastInfo = getPodcastInfo(podcastId)
-		val podcastEpisodes = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+		val podcastEpisodes = getPodcastEpisodes(podcastId)
 
 		return PodcastData(podcastInfo, podcastEpisodes)
 	}
@@ -52,7 +52,20 @@ class PodcastService @Autowired constructor(
 	private fun getPodcastInfo(podcastId: String) =
 		podcastCrudRepository.findById(podcastId).getOrNull() ?: throw PodcastException("Podcast not found in DB", ErrorType.DB001)
 
-	fun storeNewPodcast(podcast: Podcast) {
+	private fun getPodcastEpisodes(podcastId: String) = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+
+	fun storeNewPodcast(podcast: Podcast) = savePodcast(podcast)
+
+	fun updatePodcast(podcastId: String, podcast: Podcast) {
+		if (podcastCrudRepository.findById(podcastId).isEmpty) {
+			log.error("Podcast with ID {} not found in DB", podcastId)
+			throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
+		}
+		podcast.id = podcastId
+		savePodcast(podcast)
+	}
+
+	private fun savePodcast(podcast: Podcast) {
 		try {
 			podcastCrudRepository.save(podcast)
 		} catch (ex: DataIntegrityViolationException) {
@@ -62,10 +75,6 @@ class PodcastService @Autowired constructor(
 			log.error(SQLExceptionLog, ex.toString())
 			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
 		}
-	}
-
-	fun updatePodcast(podcastId: String, podcast: Podcast) {
-		dao.updatePodcast(podcastId, podcast)
 	}
 
 	fun storeNewPodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {

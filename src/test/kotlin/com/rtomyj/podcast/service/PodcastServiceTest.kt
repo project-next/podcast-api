@@ -125,13 +125,18 @@ class PodcastServiceTest {
 				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
 				val podcast = TestObjectsFromFile.podcastData1.podcast
 
-				Mockito.doNothing().`when`(daoMock).updatePodcast(podcastId, podcast)
+				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+					.thenReturn(Optional.of(podcast))
+
+				Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+					.thenReturn(podcast)
 
 				// Call
 				podcastService.updatePodcast(podcastId, podcast)
 
 				// Assert
-				Mockito.verify(daoMock).updatePodcast(podcastId, podcast)
+				Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
 			}
 		}
 	}

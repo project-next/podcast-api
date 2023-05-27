@@ -12,7 +12,7 @@ import java.util.*
 
 @Entity(name = "podcast_info")
 data class Podcast(
-	@Id @Column(name = "podcast_id", columnDefinition="bpchar") val id: String = UUID.randomUUID().toString()
+	@Id @Column(name = "podcast_id", columnDefinition="bpchar", updatable = false, nullable = false) var id: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 50)
@@ -43,7 +43,7 @@ data class Podcast(
 	lateinit var copyright: String
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "podcast_last_build_date", nullable = false, updatable = false)
+	@Column(name = "podcast_last_build_date", nullable = false)
 	@CreationTimestamp
 	lateinit var lastBuildDate: LocalDateTime
 

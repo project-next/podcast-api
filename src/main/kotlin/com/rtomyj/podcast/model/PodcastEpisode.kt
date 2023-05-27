@@ -2,10 +2,7 @@ package com.rtomyj.podcast.model
 
 import com.rtomyj.podcast.dao.KeywordsConverter
 import com.rtomyj.podcast.util.constant.Generic
-import jakarta.persistence.Column
-import jakarta.persistence.Convert
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
@@ -15,8 +12,8 @@ import java.util.*
 
 @Entity(name = "podcast_episode")
 data class PodcastEpisode(
-	@Size(min = 36, max = 36) @Column(name = "podcast_id") val podcastId: String = "",
-	@Id @Column(name = "episode_guid") val episodeId: String = UUID.randomUUID().toString()
+	@Size(min = 36, max = 36) @Column(name = "podcast_id", columnDefinition="bpchar") val podcastId: String = "",
+	@Id @Column(name = "episode_guid", columnDefinition="bpchar") val episodeId: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 100)
@@ -41,6 +38,7 @@ data class PodcastEpisode(
 	@Column(name = "episode_description")
 	lateinit var description: String
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "episode_pub_date")
 	lateinit var publicationDate: LocalDateTime
 

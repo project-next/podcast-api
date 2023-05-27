@@ -1,7 +1,6 @@
 package com.rtomyj.podcast.dao
 
 import com.rtomyj.podcast.exception.PodcastException
-import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.constant.SqlQueries
 import com.rtomyj.podcast.util.enum.ErrorType
@@ -45,33 +44,6 @@ class JdbcDao @Autowired constructor(val namedParameterJdbcTemplate: NamedParame
 
 		try {
 			namedParameterJdbcTemplate.update(SqlQueries.INSERT_NEW_PODCAST_EPISODE_QUERY, sqlParams)
-		} catch (ex: DataIntegrityViolationException) {
-			log.error(DataIntegrityViolationExceptionLog, ex.toString())
-			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
-		} catch (ex: SQLException) {
-			log.error(SQLExceptionLog, ex.toString())
-			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
-		}
-	}
-
-	override fun updatePodcast(podcastId: String, podcast: Podcast) {
-		val sqlParams = MapSqlParameterSource()
-		sqlParams.addValue("podcast_id", podcastId)
-		sqlParams.addValue("podcast_title", podcast.title)
-		sqlParams.addValue("podcast_link", podcast.link)
-		sqlParams.addValue("podcast_description", podcast.description)
-		sqlParams.addValue("podcast_language", podcast.language)
-		sqlParams.addValue("podcast_copyright", podcast.copyright)
-		sqlParams.addValue("podcast_email", podcast.email)
-		sqlParams.addValue("podcast_category", podcast.category)
-		sqlParams.addValue("podcast_author", podcast.author)
-		sqlParams.addValue("is_explicit", podcast.isExplicit)
-		sqlParams.addValue("podcast_image_url", podcast.imageUrl)
-
-		try {
-			if (namedParameterJdbcTemplate.update(SqlQueries.UPDATE_PODCAST_QUERY, sqlParams) == 0) {
-				throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
-			}
 		} catch (ex: DataIntegrityViolationException) {
 			log.error(DataIntegrityViolationExceptionLog, ex.toString())
 			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
