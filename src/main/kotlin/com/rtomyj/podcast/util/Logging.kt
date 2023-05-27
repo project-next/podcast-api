@@ -1,8 +1,8 @@
 package com.rtomyj.podcast.util
 
-import com.google.common.net.HttpHeaders
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.MDC
+import org.springframework.http.HttpHeaders
 import java.util.*
 
 /**
