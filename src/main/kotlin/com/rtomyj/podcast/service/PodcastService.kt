@@ -11,7 +11,6 @@ import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.sql.SQLException
@@ -27,12 +26,10 @@ class PodcastService @Autowired constructor(
 	companion object {
 		private val log = LoggerFactory.getLogger(this::class.java.name)
 
-		private const val DataIntegrityViolationExceptionLog = "DataIntegrityViolationException occurred while inserting new podcast info. {}"
 		private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
 
 		private const val SOMETHING_WENT_WRONG = "Something went wrong!"
-		private const val DATA_CONSTRAINT_ISSUE = "Data constraint issue!"
-		private const val NO_ROWS_UPDATED = "No rows updated!"
+		private const val DB_MISSING_RECORD_CANNOT_UPDATE = "Could not update record as it DNE in DB."
 	}
 
 	fun getRssFeedForPodcast(podcastId: String): RssFeed {
@@ -62,8 +59,8 @@ class PodcastService @Autowired constructor(
 
 	fun updatePodcast(podcastId: String, podcast: Podcast) {
 		if (podcastCrudRepository.findById(podcastId).isEmpty) {
-			log.error("Podcast with ID {} not found in DB", podcastId)
-			throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
+			log.error("Podcast with ID {} not found in DB, therefore cannot update podcast information.", podcastId)
+			throw PodcastException(DB_MISSING_RECORD_CANNOT_UPDATE, ErrorType.DB004)
 		}
 		podcast.id = podcastId
 		savePodcast(podcast)
@@ -72,36 +69,28 @@ class PodcastService @Autowired constructor(
 	private fun savePodcast(podcast: Podcast) {
 		try {
 			podcastCrudRepository.save(podcast)
-		} catch (ex: DataIntegrityViolationException) {
-			log.error(DataIntegrityViolationExceptionLog, ex.toString())
-			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
-		} catch (ex: SQLException) {
+		}  catch (ex: SQLException) {
 			log.error(SQLExceptionLog, ex.toString())
 			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
 		}
 	}
 
 	fun storeNewPodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
-		if (podcastId != podcastEpisode.podcastId) {
-			throw PodcastException("Podcast ID from URL and the one from the body do not match!", ErrorType.G005)
-		}
-
+		podcastEpisode.podcastId = podcastId
 		savePodcastEpisode(podcastEpisode)
 	}
 
 	fun updatePodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
-		if (podcastId != podcastEpisode.podcastId) {
-			throw PodcastException("Podcast ID from URL and the one from the body do not match!", ErrorType.G005)
-		}
+		podcastEpisode.podcastId = podcastId
 
 		if (podcastCrudRepository.findById(podcastId).isEmpty) {
-			log.error("Podcast with ID {} not found in DB", podcastId)
-			throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
+			log.error("Podcast with ID {} not found in DB, therefore cannot update podcast episode.", podcastId)
+			throw PodcastException(DB_MISSING_RECORD_CANNOT_UPDATE, ErrorType.DB004)
 		}
 
 		if (podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId).isEmpty) {
-			log.error("Podcast episode with ID {} not found in DB", podcastEpisode.episodeId)
-			throw PodcastException(NO_ROWS_UPDATED, ErrorType.DB004)
+			log.error("Podcast episode with ID {} not found in DB, therefore cannot update podcast episode.", podcastEpisode.episodeId)
+			throw PodcastException(DB_MISSING_RECORD_CANNOT_UPDATE, ErrorType.DB004)
 		}
 
 		savePodcastEpisode(podcastEpisode)
@@ -110,9 +99,6 @@ class PodcastService @Autowired constructor(
 	private fun savePodcastEpisode(podcastEpisode: PodcastEpisode) {
 		try {
 			podcastEpisodeCrudRepository.save(podcastEpisode)
-		} catch (ex: DataIntegrityViolationException) {
-			log.error(DataIntegrityViolationExceptionLog, ex.toString())
-			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
 		} catch (ex: SQLException) {
 			log.error(SQLExceptionLog, ex.toString())
 			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)

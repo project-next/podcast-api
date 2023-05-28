@@ -17,7 +17,7 @@ import java.util.*
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class PodcastEpisode(
-	@Size(min = 36, max = 36) @Column(name = "podcast_id", columnDefinition="bpchar") val podcastId: String = "",
+	@Size(min = 36, max = 36) @Column(name = "podcast_id", columnDefinition="bpchar") var podcastId: String = "",
 	@Id @Column(name = "episode_guid", columnDefinition="bpchar") val episodeId: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank

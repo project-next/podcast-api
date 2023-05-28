@@ -1,13 +1,10 @@
 package com.rtomyj.podcast.service
 
-import com.nhaarman.mockito_kotlin.any
 import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
-import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestObjectsFromFile
-import com.rtomyj.podcast.util.enum.ErrorType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
@@ -161,32 +158,6 @@ class PodcastServiceTest {
 				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
 			}
 		}
-
-		@Nested
-		inner class VerificationIssue {
-			@Test
-			fun `Podcast IDs Differ`() {
-				// Mock
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-
-				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
-					.thenReturn(podcastEpisode)
-
-				// Call
-				val err = Assertions.assertThrows(
-					PodcastException::class.java,
-					{ podcastService.storeNewPodcastEpisode("Random", podcastEpisode) },
-					"Wanted differing IDs and an exception to rise, but exception did not get thrown"
-				)
-
-				// Assert
-				Assertions.assertNotNull(err)
-				Assertions.assertEquals("Podcast ID from URL and the one from the body do not match!", err.message)
-				Assertions.assertEquals(ErrorType.G005, err.errorType)
-
-				Mockito.verify(podcastEpisodeCrudRepository, Mockito.times(0)).save(any())
-			}
-		}
 	}
 
 	@Nested
@@ -213,39 +184,6 @@ class PodcastServiceTest {
 				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
 				Mockito.verify(podcastEpisodeCrudRepository).findById(podcastEpisode.episodeId)
 				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
-			}
-		}
-
-		@Nested
-		inner class VerificationIssue {
-			@Test
-			fun `Podcast IDs Differ`() {
-				// Mock
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val podcastId = mockPodcastData.podcast.id
-				val mockedPodcast = mockPodcastData.podcast
-
-				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastId)).thenReturn(Optional.of(podcastEpisode))
-				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
-					.thenReturn(podcastEpisode)
-
-				// Call
-				val err = Assertions.assertThrows(
-					PodcastException::class.java,
-					{ podcastService.updatePodcastEpisode("Random", podcastEpisode) },
-					"Wanted differing IDs and an exception to rise, but exception did not get thrown"
-				)
-
-				// Assert
-				Assertions.assertNotNull(err)
-				Assertions.assertEquals("Podcast ID from URL and the one from the body do not match!", err.message)
-				Assertions.assertEquals(ErrorType.G005, err.errorType)
-
-				Mockito.verify(podcastCrudRepositoryMock, Mockito.times(0)).findById(any())
-				Mockito.verify(podcastEpisodeCrudRepository, Mockito.times(0)).findById(any())
-				Mockito.verify(podcastEpisodeCrudRepository, Mockito.times(0)).save(any())
 			}
 		}
 	}
