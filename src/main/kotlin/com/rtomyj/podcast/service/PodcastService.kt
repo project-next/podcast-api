@@ -32,21 +32,17 @@ class PodcastService @Autowired constructor(
 		private const val DB_MISSING_RECORD_CANNOT_UPDATE = "Could not update record as it DNE in DB."
 	}
 
-	fun getRssFeedForPodcast(podcastId: String): RssFeed {
-		log.info("Retrieving feed for podcast w/ ID: {}", podcastId)
+	fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastDataFromDB(podcastId))
+
+	fun getPodcastData(podcastId: String): PodcastData = getPodcastDataFromDB(podcastId)
+
+	private fun getPodcastDataFromDB(podcastId: String): PodcastData {
+		log.info("Retrieving podcast info and episodes for podcast w/ ID: {}", podcastId)
 		val podcastInfo = getPodcastInfo(podcastId)
 		val podcastEpisodes = getPodcastEpisodes(podcastId)
 
-		log.info("Found podcast w/ ID: {}. Total episodes: {}", podcastId, podcastEpisodes.size)
-		return RssFeed(podcastInfo, podcastEpisodes)
-	}
-
-	fun getPodcastData(podcastId: String): PodcastData {
-		log.info("Retrieving data for podcast w/ ID: {}", podcastId)
-		val podcastInfo = getPodcastInfo(podcastId)
-		val podcastEpisodes = getPodcastEpisodes(podcastId)
-
-		log.info("Found podcast w/ ID: {}. Total episodes: {}", podcastId, podcastEpisodes.size)
+		log.info("Podcast w/ ID: {} and name {} has a feed with {} episodes.", podcastId, podcastInfo.title,
+			podcastEpisodes.size)
 		return PodcastData(podcastInfo, podcastEpisodes)
 	}
 
@@ -55,7 +51,12 @@ class PodcastService @Autowired constructor(
 
 	private fun getPodcastEpisodes(podcastId: String) = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
-	fun storeNewPodcast(podcast: Podcast) = savePodcast(podcast)
+	fun storeNewPodcast(podcast: Podcast) {
+		log.info("Attempting to store new podcast w/ name {}. ID of podcast will be {} if storage is successful",
+			podcast.title, podcast.id)
+		savePodcast(podcast)
+		log.info("Successfully added new podcast!")
+	}
 
 	fun updatePodcast(podcastId: String, podcast: Podcast) {
 		if (podcastCrudRepository.findById(podcastId).isEmpty) {
@@ -77,7 +78,15 @@ class PodcastService @Autowired constructor(
 
 	fun storeNewPodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
 		podcastEpisode.podcastId = podcastId
+		log.info(
+			"Attempting to store new episode w/ name {}. ID of episode will be {} if storage is successful. ID of podcast to associate episode is {}",
+			podcastEpisode.title,
+			podcastEpisode.episodeId,
+			podcastEpisode.podcastId
+		)
+
 		savePodcastEpisode(podcastEpisode)
+		log.info("Successfully added new episode!")
 	}
 
 	fun updatePodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {

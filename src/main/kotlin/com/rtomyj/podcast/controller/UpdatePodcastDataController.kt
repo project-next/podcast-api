@@ -1,6 +1,5 @@
 package com.rtomyj.podcast.controller
 
-import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.Status
@@ -30,7 +29,6 @@ class UpdatePodcastDataController {
 	private lateinit var podcastService: PodcastService
 
 	@PutMapping("/podcast/{podcastId}")
-	@Throws(PodcastException::class)
 	fun updatePodcast(
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcast: Podcast
 	): ResponseEntity<Status> {
@@ -41,7 +39,6 @@ class UpdatePodcastDataController {
 	}
 
 	@PutMapping("/podcast/{podcastId}/episode")
-	@Throws(PodcastException::class)
 	fun updatePodcastEpisode(
 		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String, @Valid @RequestBody podcastEpisode: PodcastEpisode
 	): ResponseEntity<Status> {

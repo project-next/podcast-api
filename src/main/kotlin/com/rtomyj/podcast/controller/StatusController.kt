@@ -20,7 +20,6 @@ class StatusController {
 		private val log: Logger = LoggerFactory.getLogger(this::class.java)
 	}
 
-
 	/**
 	 * Retrieve basic info of the API and status on all dependant downstream services.
 	 * @return Status info.
