@@ -65,6 +65,7 @@ class TransformToFeed {
 				this.modules = EntryInformationImpl().run {
 					image = URL(episode.imageLink)
 					keywords = episode.keywords.toTypedArray()
+					explicit = episode.isExplicit
 
 					val durationTokens = episode.duration.split(":")
 					duration = Duration(durationTokens[0].toInt(), durationTokens[1].toInt(), durationTokens[2].toFloat())
