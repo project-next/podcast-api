@@ -10,7 +10,7 @@ enum class ErrorType(val error: String, val httpStatus: HttpStatus) {
 	G005("Data integrity via user request", HttpStatus.BAD_REQUEST),
 
 	DB001("Requested resource was not found", HttpStatus.NOT_FOUND),
-	DB002("Constraint violation", HttpStatus.INTERNAL_SERVER_ERROR),
-	DB003("Failed to update resource", HttpStatus.INTERNAL_SERVER_ERROR),
+	DB002("Constraint violation on DB column", HttpStatus.INTERNAL_SERVER_ERROR),
+	DB003("Error updating database", HttpStatus.INTERNAL_SERVER_ERROR),
 	DB004("No rows effected by update", HttpStatus.INTERNAL_SERVER_ERROR);
 }

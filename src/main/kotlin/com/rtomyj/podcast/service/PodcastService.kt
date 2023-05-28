@@ -77,7 +77,7 @@ class PodcastService @Autowired constructor(
 			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
 		} catch (ex: SQLException) {
 			log.error(SQLExceptionLog, ex.toString())
-			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
 		}
 	}
 
@@ -115,7 +115,7 @@ class PodcastService @Autowired constructor(
 			throw PodcastException(DATA_CONSTRAINT_ISSUE, ErrorType.DB002)
 		} catch (ex: SQLException) {
 			log.error(SQLExceptionLog, ex.toString())
-			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB002)
+			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
 		}
 	}
 }

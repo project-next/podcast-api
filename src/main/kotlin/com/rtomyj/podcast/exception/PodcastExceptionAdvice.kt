@@ -1,6 +1,5 @@
 package com.rtomyj.podcast.exception
 
-import com.rtomyj.podcast.util.Constants
 import com.rtomyj.podcast.util.enum.ErrorType
 import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
@@ -21,7 +20,8 @@ class PodcastExceptionAdvice {
 	@ResponseBody
 	@ExceptionHandler(PodcastException::class)
 	fun onPodcastException(exception: PodcastException): ResponseEntity<PodcastError> {
-		log.error(Constants.EXCEPTION_PROVIDER_LOG, exception.message, exception.errorType, exception.errorType.httpStatus)
+		log.error("Exception occurred w/ message: {}, with ErrorType: {}, responding with: {}"
+			, exception.message, exception.errorType, exception.errorType.httpStatus)
 
 		return ResponseEntity(
 			PodcastError(exception.errorType.error, exception.errorType.name), exception.errorType.httpStatus
