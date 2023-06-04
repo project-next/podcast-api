@@ -39,16 +39,21 @@ class PodcastServiceTest {
     @Autowired
     private lateinit var podcastService: PodcastService
 
+    companion object {
+        val mockPodcastData = TestObjectsFromFile.podcastData1
+        val podcastId = mockPodcastData.podcast.id
+        val mockedPodcast = mockPodcastData.podcast
+        val mockedEpisodes = mockPodcastData.podcastEpisodes
+
+        val podcast = TestObjectsFromFile.podcastData1.podcast
+        val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+    }
+
     @Nested
     inner class PodcastRSSFeedRetrievalHappyPath {
         @Test
         fun `Successfully Retrieve Feed`() {
-            // Mock
-            val mockPodcastData = TestObjectsFromFile.podcastData1
-            val podcastId = mockPodcastData.podcast.id
-            val mockedPodcast = mockPodcastData.podcast
-            val mockedEpisodes = mockPodcastData.podcastEpisodes
-
+            // mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
             Mockito.`when`(
                 podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
@@ -74,12 +79,7 @@ class PodcastServiceTest {
     inner class PodcastInfoRetrievalHappyPath {
         @Test
         fun `Successfully Retrieve Podcast Info`() {
-            // Mock
-            val mockPodcastData = TestObjectsFromFile.podcastData1
-            val podcastId = mockPodcastData.podcast.id
-            val mockedPodcast = mockPodcastData.podcast
-            val mockedEpisodes = mockPodcastData.podcastEpisodes
-
+            // mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
             Mockito.`when`(
                 podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
@@ -106,10 +106,7 @@ class PodcastServiceTest {
     inner class PodcastInfoRetrievalErrorScenarios {
         @Test
         fun `Podcast ID Not In DB`() {
-            // Mock
-            val mockPodcastData = TestObjectsFromFile.podcastData1
-            val podcastId = mockPodcastData.podcast.id
-
+            // mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.empty())
 
             // Call
@@ -151,9 +148,6 @@ class PodcastServiceTest {
         @Test
         fun `Successfully Update Existing Podcast`() {
             // Mock
-            val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-            val podcast = TestObjectsFromFile.podcastData1.podcast
-
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
                 .thenReturn(Optional.of(podcast))
 
@@ -174,9 +168,6 @@ class PodcastServiceTest {
         @Test
         fun `Podcast ID Not In DB`() {
             // Mock
-            val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-            val podcast = TestObjectsFromFile.podcastData1.podcast
-
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
                 .thenReturn(Optional.empty())
 
@@ -198,11 +189,7 @@ class PodcastServiceTest {
 
         @Test
         fun `DB Error On Podcast Save`() {
-
             // Mock
-            val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-            val podcast = TestObjectsFromFile.podcastData1.podcast
-
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
                 .thenReturn(Optional.of(podcast))
 
@@ -229,11 +216,6 @@ class PodcastServiceTest {
         @Test
         fun `Successfully Store New Episode`() {
             // Mock
-            val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-            val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-            val mockPodcastData = TestObjectsFromFile.podcastData1
-            val mockedPodcast = mockPodcastData.podcast
-
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
                 .thenReturn(Optional.of(mockedPodcast))
             Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
@@ -249,15 +231,57 @@ class PodcastServiceTest {
     }
 
     @Nested
+    inner class StoreNewPodcastEpisodeErrorScenarios {
+        @Test
+        fun `Podcast ID Does Not Exist In DB`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.empty())
+
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) }
+                , "Expected an error thrown as there should be no records for Podcast ID."
+            )
+
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Podcast ID not found in DB", ErrorType.DB001), err)
+
+            Mockito.verify(podcastCrudRepositoryMock)
+                .findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository, never())
+                .save(podcastEpisode)
+        }
+
+        @Test
+        fun `DB Error On Episode Save`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+                .thenThrow(DataRetrievalFailureException(""))
+
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) }
+                , "Expected an error thrown as mcoks will cause SQL Error."
+            )
+
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Something went wrong!", ErrorType.DB003), err)
+
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+        }
+    }
+
+    @Nested
     inner class UpdatePodcastEpisodeHappyPath {
         @Test
         fun `Successfully Update Episode`() {
             // Mock
-            val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-            val mockPodcastData = TestObjectsFromFile.podcastData1
-            val podcastId = mockPodcastData.podcast.id
-            val mockedPodcast = mockPodcastData.podcast
-
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
             Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId))
                 .thenReturn(Optional.of(podcastEpisode))

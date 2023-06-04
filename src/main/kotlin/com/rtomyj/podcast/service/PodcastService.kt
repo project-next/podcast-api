@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataAccessException
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import java.sql.SQLException
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -121,7 +120,7 @@ class PodcastService @Autowired constructor(
 
 		try {
 			podcastEpisodeCrudRepository.save(podcastEpisode)
-		} catch (ex: SQLException) {
+		} catch (ex: DataAccessException) {
 			log.error(SQLExceptionLog, ex.toString())
 			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
 		}
