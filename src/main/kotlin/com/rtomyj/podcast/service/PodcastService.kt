@@ -11,6 +11,7 @@ import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataAccessException
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.sql.SQLException
@@ -45,7 +46,7 @@ class PodcastService @Autowired constructor(
 	}
 
 	private fun getPodcastInfo(podcastId: String) =
-		podcastCrudRepository.findById(podcastId).getOrNull() ?: throw PodcastException("Podcast not found in DB", ErrorType.DB001)
+		podcastCrudRepository.findById(podcastId).getOrNull() ?: throw PodcastException(PODCAST_ID_NOT_FOUND, ErrorType.DB001)
 
 	private fun getPodcastEpisodes(podcastId: String) = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
@@ -71,7 +72,7 @@ class PodcastService @Autowired constructor(
 	private fun savePodcast(podcast: Podcast) {
 		try {
 			podcastCrudRepository.save(podcast)
-		}  catch (ex: SQLException) {
+		}  catch (ex: DataAccessException) {
 			log.error(SQLExceptionLog, ex.toString())
 			throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
 		}
