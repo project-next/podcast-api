@@ -22,174 +22,169 @@ import java.util.*
 @ContextConfiguration(classes = [PodcastService::class])
 @Tag("Service")
 class PodcastServiceTest {
-	@MockBean
-	private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
+    @MockBean
+    private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
 
-	@MockBean
-	private lateinit var podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
+    @MockBean
+    private lateinit var podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 
-	@MockBean
-	private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
+    @MockBean
+    private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
 
-	@Autowired
-	private lateinit var podcastService: PodcastService
+    @Autowired
+    private lateinit var podcastService: PodcastService
 
-	@Nested
-	inner class PodcastRSSFeedRetrieval {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Retrieve Feed`() {
-				// Mock
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val podcastId = mockPodcastData.podcast.id
-				val mockedPodcast = mockPodcastData.podcast
-				val mockedEpisodes = mockPodcastData.podcastEpisodes
+    @Nested
+    inner class PodcastRSSFeedRetrievalHappyPath {
+        @Test
+        fun `Successfully Retrieve Feed`() {
+            // Mock
+            val mockPodcastData = TestObjectsFromFile.podcastData1
+            val podcastId = mockPodcastData.podcast.id
+            val mockedPodcast = mockPodcastData.podcast
+            val mockedEpisodes = mockPodcastData.podcastEpisodes
 
-				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(podcastId, Sort.by("publicationDate")))
-					.thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(
+                podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
+                    podcastId,
+                    Sort.by("publicationDate")
+                )
+            )
+                .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
-				// Call
-				val feed = podcastService.getPodcastData(podcastId)
+            // Call
+            val feed = podcastService.getPodcastData(podcastId)
 
-				// Assert
-				Assertions.assertNotNull(feed)
+            // Assert
+            Assertions.assertNotNull(feed)
 
-				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-				Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).findAllByPodcastId(podcastId, Sort.by("publicationDate"))
-			}
-		}
-	}
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock)
+                .findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+        }
+    }
 
-	@Nested
-	inner class PodcastInfoRetrieval {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Retrieve Podcast Info`() {
-				// Mock
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val podcastId = mockPodcastData.podcast.id
-				val mockedPodcast = mockPodcastData.podcast
-				val mockedEpisodes = mockPodcastData.podcastEpisodes
+    @Nested
+    inner class PodcastInfoRetrievalHappyPath {
+        @Test
+        fun `Successfully Retrieve Podcast Info`() {
+            // Mock
+            val mockPodcastData = TestObjectsFromFile.podcastData1
+            val podcastId = mockPodcastData.podcast.id
+            val mockedPodcast = mockPodcastData.podcast
+            val mockedEpisodes = mockPodcastData.podcastEpisodes
 
-				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(podcastId, Sort.by("publicationDate")))
-					.thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(
+                podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
+                    podcastId,
+                    Sort.by("publicationDate")
+                )
+            )
+                .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
-				// Call
-				val data = podcastService.getPodcastData(podcastId)
+            // Call
+            val data = podcastService.getPodcastData(podcastId)
 
-				// Assert
-				Assertions.assertNotNull(data)
-				Assertions.assertEquals(mockPodcastData, data)
+            // Assert
+            Assertions.assertNotNull(data)
+            Assertions.assertEquals(mockPodcastData, data)
 
-				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-				Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).findAllByPodcastId(podcastId, Sort.by("publicationDate"))
-			}
-		}
-	}
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock)
+                .findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+        }
+    }
 
-	@Nested
-	inner class StoreNewPodcast {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Add Podcast To DB`() {
-				// Mock
-				val podcast = TestObjectsFromFile.podcastData1.podcast
+    @Nested
+    inner class StoreNewPodcastHappyPath {
+        @Test
+        fun `Successfully Add Podcast To DB`() {
+            // Mock
+            val podcast = TestObjectsFromFile.podcastData1.podcast
 
-				Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
-					.thenReturn(podcast)
+            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+                .thenReturn(podcast)
 
-				// Call
-				podcastService.storeNewPodcast(podcast)
+            // Call
+            podcastService.storeNewPodcast(podcast)
 
-				// Assert
-				Mockito.verify(podcastCrudRepositoryMock).save(podcast)
-			}
-		}
-	}
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+        }
+    }
 
-	@Nested
-	inner class UpdateExistingPodcast {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Update Existing Podcast`() {
-				// Mock
-				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-				val podcast = TestObjectsFromFile.podcastData1.podcast
+    @Nested
+    inner class UpdateExistingPodcastHappyPath {
+        @Test
+        fun `Successfully Update Existing Podcast`() {
+            // Mock
+            val podcastId = TestObjectsFromFile.podcastData1.podcast.id
+            val podcast = TestObjectsFromFile.podcastData1.podcast
 
-				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
-					.thenReturn(Optional.of(podcast))
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(podcast))
 
-				Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
-					.thenReturn(podcast)
+            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+                .thenReturn(podcast)
 
-				// Call
-				podcastService.updatePodcast(podcastId, podcast)
+            // Call
+            podcastService.updatePodcast(podcastId, podcast)
 
-				// Assert
-				Mockito.verify(podcastCrudRepositoryMock).save(podcast)
-				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-			}
-		}
-	}
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+        }
+    }
 
-	@Nested
-	inner class StoreNewPodcastEpisode {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Store New Episode`() {
-				// Mock
-				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val mockedPodcast = mockPodcastData.podcast
+    @Nested
+    inner class StoreNewPodcastEpisodeHappyPath {
+        @Test
+        fun `Successfully Store New Episode`() {
+            // Mock
+            val podcastId = TestObjectsFromFile.podcastData1.podcast.id
+            val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            val mockPodcastData = TestObjectsFromFile.podcastData1
+            val mockedPodcast = mockPodcastData.podcast
 
-				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
-					.thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
-					.thenReturn(podcastEpisode)
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+                .thenReturn(podcastEpisode)
 
-				// Call
-				podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
+            // Call
+            podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
 
-				// Assert
-				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
-			}
-		}
-	}
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+        }
+    }
 
-	@Nested
-	inner class UpdatePodcastEpisode {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Update Episode`() {
-				// Mock
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val podcastId = mockPodcastData.podcast.id
-				val mockedPodcast = mockPodcastData.podcast
+    @Nested
+    inner class UpdatePodcastEpisodeHappyPath {
+        @Test
+        fun `Successfully Update Episode`() {
+            // Mock
+            val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            val mockPodcastData = TestObjectsFromFile.podcastData1
+            val podcastId = mockPodcastData.podcast.id
+            val mockedPodcast = mockPodcastData.podcast
 
-				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-				Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId)).thenReturn(Optional.of(podcastEpisode))
-				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
-					.thenReturn(podcastEpisode)
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId))
+                .thenReturn(Optional.of(podcastEpisode))
+            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+                .thenReturn(podcastEpisode)
 
-				// Call
-				podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+            // Call
+            podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
 
-				// Assert
-				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-				Mockito.verify(podcastEpisodeCrudRepository).findById(podcastEpisode.episodeId)
-				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
-			}
-		}
-	}
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository).findById(podcastEpisode.episodeId)
+            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+        }
+    }
 }
