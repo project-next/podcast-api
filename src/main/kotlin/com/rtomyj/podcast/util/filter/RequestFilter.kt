@@ -15,7 +15,7 @@ import java.util.*
 class RequestFilter : OncePerRequestFilter() {
 	companion object {
 		private const val X_FORWARDED_FOR = "X-Forwarded-For"
-		private const val CLIENT_ID_NAME = "CLIENT_ID"
+		const val CLIENT_ID_NAME = "CLIENT_ID"
 
 		/**
 		 * Configures the global MDC object for all requests. MDC is used to hold useful info that will later be used in logs to better track requests.
