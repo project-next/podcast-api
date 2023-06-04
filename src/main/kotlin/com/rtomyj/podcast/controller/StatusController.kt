@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping(path = ["/status"], produces = ["application/json; charset=UTF-8"])
 class StatusController {
-
 	companion object {
 		private val log: Logger = LoggerFactory.getLogger(this::class.java)
 	}
@@ -26,10 +25,8 @@ class StatusController {
 	 */
 	@GetMapping
 	fun status(): ResponseEntity<StatusResponse> {
-		log.info("Status of API was requested")
-
-		return ResponseEntity.ok(
-			StatusResponse("API is online and functional.", Constants.APP_VERSION)
-		)
+		val status = StatusResponse("API is online and functional", Constants.APP_VERSION)
+		log.info("Status of API was requested. Status: {}", status.toString())
+		return ResponseEntity.ok(status)
 	}
 }

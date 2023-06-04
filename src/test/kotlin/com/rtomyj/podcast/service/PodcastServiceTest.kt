@@ -51,7 +51,7 @@ class PodcastServiceTest {
 					.thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
 				// Call
-				val feed = podcastService.getRssFeedForPodcast(podcastId)
+				val feed = podcastService.getPodcastData(podcastId)
 
 				// Assert
 				Assertions.assertNotNull(feed)
@@ -147,7 +147,11 @@ class PodcastServiceTest {
 				// Mock
 				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
 				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+				val mockPodcastData = TestObjectsFromFile.podcastData1
+				val mockedPodcast = mockPodcastData.podcast
 
+				Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+					.thenReturn(Optional.of(mockedPodcast))
 				Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
 					.thenReturn(podcastEpisode)
 
@@ -155,6 +159,7 @@ class PodcastServiceTest {
 				podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
 
 				// Assert
+				Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
 				Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
 			}
 		}

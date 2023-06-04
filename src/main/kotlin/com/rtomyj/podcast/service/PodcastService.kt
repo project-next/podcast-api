@@ -27,16 +27,14 @@ class PodcastService @Autowired constructor(
 		private val log = LoggerFactory.getLogger(this::class.java.name)
 
 		private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
-
+		private const val PODCAST_ID_NOT_FOUND = "Podcast ID not found in DB"
+		private const val EPISODE_ID_NOT_FOUND = "Episode ID not found in DB"
 		private const val SOMETHING_WENT_WRONG = "Something went wrong!"
-		private const val DB_MISSING_RECORD_CANNOT_UPDATE = "Could not update record as it DNE in DB."
 	}
 
-	fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastDataFromDB(podcastId))
+	fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastData(podcastId))
 
-	fun getPodcastData(podcastId: String): PodcastData = getPodcastDataFromDB(podcastId)
-
-	private fun getPodcastDataFromDB(podcastId: String): PodcastData {
+	fun getPodcastData(podcastId: String): PodcastData {
 		log.info("Retrieving podcast info and episodes for podcast w/ ID: {}", podcastId)
 		val podcastInfo = getPodcastInfo(podcastId)
 		val podcastEpisodes = getPodcastEpisodes(podcastId)
@@ -52,19 +50,22 @@ class PodcastService @Autowired constructor(
 	private fun getPodcastEpisodes(podcastId: String) = podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
 	fun storeNewPodcast(podcast: Podcast) {
-		log.info("Attempting to store new podcast w/ name {}. ID of podcast will be {} if storage is successful",
-			podcast.title, podcast.id)
+		log.info("Attempting to store new podcast w/ name {}", podcast.title)
 		savePodcast(podcast)
-		log.info("Successfully added new podcast!")
+		log.info("Successfully added new podcast [{}] - ID: {}", podcast.title, podcast.id)
 	}
 
 	fun updatePodcast(podcastId: String, podcast: Podcast) {
+		log.info("Updating info of an existing podcast using ID {}", podcastId)
+
 		if (podcastCrudRepository.findById(podcastId).isEmpty) {
 			log.error("Podcast with ID {} not found in DB, therefore cannot update podcast information.", podcastId)
-			throw PodcastException(DB_MISSING_RECORD_CANNOT_UPDATE, ErrorType.DB004)
+			throw PodcastException(PODCAST_ID_NOT_FOUND, ErrorType.DB001)
 		}
 		podcast.id = podcastId
 		savePodcast(podcast)
+
+		log.info("Successfully updated podcast w/ ID {}", podcastId)
 	}
 
 	private fun savePodcast(podcast: Podcast) {
@@ -86,26 +87,37 @@ class PodcastService @Autowired constructor(
 		)
 
 		savePodcastEpisode(podcastEpisode)
-		log.info("Successfully added new episode!")
+		log.info("Successfully added new episode [{}] - episode ID: {}", podcastEpisode.title, podcastEpisode.episodeId)
 	}
 
 	fun updatePodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
+		log.info(
+			"Attempting to update episode w/ name [{}]. ID of podcast is {} and the episode ID is {}",
+			podcastEpisode.title,
+			podcastEpisode.podcastId,
+			podcastEpisode.episodeId
+		)
+
 		podcastEpisode.podcastId = podcastId
-
-		if (podcastCrudRepository.findById(podcastId).isEmpty) {
-			log.error("Podcast with ID {} not found in DB, therefore cannot update podcast episode.", podcastId)
-			throw PodcastException(DB_MISSING_RECORD_CANNOT_UPDATE, ErrorType.DB004)
-		}
-
-		if (podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId).isEmpty) {
+		val dbPodcast = podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId)
+		if (dbPodcast.isEmpty) {
 			log.error("Podcast episode with ID {} not found in DB, therefore cannot update podcast episode.", podcastEpisode.episodeId)
-			throw PodcastException(DB_MISSING_RECORD_CANNOT_UPDATE, ErrorType.DB004)
+			throw PodcastException(EPISODE_ID_NOT_FOUND, ErrorType.DB001)
+		} else if (dbPodcast.get().podcastId != podcastEpisode.podcastId) {
+			log.error("Podcast ID from request does not match ID in DB for given podcast episode.")
+			throw PodcastException("Podcast ID mismatch", ErrorType.DB003)
 		}
-
 		savePodcastEpisode(podcastEpisode)
+
+		log.info("Successfully updated episode")
 	}
 
 	private fun savePodcastEpisode(podcastEpisode: PodcastEpisode) {
+		if (podcastCrudRepository.findById(podcastEpisode.podcastId).isEmpty) {
+			log.error("Podcast with ID {} not found in DB, therefore cannot update podcast episode.", podcastEpisode.podcastId)
+			throw PodcastException(PODCAST_ID_NOT_FOUND, ErrorType.DB001)
+		}
+
 		try {
 			podcastEpisodeCrudRepository.save(podcastEpisode)
 		} catch (ex: SQLException) {
