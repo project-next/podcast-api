@@ -12,7 +12,9 @@ RSS data will be compliant with Apple Podcasts and Spotify Podcasts.
 
 ## Hibernate L2 Cache
 
-To speed up read queries, an L2 cache is being used when reading from the database. In summary, the following need to be done in order to achieve L2 caching.
+To speed up read queries, an L2 cache is being used when reading from the database. 
+
+In summary, the following need to be done in order to achieve L2 caching:
 
 **Note:** L2 cache is only desirable if there are far more reads than there are writes to a particular DB, else the Cache might be counter-productive.
 
