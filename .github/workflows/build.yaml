@@ -27,7 +27,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Execute Gradle Build
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@2.4.2
         with:
           gradle-version: wrapper
           arguments: build
@@ -36,4 +36,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: junit-results
-          path: build/reports/tests/test
+          path: |
+            build/reports/tests/test
+            build/reports/jacoco/test
