@@ -47,7 +47,7 @@ tasks.withType<JacocoCoverageVerification> {
 			limit {
 				counter = "LINE"
 				value = "COVEREDRATIO"
-				minimum = "0.7".toBigDecimal()
+				minimum = "0.8".toBigDecimal()
 			}
 		}
 
@@ -55,7 +55,7 @@ tasks.withType<JacocoCoverageVerification> {
 			limit {
 				counter = "BRANCH"
 				value = "COVEREDRATIO"
-				minimum = "0.4".toBigDecimal()
+				minimum = "0.5".toBigDecimal()
 			}
 		}
 	}
