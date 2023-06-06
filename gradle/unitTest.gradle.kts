@@ -1,4 +1,4 @@
-val springVersion = "3.0.6"
+val springVersion = "3.1.0"
 val mockitKotlinVersion = "1.6.0"
 val h2Version = "2.1.214"
 
@@ -7,7 +7,7 @@ dependencies {
 
 	"testImplementation"("com.nhaarman:mockito-kotlin:$mockitKotlinVersion")    // provides helper functions needed for mockito to work in Kotlin
 	"testImplementation"("org.springframework.boot:spring-boot-starter-test:$springVersion")
-	"testImplementation"("org.springframework.security:spring-security-test:6.0.3")
+	"testImplementation"("org.springframework.security:spring-security-test:6.1.0")
 
 	"testRuntimeOnly"("com.h2database:h2:$h2Version")
 }
@@ -33,7 +33,7 @@ tasks.withType<JacocoReport> {
 	afterEvaluate {
 		classDirectories.setFrom(classDirectories.files.map {
 			fileTree(it).matching {
-				exclude("com/rtomyj/podcast/model/**", "com/rtomyj/podcast/Application.kt", "com/rtomyj/podcast/util/enum/**", "com/rtomyj/podcast/util/constant/**")
+				exclude("com/rtomyj/podcast/model/**", "com/rtomyj/podcast/Application**", "com/rtomyj/podcast/util/enum/**", "com/rtomyj/podcast/util/Constants**")
 			}
 		})
 	}
@@ -47,7 +47,7 @@ tasks.withType<JacocoCoverageVerification> {
 			limit {
 				counter = "LINE"
 				value = "COVEREDRATIO"
-				minimum = "0.2".toBigDecimal()
+				minimum = "0.8".toBigDecimal()
 			}
 		}
 
@@ -55,7 +55,7 @@ tasks.withType<JacocoCoverageVerification> {
 			limit {
 				counter = "BRANCH"
 				value = "COVEREDRATIO"
-				minimum = "0.1".toBigDecimal()
+				minimum = "0.5".toBigDecimal()
 			}
 		}
 	}

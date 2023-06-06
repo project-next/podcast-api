@@ -1,7 +1,10 @@
 package com.rtomyj.podcast.service
 
 import com.nhaarman.mockito_kotlin.any
-import com.rtomyj.podcast.dao.Dao
+import com.nhaarman.mockito_kotlin.never
+import com.rtomyj.podcast.dao.PodcastCrudRepository
+import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
+import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestObjectsFromFile
@@ -14,206 +17,284 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.dao.DataRetrievalFailureException
+import org.springframework.data.domain.Sort
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [PodcastService::class])
 @Tag("Service")
 class PodcastServiceTest {
-	@MockBean
-	private lateinit var daoMock: Dao
+    @MockBean
+    private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
 
-	@Autowired
-	private lateinit var podcastService: PodcastService
+    @MockBean
+    private lateinit var podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 
-	@Nested
-	inner class PodcastRSSFeedRetrieval {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Retrieve Feed`() {
-				// Mock
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val podcastId = mockPodcastData.podcast.id
-				val mockedPodcast = mockPodcastData.podcast
-				val mockedEpisodes = mockPodcastData.podcastEpisodes
+    @MockBean
+    private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
 
-				Mockito.`when`(daoMock.getPodcastInfo(podcastId)).thenReturn(mockedPodcast)
-				Mockito.`when`(daoMock.getPodcastEpisodes(podcastId)).thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
+    @Autowired
+    private lateinit var podcastService: PodcastService
 
-				// Call
-				val feed = podcastService.getRssFeedForPodcast(podcastId)
+    companion object {
+        val mockPodcastData = TestObjectsFromFile.podcastData1
+        val podcastId = mockPodcastData.podcast.id
+        val mockedPodcast = mockPodcastData.podcast
+        val mockedEpisodes = mockPodcastData.podcastEpisodes
 
-				// Assert
-				Assertions.assertNotNull(feed)
+        val podcast = TestObjectsFromFile.podcastData1.podcast
+        val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+    }
 
-				Mockito.verify(daoMock).getPodcastInfo(podcastId)
-				Mockito.verify(daoMock).getPodcastEpisodes(podcastId)
-			}
-		}
-	}
+    @Nested
+    inner class PodcastRSSFeedRetrievalHappyPath {
+        @Test
+        fun `Successfully Retrieve Feed`() {
+            // mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(
+                podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
+                    podcastId,
+                    Sort.by("publicationDate")
+                )
+            )
+                .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
-	@Nested
-	inner class PodcastInfoRetrieval {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Retrieve Podcast Info`() {
-				// Mock
-				val mockPodcastData = TestObjectsFromFile.podcastData1
-				val podcastId = mockPodcastData.podcast.id
-				val mockedPodcast = mockPodcastData.podcast
-				val mockedEpisodes = mockPodcastData.podcastEpisodes
+            // Call
+            val feed = podcastService.getPodcastData(podcastId)
 
-				Mockito.`when`(daoMock.getPodcastInfo(podcastId)).thenReturn(mockedPodcast)
-				Mockito.`when`(daoMock.getPodcastEpisodes(podcastId)).thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
+            // Assert
+            Assertions.assertNotNull(feed)
 
-				// Call
-				val data = podcastService.getPodcastData(podcastId)
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock)
+                .findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+        }
+    }
 
-				// Assert
-				Assertions.assertNotNull(data)
-				Assertions.assertEquals(mockPodcastData, data)
+    @Nested
+    inner class PodcastInfoRetrievalHappyPath {
+        @Test
+        fun `Successfully Retrieve Podcast Info`() {
+            // mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(
+                podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
+                    podcastId,
+                    Sort.by("publicationDate")
+                )
+            )
+                .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
-				Mockito.verify(daoMock).getPodcastInfo(podcastId)
-				Mockito.verify(daoMock).getPodcastEpisodes(podcastId)
-			}
-		}
-	}
+            // Call
+            val data = podcastService.getPodcastData(podcastId)
 
-	@Nested
-	inner class StoreNewPodcast {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Add Podcast To DB`() {
-				// Mock
-				val podcast = TestObjectsFromFile.podcastData1.podcast
+            // Assert
+            Assertions.assertNotNull(data)
+            Assertions.assertEquals(mockPodcastData, data)
 
-				Mockito.doNothing().`when`(daoMock).storeNewPodcast(podcast)
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock)
+                .findAllByPodcastId(podcastId, Sort.by("publicationDate"))
+        }
+    }
 
-				// Call
-				podcastService.storeNewPodcast(podcast)
+    @Nested
+    inner class PodcastInfoRetrievalErrorScenarios {
+        @Test
+        fun `Podcast ID Not In DB`() {
+            // mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.empty())
 
-				// Assert
-				Mockito.verify(daoMock).storeNewPodcast(podcast)
-			}
-		}
-	}
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.getPodcastData(podcastId) }, "Expected an error thrown as there should be no records for ID."
+            )
 
-	@Nested
-	inner class UpdateExistingPodcast {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Update Existing Podcast`() {
-				// Mock
-				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-				val podcast = TestObjectsFromFile.podcastData1.podcast
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Podcast ID not found in DB", ErrorType.DB001), err)
 
-				Mockito.doNothing().`when`(daoMock).updatePodcast(podcastId, podcast)
+            Mockito.verify(podcastCrudRepositoryMock)
+                .findById(podcastId)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock, never())
+                .findAllByPodcastId(any(), any())
+        }
+    }
 
-				// Call
-				podcastService.updatePodcast(podcastId, podcast)
+    @Nested
+    inner class StoreNewPodcastHappyPath {
+        @Test
+        fun `Successfully Add Podcast To DB`() {
+            // Mock
+            val podcast = TestObjectsFromFile.podcastData1.podcast
 
-				// Assert
-				Mockito.verify(daoMock).updatePodcast(podcastId, podcast)
-			}
-		}
-	}
+            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+                .thenReturn(podcast)
 
-	@Nested
-	inner class StoreNewPodcastEpisode {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Store New Episode`() {
-				// Mock
-				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
+            // Call
+            podcastService.storeNewPodcast(podcast)
 
-				Mockito.doNothing().`when`(daoMock).storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+        }
+    }
 
-				// Call
-				podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
+    @Nested
+    inner class UpdateExistingPodcastHappyPath {
+        @Test
+        fun `Successfully Update Existing Podcast`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(podcast))
 
-				// Assert
-				Mockito.verify(daoMock).storeNewPodcastEpisode(podcastEpisode, delimitedKeywords)
-			}
-		}
+            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+                .thenReturn(podcast)
 
-		@Nested
-		inner class VerificationIssue {
-			@Test
-			fun `Podcast IDs Differ`() {
-				// Mock
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            // Call
+            podcastService.updatePodcast(podcastId, podcast)
 
-				Mockito.doNothing().`when`(daoMock).storeNewPodcastEpisode(any(), any())
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+        }
+    }
 
-				// Call
-				val err = Assertions.assertThrows(
-					PodcastException::class.java,
-					{ podcastService.storeNewPodcastEpisode("Random", podcastEpisode) },
-					"Wanted differing IDs and an exception to rise, but exception did not get thrown"
-				)
+    @Nested
+    inner class UpdateExistingPodcastErrorScenarios {
+        @Test
+        fun `Podcast ID Not In DB`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.empty())
 
-				// Assert
-				Assertions.assertNotNull(err)
-				Assertions.assertEquals("Podcast ID from URL and the one from the body do not match!", err.message)
-				Assertions.assertEquals(ErrorType.G005, err.errorType)
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.updatePodcast(podcastId, podcast) }
+                , "Expected an error thrown as there should be no records for ID."
+            )
 
-				Mockito.verify(daoMock, Mockito.times(0)).storeNewPodcastEpisode(any(), any())
-			}
-		}
-	}
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Podcast ID not found in DB", ErrorType.DB001), err)
 
-	@Nested
-	inner class UpdatePodcastEpisode {
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `Successfully Update Episode`() {
-				// Mock
-				val podcastId = TestObjectsFromFile.podcastData1.podcast.id
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				val delimitedKeywords = podcastEpisode.keywords.joinToString(separator = "|")
+            Mockito.verify(podcastCrudRepositoryMock)
+                .findById(podcastId)
+            Mockito.verify(podcastCrudRepositoryMock, never())
+                .save(podcast)
+        }
 
-				Mockito.doNothing().`when`(daoMock).updatePodcastEpisode(podcastEpisode, delimitedKeywords)
+        @Test
+        fun `DB Error On Podcast Save`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(podcast))
 
-				// Call
-				podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+                .thenThrow(DataRetrievalFailureException(""))
 
-				// Assert
-				Mockito.verify(daoMock).updatePodcastEpisode(podcastEpisode, delimitedKeywords)
-			}
-		}
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.updatePodcast(podcastId, podcast) }
+                , "Expected an error thrown as an error was thrown while saving podcast data."
+            )
 
-		@Nested
-		inner class VerificationIssue {
-			@Test
-			fun `Podcast IDs Differ`() {
-				// Mock
-				val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Something went wrong!", ErrorType.DB003), err)
 
-				Mockito.doNothing().`when`(daoMock).updatePodcastEpisode(any(), any())
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+        }
+    }
 
-				// Call
-				val err = Assertions.assertThrows(
-					PodcastException::class.java,
-					{ podcastService.updatePodcastEpisode("Random", podcastEpisode) },
-					"Wanted differing IDs and an exception to rise, but exception did not get thrown"
-				)
+    @Nested
+    inner class StoreNewPodcastEpisodeHappyPath {
+        @Test
+        fun `Successfully Store New Episode`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+                .thenReturn(podcastEpisode)
 
-				// Assert
-				Assertions.assertNotNull(err)
-				Assertions.assertEquals("Podcast ID from URL and the one from the body do not match!", err.message)
-				Assertions.assertEquals(ErrorType.G005, err.errorType)
+            // Call
+            podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
 
-				Mockito.verify(daoMock, Mockito.times(0)).updatePodcastEpisode(any(), any())
-			}
-		}
-	}
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+        }
+    }
+
+    @Nested
+    inner class StoreNewPodcastEpisodeErrorScenarios {
+        @Test
+        fun `Podcast ID Does Not Exist In DB`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.empty())
+
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) }
+                , "Expected an error thrown as there should be no records for Podcast ID."
+            )
+
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Podcast ID not found in DB", ErrorType.DB001), err)
+
+            Mockito.verify(podcastCrudRepositoryMock)
+                .findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository, never())
+                .save(podcastEpisode)
+        }
+
+        @Test
+        fun `DB Error On Episode Save`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
+                .thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+                .thenThrow(DataRetrievalFailureException(""))
+
+            // Call
+            val err = Assertions.assertThrows(
+                PodcastException::class.java, { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) }
+                , "Expected an error thrown as mcoks will cause SQL Error."
+            )
+
+            // Assert
+            Assertions.assertNotNull(err)
+            Assertions.assertEquals(PodcastException("Something went wrong!", ErrorType.DB003), err)
+
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+        }
+    }
+
+    @Nested
+    inner class UpdatePodcastEpisodeHappyPath {
+        @Test
+        fun `Successfully Update Episode`() {
+            // Mock
+            Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
+            Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId))
+                .thenReturn(Optional.of(podcastEpisode))
+            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+                .thenReturn(podcastEpisode)
+
+            // Call
+            podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+
+            // Assert
+            Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
+            Mockito.verify(podcastEpisodeCrudRepository).findById(podcastEpisode.episodeId)
+            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+        }
+    }
 }

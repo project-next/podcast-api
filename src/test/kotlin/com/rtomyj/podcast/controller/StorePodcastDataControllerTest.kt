@@ -18,7 +18,6 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -28,179 +27,198 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 
 @WebMvcTest
-@ContextConfiguration(classes = [RestAccessDeniedHandler::class, RestAuthenticationEntryPoint::class])  // import classes as beans - these are needed by SecurityConfig
 /*
-	Import security beans defined in SecurityConfig.
-	Controller needs to be imported here and not in @WebMvcTest or else 404 errors is all that will be returned.
+	Normally, StorePodcastDataController would not need to be imported in @ContextConfiguration but instead in the @WebMvcTest.
+		However, since we are using @ContextConfiguration, we have to include StorePodcastDataController here
+		 which will correctly configure our tests - else we will see 404 errors when using MockMvc.
 	ControllerAdvice should be imported, so it can handle the errors correctly.
  */
-@Import(value = [SecurityConfig::class, StorePodcastDataController::class, PodcastExceptionAdvice::class])
+@ContextConfiguration(
+    classes = [SecurityConfig::class, StorePodcastDataController::class, PodcastExceptionAdvice::class,
+        RestAccessDeniedHandler::class, RestAuthenticationEntryPoint::class]
+)  // import classes as beans - these are needed by SecurityConfig
 @ActiveProfiles("test") // Loading test props with H2 in memory DB configurations
 @Tag("Controller")
 class StorePodcastDataControllerTest {
-	@MockBean
-	private lateinit var service: PodcastService
+    @MockBean
+    private lateinit var service: PodcastService
 
-	@Autowired
-	private lateinit var mockMvc: MockMvc
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
-	@Nested
-	inner class StoreNewPodcast {
-		@Nested
-		inner class AuthenticationIssue {
-			@Test
-			fun `Authorization Header Is Missing - With CSRF`() {
-				mockMvc.perform(
-					post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
-				).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
+    @Nested
+    inner class StoreNewPodcastAuthenticationIssue {
+        @Test
+        fun `Authorization Header Is Missing - With CSRF`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
+                    .content(TestConstants.EMPTY_BODY)
+            ).andExpect(MockMvcResultMatchers.status().isUnauthorized)
+                .andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
 
-			@Test
-			fun `Authorization Header Is Missing - Without CSRF`() {
-				mockMvc.perform(
-					post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
-				).andExpect(MockMvcResultMatchers.status().isUnauthorized).andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
+        @Test
+        fun `Authorization Header Is Missing - Without CSRF`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
+                    .content(TestConstants.EMPTY_BODY)
+            ).andExpect(MockMvcResultMatchers.status().isUnauthorized)
+                .andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
 
-			@Test
-			fun `User is not admin`() {
-				mockMvc.perform(
-					post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
-						.header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
-				).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
+        @Test
+        fun `User is not admin`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
+                    .content(TestConstants.EMPTY_BODY)
+                    .header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
+            ).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden")))
+                .andExpect(jsonPath("$.code", `is`("G004")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
-		}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
+    }
 
-		@Nested
-		inner class RequestValidationError {
-			@Test
-			fun `User is admin - Body is empty`() {
-				mockMvc.perform(
-					post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
-						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-				).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
-					jsonPath(
-						"message", startsWith(
-							"Body is missing data or fields do not conform to spec."
-						)
-					)
-				).andExpect(jsonPath("$.code", `is`("G002")))
+    @Nested
+    inner class StoreNewPodcastRequestValidationError {
+        @Test
+        fun `User is admin - Body is empty`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
+                    .content(TestConstants.EMPTY_BODY)
+                    .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+                jsonPath(
+                    "message", startsWith(
+                        "Body is missing data or fields do not conform to spec."
+                    )
+                )
+            ).andExpect(jsonPath("$.code", `is`("G002")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
-		}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
+    }
 
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `User is admin - Body Is Valid`() {
-				// setup mocks
-				val mockData = TestObjectsFromFile.podcastData1.podcast
-				Mockito.doNothing().`when`(service).storeNewPodcast(mockData)
+    @Nested
+    inner class StoreNewPodcastHappyPath {
+        @Test
+        fun `User is admin - Body Is Valid`() {
+            // setup mocks
+            val mockData = TestObjectsFromFile.podcastData1.podcast
+            Mockito.doNothing().`when`(service).storeNewPodcast(mockData)
 
-				mockMvc.perform(
-					post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE).content(Helpers.mapper.writeValueAsString(mockData))
-						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-				).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
-					jsonPath(
-						"message", `is`(
-							"Successfully stored new podcast!"
-						)
-					)
-				)
+            mockMvc.perform(
+                post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
+                    .content(Helpers.mapper.writeValueAsString(mockData))
+                    .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+            ).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
+                jsonPath(
+                    "message", `is`(
+                        "Successfully stored new podcast!"
+                    )
+                )
+            )
 
-				// verify mocks are called
-				Mockito.verify(service).storeNewPodcast(mockData)
-			}
-		}
-	}
+            // verify mocks are called
+            Mockito.verify(service).storeNewPodcast(mockData)
+        }
+    }
 
-	@Nested
-	inner class StoreNewPodcastEpisode {
-		@Nested
-		inner class AuthenticationIssue {
-			@Test
-			fun `Authorization Header Is Missing - With CSRF`() {
-				mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).with(csrf())).andExpect(MockMvcResultMatchers.status().isUnauthorized)
-					.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
+    @Nested
+    inner class StoreNewPodcastEpisodeAuthenticationIssue {
+        @Test
+        fun `Authorization Header Is Missing - With CSRF`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).with(
+                    csrf()
+                )
+            ).andExpect(MockMvcResultMatchers.status().isUnauthorized)
+                .andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
 
-			@Test
-			fun `Authorization Header Is Missing - Without CSRF`() {
-				mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY)).andExpect(MockMvcResultMatchers.status().isUnauthorized)
-					.andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
+        @Test
+        fun `Authorization Header Is Missing - Without CSRF`() {
+            mockMvc.perform(post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+                .andExpect(jsonPath("$.message", `is`("Unauthorized"))).andExpect(jsonPath("$.code", `is`("G003")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
 
-			@Test
-			fun `User is not admin`() {
-				mockMvc.perform(
-					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
-						.header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
-				).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden"))).andExpect(jsonPath("$.code", `is`("G004")))
+        @Test
+        fun `User is not admin`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
+                    TestConstants.CONTENT_TYPE
+                ).content(TestConstants.EMPTY_BODY)
+                    .header("Authorization", "Basic VHlsZXI6Q2hhbmdlbWUh").with(csrf())
+            ).andExpect(MockMvcResultMatchers.status().isForbidden).andExpect(jsonPath("$.message", `is`("Forbidden")))
+                .andExpect(jsonPath("$.code", `is`("G004")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
-		}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
+    }
 
-		@Nested
-		inner class RequestValidationError {
-			@Test
-			fun `User is admin - Body is empty`() {
-				mockMvc.perform(
-					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(TestConstants.CONTENT_TYPE).content(TestConstants.EMPTY_BODY)
-						.header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-				).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
-					jsonPath(
-						"message", startsWith(
-							"Body is missing data or fields do not conform to spec."
-						)
-					)
-				).andExpect(jsonPath("$.code", `is`("G002")))
+    @Nested
+    inner class StoreNewPodcastEpisodeRequestValidationError {
+        @Test
+        fun `User is admin - Body is empty`() {
+            mockMvc.perform(
+                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
+                    TestConstants.CONTENT_TYPE
+                ).content(TestConstants.EMPTY_BODY)
+                    .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+                jsonPath(
+                    "message", startsWith(
+                        "Body is missing data or fields do not conform to spec."
+                    )
+                )
+            ).andExpect(jsonPath("$.code", `is`("G002")))
 
-				// verify mocks are called
-				Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
-			}
-		}
+            // verify mocks are called
+            Mockito.verify(service, Mockito.times(0)).storeNewPodcast(any())
+        }
+    }
 
-		@Nested
-		inner class HappyPath {
-			@Test
-			fun `User is admin - Body Is Valid`() {
-				// setup mocks
-				val mockData = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
-				Mockito.doNothing().`when`(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+    @Nested
+    inner class StoreNewPodcastEpisodeHappyPath {
+        @Test
+        fun `User is admin - Body Is Valid`() {
+            // setup mocks
+            val mockData = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            Mockito.doNothing().`when`(service)
+                .storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
 
-				mockMvc.perform(
-					post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(TestConstants.CONTENT_TYPE)
-						.content(Helpers.mapper.writeValueAsString(mockData)).header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-				).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
-					jsonPath(
-						"message", `is`(
-							"Successfully stored new podcast episode!"
-						)
-					)
-				)
+            mockMvc.perform(
+                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(
+                    TestConstants.CONTENT_TYPE
+                )
+                    .content(Helpers.mapper.writeValueAsString(mockData))
+                    .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
+            ).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
+                jsonPath(
+                    "message", `is`(
+                        "Successfully stored new podcast episode!"
+                    )
+                )
+            )
 
-				// verify mocks are called
-				Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
-			}
-		}
-	}
+            // verify mocks are called
+            Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+        }
+    }
 }

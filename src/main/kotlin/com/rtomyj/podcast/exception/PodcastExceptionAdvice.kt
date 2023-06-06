@@ -1,9 +1,9 @@
 package com.rtomyj.podcast.exception
 
-import com.rtomyj.podcast.util.constant.Generic
 import com.rtomyj.podcast.util.enum.ErrorType
 import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -21,7 +21,8 @@ class PodcastExceptionAdvice {
 	@ResponseBody
 	@ExceptionHandler(PodcastException::class)
 	fun onPodcastException(exception: PodcastException): ResponseEntity<PodcastError> {
-		log.error(Generic.EXCEPTION_PROVIDER_LOG, exception.message, exception.errorType, exception.errorType.httpStatus)
+		log.error("Exception occurred w/ message: {}, with ErrorType: {}, responding with: {}"
+			, exception.message, exception.errorType, exception.errorType.httpStatus)
 
 		return ResponseEntity(
 			PodcastError(exception.errorType.error, exception.errorType.name), exception.errorType.httpStatus
@@ -50,5 +51,15 @@ class PodcastExceptionAdvice {
 		log.error("Request url did not conform to spec. Constraints violated: {}", exception.toString())
 
 		return PodcastError(ErrorType.G001.error, ErrorType.G001.name)
+	}
+
+	@ResponseBody
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(DataIntegrityViolationException::class)
+	fun onDBDataIntegrityError(exception: DataIntegrityViolationException): PodcastError {
+		val cause = exception.cause as org.hibernate.exception.ConstraintViolationException
+		log.error("Constraint violation occurred while updating DB. Constraint: {}", cause.constraintName)
+
+		return PodcastError(ErrorType.DB002.error, ErrorType.DB002.name)
 	}
 }
