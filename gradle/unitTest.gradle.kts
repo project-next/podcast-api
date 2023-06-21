@@ -3,60 +3,65 @@ val mockitKotlinVersion = "1.6.0"
 val h2Version = "2.1.214"
 
 dependencies {
-	"testImplementation"(kotlin("test"))
+    "testImplementation"(kotlin("test"))
 
-	"testImplementation"("com.nhaarman:mockito-kotlin:$mockitKotlinVersion")    // provides helper functions needed for mockito to work in Kotlin
-	"testImplementation"("org.springframework.boot:spring-boot-starter-test:$springVersion")
-	"testImplementation"("org.springframework.security:spring-security-test:6.1.0")
+    "testImplementation"("com.nhaarman:mockito-kotlin:$mockitKotlinVersion")    // provides helper functions needed for mockito to work in Kotlin
+    "testImplementation"("org.springframework.boot:spring-boot-starter-test:$springVersion")
+    "testImplementation"("org.springframework.security:spring-security-test:6.1.0")
 
-	"testRuntimeOnly"("com.h2database:h2:$h2Version")
+    "testRuntimeOnly"("com.h2database:h2:$h2Version")
 }
 
-tasks.withType<Test>  {
-	useJUnitPlatform()
+tasks.withType<Test> {
+    useJUnitPlatform()
 
-	minHeapSize = "256m"
-	maxHeapSize = "896m"
-	maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 ?: 1
+    minHeapSize = "256m"
+    maxHeapSize = "896m"
+    maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 ?: 1
 
-	finalizedBy(tasks.withType<JacocoReport>())
+    finalizedBy(tasks.withType<JacocoReport>())
 }
 
 tasks.withType<JacocoReport> {
-	dependsOn(tasks.withType<Test>())
+    dependsOn(tasks.withType<Test>())
 
-	reports {
-		xml.required.set(false)
-		csv.required.set(false)
-	}
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+    }
 
-	afterEvaluate {
-		classDirectories.setFrom(classDirectories.files.map {
-			fileTree(it).matching {
-				exclude("com/rtomyj/podcast/model/**", "com/rtomyj/podcast/Application**", "com/rtomyj/podcast/util/enum/**", "com/rtomyj/podcast/util/Constants**")
-			}
-		})
-	}
+    afterEvaluate {
+        classDirectories.setFrom(classDirectories.files.map {
+            fileTree(it).matching {
+                exclude(
+                    "com/rtomyj/podcast/model/**",
+                    "com/rtomyj/podcast/Application**",
+                    "com/rtomyj/podcast/util/enum/**",
+                    "com/rtomyj/podcast/util/Constants**"
+                )
+            }
+        })
+    }
 
-	finalizedBy(tasks.withType<JacocoCoverageVerification>())
+    finalizedBy(tasks.withType<JacocoCoverageVerification>())
 }
 
 tasks.withType<JacocoCoverageVerification> {
-	violationRules {
-		rule {
-			limit {
-				counter = "LINE"
-				value = "COVEREDRATIO"
-				minimum = "0.8".toBigDecimal()
-			}
-		}
+    violationRules {
+        rule {
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.8".toBigDecimal()
+            }
+        }
 
-		rule {
-			limit {
-				counter = "BRANCH"
-				value = "COVEREDRATIO"
-				minimum = "0.5".toBigDecimal()
-			}
-		}
-	}
+        rule {
+            limit {
+                counter = "BRANCH"
+                value = "COVEREDRATIO"
+                minimum = "0.5".toBigDecimal()
+            }
+        }
+    }
 }
