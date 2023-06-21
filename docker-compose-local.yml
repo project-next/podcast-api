@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   podcast-api:
-    image: "openjdk:17.0.2-jdk-slim"
+    image: "eclipse-temurin:17.0.7_7-jre-alpine"
     ports:
       - "9001:8080"
     volumes:
