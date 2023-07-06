@@ -20,15 +20,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          java-version: '20'
+          distribution: 'temurin'
           cache: 'gradle'
 
       - name: Execute Gradle Build
-        uses: gradle/gradle-build-action@v2.4.2
+        uses: gradle/gradle-build-action@v2.5.1
         with:
           gradle-version: wrapper
           arguments: build
