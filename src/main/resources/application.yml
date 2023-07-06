@@ -2,7 +2,7 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 10
-    url: "jdbc:postgresql://${PODCAST_API_DB_URI}"
+    url: "jdbc:postgresql://${PODCAST_API_DB_URI}?serverTimezone=${user.timezone}&useLegacyDatetimeCode=false&cacheDefaultTimezone=false"
     username: "${PODCAST_API_DB_USERNAME}"
     password: "${PODCAST_API_DB_PASSWORD}"
   jpa:
