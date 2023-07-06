@@ -31,7 +31,7 @@ plugins {
 
 group = "com.rtomyj.next"
 version = "1.4.1"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_20
 
 
 repositories {
@@ -101,7 +101,7 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
+            jvmTarget = JavaVersion.VERSION_20.toString()
         }
     }
 
