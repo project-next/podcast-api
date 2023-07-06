@@ -7,7 +7,7 @@ import com.rometools.modules.itunes.types.Duration
 import com.rometools.rome.feed.rss.*
 import com.rtomyj.podcast.model.Podcast
 import com.rtomyj.podcast.model.PodcastEpisode
-import java.net.URL
+import java.net.URI
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -33,7 +33,7 @@ class TransformToFeed {
 				ownerName = podcast.author
 				ownerEmailAddress = podcast.email
 				explicit = podcast.isExplicit
-				image = URL(podcast.imageUrl)
+				image = URI(podcast.imageUrl).toURL()
 				categories = listOf(Category(podcast.category))
 			}
 
@@ -63,7 +63,7 @@ class TransformToFeed {
 				guid.value = episode.episodeId
 
 				this.modules = EntryInformationImpl().run {
-					image = URL(episode.imageLink)
+					image = URI(episode.imageLink).toURL()
 					keywords = episode.keywords.toTypedArray()
 					explicit = episode.isExplicit
 
