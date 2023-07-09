@@ -64,7 +64,7 @@ class PodcastServiceTest {
                 .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
             // Call
-            val feed = podcastService.getPodcastData(podcastId)
+            val feed = podcastService.getRssFeedForPodcast(podcastId)
 
             // Assert
             Assertions.assertNotNull(feed)
@@ -111,7 +111,9 @@ class PodcastServiceTest {
 
             // Call
             val err = Assertions.assertThrows(
-                PodcastException::class.java, { podcastService.getPodcastData(podcastId) }, "Expected an error thrown as there should be no records for ID."
+                PodcastException::class.java,
+                { podcastService.getPodcastData(podcastId) },
+                "Expected an error thrown as there should be no records for ID."
             )
 
             // Assert
@@ -173,8 +175,9 @@ class PodcastServiceTest {
 
             // Call
             val err = Assertions.assertThrows(
-                PodcastException::class.java, { podcastService.updatePodcast(podcastId, podcast) }
-                , "Expected an error thrown as there should be no records for ID."
+                PodcastException::class.java,
+                { podcastService.updatePodcast(podcastId, podcast) },
+                "Expected an error thrown as there should be no records for ID."
             )
 
             // Assert
@@ -198,8 +201,9 @@ class PodcastServiceTest {
 
             // Call
             val err = Assertions.assertThrows(
-                PodcastException::class.java, { podcastService.updatePodcast(podcastId, podcast) }
-                , "Expected an error thrown as an error was thrown while saving podcast data."
+                PodcastException::class.java,
+                { podcastService.updatePodcast(podcastId, podcast) },
+                "Expected an error thrown as an error was thrown while saving podcast data."
             )
 
             // Assert
@@ -240,8 +244,9 @@ class PodcastServiceTest {
 
             // Call
             val err = Assertions.assertThrows(
-                PodcastException::class.java, { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) }
-                , "Expected an error thrown as there should be no records for Podcast ID."
+                PodcastException::class.java,
+                { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) },
+                "Expected an error thrown as there should be no records for Podcast ID."
             )
 
             // Assert
@@ -264,8 +269,9 @@ class PodcastServiceTest {
 
             // Call
             val err = Assertions.assertThrows(
-                PodcastException::class.java, { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) }
-                , "Expected an error thrown as mcoks will cause SQL Error."
+                PodcastException::class.java,
+                { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) },
+                "Expected an error thrown as mcoks will cause SQL Error."
             )
 
             // Assert

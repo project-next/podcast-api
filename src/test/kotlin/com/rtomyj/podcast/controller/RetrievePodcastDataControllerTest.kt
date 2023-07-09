@@ -11,6 +11,7 @@ import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.service.PodcastService
 import com.rtomyj.podcast.util.TestConstants
 import com.rtomyj.podcast.util.TestObjectsFromFile
+import com.rtomyj.podcast.util.TransformToFeedUtil
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Nested
@@ -54,7 +55,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - With CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
@@ -114,7 +115,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - Without CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
@@ -207,7 +208,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - With CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
@@ -271,7 +272,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - Without CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
