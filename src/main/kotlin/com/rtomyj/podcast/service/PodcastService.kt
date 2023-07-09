@@ -12,7 +12,6 @@ import com.rtomyj.podcast.util.TransformToFeedUtil
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.DataAccessException
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -23,8 +22,7 @@ import kotlin.jvm.optionals.getOrNull
 class PodcastService @Autowired constructor(
     val podcastCrudRepository: PodcastCrudRepository,
     val podcastEpisodePagingAndSortingRepository: PodcastEpisodePagingAndSortingRepository,
-    val podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository,
-    @Value("\${server.timezone}") val serverTZ: String
+    val podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(this::class.java.name)
@@ -35,7 +33,7 @@ class PodcastService @Autowired constructor(
         private const val SOMETHING_WENT_WRONG = "Something went wrong!"
     }
 
-    fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastData(podcastId), TransformToFeedUtil(serverTZ))
+    fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastData(podcastId), TransformToFeedUtil())
 
     fun getPodcastData(podcastId: String): PodcastData {
         log.info("Retrieving podcast info and episodes for podcast w/ ID: {}", podcastId)

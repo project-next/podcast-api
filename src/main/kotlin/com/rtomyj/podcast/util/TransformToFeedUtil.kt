@@ -12,9 +12,9 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-class TransformToFeedUtil(private val serverTZ: String) {
+class TransformToFeedUtil {
     private fun dbLocalDateToDate(localDateTime: LocalDateTime): Date =
-        Date.from(localDateTime.atZone(ZoneId.of(serverTZ)).toInstant())
+        Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
 
     fun populateChannelInfo(feed: Channel, podcast: Podcast) {
         with(feed) {

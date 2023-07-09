@@ -17,6 +17,3 @@ auth:
   generic-user:
     username: Tyler
     password: Changeme!
-
-server:
-  timezone: America/Chicago

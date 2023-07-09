@@ -55,7 +55,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - With CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil())
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
@@ -115,7 +115,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - Without CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil())
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
@@ -208,7 +208,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - With CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil())
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
@@ -272,7 +272,7 @@ class RetrievePodcastDataControllerTest {
         @Test
         fun `Retrieve Podcast Data XML - Authorization Header Is Missing - Without CSRF`() {
             val mockData = TestObjectsFromFile.podcastData1
-            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil("UTC"))
+            val feed = RssFeed(PodcastData(mockData.podcast, mockData.podcastEpisodes), TransformToFeedUtil())
             val namespace = mapOf(Pair("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"))
 
             // setup mocks
