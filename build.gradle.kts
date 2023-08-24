@@ -23,7 +23,7 @@ plugins {
 //	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
     kotlin("jvm") version "1.9.10"
-    kotlin("plugin.spring") version "1.9.0"
+    kotlin("plugin.spring") version "1.9.10"
 
     jacoco
 }
