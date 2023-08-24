@@ -1,13 +1,13 @@
-server=$1
-user="ec2-user"
+SERVER=$1
+USER="ec2-user"
 
-ssh -y -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
-    mkdir -p api/podcast-api/build/libs
-EOF
+if [ $# -eq 0 ]
+	then
+		echo "Need server name"
+		exit -1
+fi
 
-sftp -i "~/.ssh/podcast-api-server.pem" "${user}@${server}" << EOF
-    cd api/podcast-api
-    put docker-compose.yml
-    cd build/libs
-    put build/libs/podcast-api.jar
-EOF
+echo $SERVER
+
+rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" docker-compose.yml "${USER}@${SERVER}:api/podcast-api/"
+rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" build/libs/podcast-api.jar "${USER}@${SERVER}:api/podcast-api/build/libs/"
