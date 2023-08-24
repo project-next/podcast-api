@@ -1,7 +1,6 @@
 package com.rtomyj.podcast.service
 
 import com.rtomyj.podcast.dao.PodcastCrudRepository
-import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataAccessException
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -22,7 +22,6 @@ import kotlin.jvm.optionals.getOrNull
 class PodcastService @Autowired constructor(
     val podcastCrudRepository: PodcastCrudRepository,
     val podcastEpisodePagingAndSortingRepository: PodcastEpisodePagingAndSortingRepository,
-    val podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(this::class.java.name)
@@ -35,6 +34,7 @@ class PodcastService @Autowired constructor(
 
     fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastData(podcastId), TransformToFeedUtil())
 
+    @Transactional(readOnly = true)
     fun getPodcastData(podcastId: String): PodcastData {
         log.info("Retrieving podcast info and episodes for podcast w/ ID: {}", podcastId)
         val podcastInfo = getPodcastInfo(podcastId)
@@ -56,12 +56,15 @@ class PodcastService @Autowired constructor(
     private fun getPodcastEpisodes(podcastId: String) =
         podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
+    @Transactional
     fun storeNewPodcast(podcast: Podcast) {
         log.info("Attempting to store new podcast w/ name {}", podcast.title)
         savePodcast(podcast)
         log.info("Successfully added new podcast [{}] - ID: {}", podcast.title, podcast.id)
     }
 
+
+    @Transactional
     fun updatePodcast(podcastId: String, podcast: Podcast) {
         log.info("Updating info of an existing podcast using ID {}", podcastId)
 
@@ -84,6 +87,7 @@ class PodcastService @Autowired constructor(
         }
     }
 
+    @Transactional
     fun storeNewPodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
         podcastEpisode.podcastId = podcastId
         log.info(
@@ -97,6 +101,7 @@ class PodcastService @Autowired constructor(
         log.info("Successfully added new episode [{}] - episode ID: {}", podcastEpisode.title, podcastEpisode.episodeId)
     }
 
+    @Transactional
     fun updatePodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
         log.info(
             "Attempting to update episode w/ name [{}]. ID of podcast is {} and the episode ID is {}",
@@ -106,7 +111,7 @@ class PodcastService @Autowired constructor(
         )
 
         podcastEpisode.podcastId = podcastId
-        val dbPodcast = podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId)
+        val dbPodcast = podcastEpisodePagingAndSortingRepository.findById(podcastEpisode.episodeId)
         if (dbPodcast.isEmpty) {
             log.error(
                 "Podcast episode with ID {} not found in DB, therefore cannot update podcast episode.",
@@ -132,7 +137,7 @@ class PodcastService @Autowired constructor(
         }
 
         try {
-            podcastEpisodeCrudRepository.save(podcastEpisode)
+            podcastEpisodePagingAndSortingRepository.save(podcastEpisode)
         } catch (ex: DataAccessException) {
             log.error(SQLExceptionLog, ex.toString())
             throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
