@@ -3,7 +3,6 @@ package com.rtomyj.podcast.service
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.never
 import com.rtomyj.podcast.dao.PodcastCrudRepository
-import com.rtomyj.podcast.dao.PodcastEpisodeCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.PodcastEpisode
@@ -29,9 +28,6 @@ import java.util.*
 class PodcastServiceTest {
     @MockBean
     private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
-
-    @MockBean
-    private lateinit var podcastEpisodeCrudRepository: PodcastEpisodeCrudRepository
 
     @MockBean
     private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
@@ -222,7 +218,7 @@ class PodcastServiceTest {
             // Mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
                 .thenReturn(Optional.of(mockedPodcast))
-            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+            Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.save(podcastEpisode))
                 .thenReturn(podcastEpisode)
 
             // Call
@@ -230,7 +226,7 @@ class PodcastServiceTest {
 
             // Assert
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).save(podcastEpisode)
         }
     }
 
@@ -255,7 +251,7 @@ class PodcastServiceTest {
 
             Mockito.verify(podcastCrudRepositoryMock)
                 .findById(podcastId)
-            Mockito.verify(podcastEpisodeCrudRepository, never())
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock, never())
                 .save(podcastEpisode)
         }
 
@@ -264,7 +260,7 @@ class PodcastServiceTest {
             // Mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
                 .thenReturn(Optional.of(mockedPodcast))
-            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+            Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.save(podcastEpisode))
                 .thenThrow(DataRetrievalFailureException(""))
 
             // Call
@@ -279,7 +275,7 @@ class PodcastServiceTest {
             Assertions.assertEquals(PodcastException("Something went wrong!", ErrorType.DB003), err)
 
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).save(podcastEpisode)
         }
     }
 
@@ -289,9 +285,9 @@ class PodcastServiceTest {
         fun `Successfully Update Episode`() {
             // Mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-            Mockito.`when`(podcastEpisodeCrudRepository.findById(podcastEpisode.episodeId))
+            Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.findById(podcastEpisode.episodeId))
                 .thenReturn(Optional.of(podcastEpisode))
-            Mockito.`when`(podcastEpisodeCrudRepository.save(podcastEpisode))
+            Mockito.`when`(podcastEpisodePagingAndSortingRepositoryMock.save(podcastEpisode))
                 .thenReturn(podcastEpisode)
 
             // Call
@@ -299,8 +295,8 @@ class PodcastServiceTest {
 
             // Assert
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastEpisodeCrudRepository).findById(podcastEpisode.episodeId)
-            Mockito.verify(podcastEpisodeCrudRepository).save(podcastEpisode)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).findById(podcastEpisode.episodeId)
+            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock).save(podcastEpisode)
         }
     }
 }

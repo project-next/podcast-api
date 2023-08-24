@@ -30,7 +30,6 @@ spring:
 
 server:
   port: 9010
-  timezone: America/Chicago
   servlet:
     contextPath: /api/v1
   compression:
@@ -52,4 +51,3 @@ spring:
 
 server:
   port: 8080
-  timezone: UTC
