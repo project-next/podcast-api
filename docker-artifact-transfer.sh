@@ -10,4 +10,4 @@ fi
 echo $SERVER
 
 rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" docker-compose.yml "${USER}@${SERVER}:api/podcast-api/"
-rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" build/libs/podcast-api.jar "${USER}@${SERVER}:api/podcast-api/build/libs/"
+rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" -R "build/libs/podcast-api.jar" "${USER}@${SERVER}:api/podcast-api/"
