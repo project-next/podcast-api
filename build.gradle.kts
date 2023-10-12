@@ -19,7 +19,7 @@ plugins {
     id("org.springframework.boot") version "3.1.4"
     id("io.spring.dependency-management") version "1.1.3"
     id("info.solidsoft.pitest") version "1.15.0"
-    id("com.adarshr.test-logger") version "3.2.0"    // printing for JUnits
+    id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 //	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
     kotlin("jvm") version "1.9.10"
