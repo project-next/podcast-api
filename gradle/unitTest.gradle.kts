@@ -17,7 +17,7 @@ tasks.withType<Test>  {
 
 	minHeapSize = "256m"
 	maxHeapSize = "896m"
-	maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 ?: 1
+	maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
 
 	finalizedBy(tasks.withType<JacocoReport>())
 }
