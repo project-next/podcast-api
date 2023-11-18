@@ -3,35 +3,35 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.1.3"
-val jacksonKotlinVersion = "2.15.2"
-val jacksonCoreVersion = "2.15.2"
-val snakeYamlVersion = "2.1"
+val springBootVersion = "3.1.5"
+val jacksonKotlinVersion = "2.16.0"
+val jacksonCoreVersion = "2.16.0"
+val snakeYamlVersion = "2.2"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.6.0"
-val slf4jVersion = "2.0.7"
-val jCacheVersion = "6.2.7.Final"
+val slf4jVersion = "2.0.9"
+val jCacheVersion = "6.3.1.Final"
 val ehCacheVersion = "3.10.8"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
-    id("org.springframework.boot") version "3.1.3"
-    id("io.spring.dependency-management") version "1.1.3"
-    id("info.solidsoft.pitest") version "1.9.11"
-    id("com.adarshr.test-logger") version "3.2.0"    // printing for JUnits
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.4"
+    id("info.solidsoft.pitest") version "1.15.0"
+    id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 //	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.spring") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
+    kotlin("plugin.spring") version "1.9.20"
 
     jacoco
 }
 
 
 group = "com.rtomyj.next"
-version = "1.4.3"
-java.sourceCompatibility = JavaVersion.VERSION_20
+version = "1.5.0"
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 
 repositories {
@@ -101,7 +101,7 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_20.toString()
+            jvmTarget = JavaVersion.VERSION_21.toString()
         }
     }
 
@@ -129,7 +129,7 @@ tasks {
         description = "Specifies the absolute path of the JAR created by the bootJar task."
 
         doFirst {
-            println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
+            println("${layout.buildDirectory.get()}/libs/$archivesBaseName-${project.version}.jar")
         }
     }
 
@@ -139,8 +139,8 @@ tasks {
 
         dependsOn(bootJar)
 
-        from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
-        into("${buildDir}/libs")
+        from("${layout.buildDirectory.get()}/libs/${archivesBaseName}-${project.version}.jar")
+        into("${layout.buildDirectory.get()}/libs")
 
         rename("${archivesBaseName}-${project.version}.jar", "${archivesBaseName}.jar")
     }
@@ -168,5 +168,5 @@ pitest {
 }
 
 jacoco {
-    toolVersion = "0.8.10"
+    toolVersion = "0.8.11"
 }

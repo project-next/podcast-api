@@ -26,7 +26,7 @@ class PodcastService @Autowired constructor(
     companion object {
         private val log = LoggerFactory.getLogger(this::class.java.name)
 
-        private const val SQLExceptionLog = "SQLException occurred while inserting new podcast info. {}"
+        private const val SQL_EXCEPTION_LOG = "SQLException occurred while inserting new podcast info. {}"
         private const val PODCAST_ID_NOT_FOUND = "Podcast ID not found in DB"
         private const val EPISODE_ID_NOT_FOUND = "Episode ID not found in DB"
         private const val SOMETHING_WENT_WRONG = "Something went wrong!"
@@ -82,7 +82,7 @@ class PodcastService @Autowired constructor(
         try {
             podcastCrudRepository.save(podcast)
         } catch (ex: DataAccessException) {
-            log.error(SQLExceptionLog, ex.toString())
+            log.error(SQL_EXCEPTION_LOG, ex.toString())
             throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
         }
     }
@@ -139,7 +139,7 @@ class PodcastService @Autowired constructor(
         try {
             podcastEpisodePagingAndSortingRepository.save(podcastEpisode)
         } catch (ex: DataAccessException) {
-            log.error(SQLExceptionLog, ex.toString())
+            log.error(SQL_EXCEPTION_LOG, ex.toString())
             throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
         }
     }
