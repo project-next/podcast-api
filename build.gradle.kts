@@ -31,7 +31,7 @@ plugins {
 
 group = "com.rtomyj.next"
 version = "1.4.4"
-java.sourceCompatibility = JavaVersion.VERSION_20
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 
 repositories {
@@ -101,7 +101,7 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_20.toString()
+            jvmTarget = JavaVersion.VERSION_21.toString()
         }
     }
 
@@ -129,7 +129,7 @@ tasks {
         description = "Specifies the absolute path of the JAR created by the bootJar task."
 
         doFirst {
-            println("$buildDir/libs/$archivesBaseName-${project.version}.jar")
+            println("${layout.buildDirectory.get()}/libs/$archivesBaseName-${project.version}.jar")
         }
     }
 
@@ -139,8 +139,8 @@ tasks {
 
         dependsOn(bootJar)
 
-        from("${buildDir}/libs/${archivesBaseName}-${project.version}.jar")
-        into("${buildDir}/libs")
+        from("${layout.buildDirectory.get()}/libs/${archivesBaseName}-${project.version}.jar")
+        into("${layout.buildDirectory.get()}/libs")
 
         rename("${archivesBaseName}-${project.version}.jar", "${archivesBaseName}.jar")
     }
