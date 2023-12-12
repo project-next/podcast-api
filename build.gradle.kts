@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.1.5"
+val springBootVersion = "3.2.0"
 val jacksonKotlinVersion = "2.16.0"
 val jacksonCoreVersion = "2.16.0"
 val snakeYamlVersion = "2.2"
@@ -37,18 +37,13 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
     runtimeOnly("org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion")
-
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
-
-    implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
-    runtimeOnly("org.eclipse.jetty:jetty-alpn-java-server")
-    runtimeOnly("org.eclipse.jetty.http2:http2-server")
+    implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootVersion")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
@@ -77,7 +72,7 @@ configurations {
 
     implementation {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-        exclude(module = "spring-boot-starter-tomcat")
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         exclude(group = "org.apache.tomcat")
         exclude(group = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
