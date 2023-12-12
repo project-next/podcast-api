@@ -20,7 +20,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("info.solidsoft.pitest") version "1.15.0"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
-//	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
     kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
@@ -57,14 +56,11 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
     implementation("org.yaml:snakeyaml:$snakeYamlVersion")
 
-    // below are needed for native???
-//	implementation("org.jetbrains.kotlin:kotlin-reflect")
-//	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
     implementation("com.rometools:rome:$romeToolsVersion")
     implementation("com.rometools:rome-modules:$romeToolsVersion")
 
     runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+
     // below are needed for Hibernate L2 caching - https://www.baeldung.com/hibernate-second-level-cache
     runtimeOnly("org.hibernate.orm:hibernate-jcache:$jCacheVersion")
     runtimeOnly("org.ehcache:ehcache:$ehCacheVersion")
