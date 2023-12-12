@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.util.filter
+package com.rtomyj.podcast.config.filter
 
 import com.nhaarman.mockito_kotlin.atLeastOnce
 import jakarta.servlet.http.HttpServletRequest

@@ -1,4 +1,4 @@
-package com.rtomyj.podcast.util.filter
+package com.rtomyj.podcast.config.filter
 
 import com.rtomyj.podcast.util.Constants
 import jakarta.servlet.FilterChain
@@ -34,7 +34,9 @@ class RequestFilter : OncePerRequestFilter() {
 	}
 	override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
 		try {
-			val clientIP = if (StringUtils.hasLength(request.getHeader(X_FORWARDED_FOR))) request.getHeader(X_FORWARDED_FOR) else request.remoteHost
+			val clientIP = if (StringUtils.hasLength(request.getHeader(X_FORWARDED_FOR))) request.getHeader(
+                X_FORWARDED_FOR
+            ) else request.remoteHost
 
 			configureMDC(request, clientIP)
 			chain.doFilter(request, response)
