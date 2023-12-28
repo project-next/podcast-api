@@ -9,7 +9,7 @@ val jacksonCoreVersion = "2.16.1"
 val snakeYamlVersion = "2.2"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.7.1"
-val slf4jVersion = "2.0.9"
+val slf4jVersion = "2.0.10"
 val jCacheVersion = "6.4.1.Final"
 val ehCacheVersion = "3.10.8"
 
