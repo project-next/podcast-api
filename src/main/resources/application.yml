@@ -54,3 +54,7 @@ spring:
 
 server:
   port: 8080
+  ssl:
+    key-store: classpath:podcast-api.jks
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-alias: podcastapi
