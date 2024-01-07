@@ -1,35 +1,31 @@
-echo "Setting up environment variables retrieved from Doppler"
-echo
+ENV="prod"
+echo -e "Downloading latest certs and creating truststore\n"
+doppler setup -p podcast-api -c ${ENV} --no-interactive
 
-# DB Creds
-PODCAST_API_DB_PASSWORD="`doppler secrets get -p podcast-api -c prod DB_PASSWORD --plain`"
-PODCAST_API_DB_USERNAME="`doppler secrets get -p podcast-api -c prod DB_USERNAME --plain`"
-PODCAST_API_DB_URI="`doppler secrets get -p podcast-api -c prod DB_URI --plain`"
+mkdir -p certs
+doppler secrets get --plain SSL_PRIVATE_KEY > certs/private.key
+doppler secrets get --plain SSL_CA_BUNDLE_CRT > certs/ca_bundle.crt
+doppler secrets get --plain SSL_CERTIFICATE_CRT > certs/certificate.crt
 
-# Users for in memory DB
-ADMIN_USERNAME="`doppler secrets get -p podcast-api -c prod ADMIN_USERNAME --plain`"
-ADMIN_PASSWORD="`doppler secrets get -p podcast-api -c prod ADMIN_PASSWORD --plain`"
-GENERIC_USER_USERNAME="`doppler secrets -p podcast-api -c prod get GENERIC_USER_USERNAME --plain`"
-GENERIC_USER_PASSWORD="`doppler secrets -p podcast-api -c prod get GENERIC_USER_PASSWORD --plain`"
+PK_PASSWORD=$(doppler secrets get --plain PK_PASSWORD)
+SSL_KEYSTORE_PASSWORD=$(doppler secrets get --plain SSL_KEYSTORE_PASSWORD)
+export PK_PASSWORD
+export SSL_KEYSTORE_PASSWORD
 
-echo "Environment set up!"
-echo "PODCAST_API_DB_USERNAME=$PODCAST_API_DB_USERNAME"
-echo "PODCAST_API_DB_PASSWORD=$PODCAST_API_DB_PASSWORD"
-echo "PODCAST_API_DB_URI=$PODCAST_API_DB_URI"
-echo "ADMIN_USERNAME=$ADMIN_USERNAME"
-echo "ADMIN_PASSWORD=$ADMIN_PASSWORD"
-echo "GENERIC_USER_USERNAME=$GENERIC_USER_USERNAME"
-echo "GENERIC_USER_PASSWORD=$GENERIC_USER_PASSWORD"
+# Create keystore w/ certs
+cd certs || exit
+openssl pkcs12 -export -name podcastapi -in certificate.crt -inkey private.key -out podcast-api.p12 -password "pass:$PK_PASSWORD"
+keytool -importkeystore -deststorepass "$SSL_KEYSTORE_PASSWORD" -destkeystore podcast-api.jks \
+ -srckeystore podcast-api.p12 -srcstoretype PKCS12 -srcstorepass "$PK_PASSWORD"
+# update keystore created above with ca bundle
+keytool -import -alias podcast-api -trustcacerts -file ca_bundle.crt -keystore podcast-api.jks -storepass "$SSL_KEYSTORE_PASSWORD"
 
-######################################
+cd ..
+mv certs/podcast-api.jks src/main/resources/podcast-api.jks
 
-# DB Creds
-export PODCAST_API_DB_PASSWORD
-export PODCAST_API_DB_USERNAME
-export PODCAST_API_DB_URI
-
-# Users for in memory DB
-export ADMIN_USERNAME
-export ADMIN_PASSWORD
-export GENERIC_USER_USERNAME
-export GENERIC_USER_PASSWORD
+#########################################
+echo -e "###############################################\n"
+echo -e "Setting up environment variables retrieved from Doppler\n"
+JQ_EXPRESSION='with_entries(select(.key | startswith("DOPPLER") or startswith("PK") or startswith("SSL_C") or startswith("SSL_PRIVATE") | not)) | to_entries[] | "\(.key)=\"\(.value)\""'
+# passwords
+doppler secrets download --no-file --format json | jq -r "$JQ_EXPRESSION"

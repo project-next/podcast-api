@@ -3,34 +3,33 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.1.5"
-val jacksonKotlinVersion = "2.16.0"
-val jacksonCoreVersion = "2.16.0"
+val springBootVersion = "3.2.0"
+val jacksonKotlinVersion = "2.16.1"
+val jacksonCoreVersion = "2.16.1"
 val snakeYamlVersion = "2.2"
 val kotlinVersion = "1.7.22"
-val postgresqlVersion = "42.6.0"
-val slf4jVersion = "2.0.9"
-val jCacheVersion = "6.3.1.Final"
+val postgresqlVersion = "42.7.1"
+val slf4jVersion = "2.0.10"
+val jCacheVersion = "6.4.1.Final"
 val ehCacheVersion = "3.10.8"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
-    id("org.springframework.boot") version "3.1.5"
+    id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.4"
     id("info.solidsoft.pitest") version "1.15.0"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
-//	id("org.graalvm.buildtools.native") version "0.9.18" // - native
 
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.22"
 
     jacoco
 }
 
 
 group = "com.rtomyj.next"
-version = "1.5.0"
+version = "1.6.0"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 
@@ -38,18 +37,13 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
     runtimeOnly("org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion")
-
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
-
-    implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
-    runtimeOnly("org.eclipse.jetty:jetty-alpn-java-server")
-    runtimeOnly("org.eclipse.jetty.http2:http2-server")
+    implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootVersion")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
@@ -57,14 +51,11 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
     implementation("org.yaml:snakeyaml:$snakeYamlVersion")
 
-    // below are needed for native???
-//	implementation("org.jetbrains.kotlin:kotlin-reflect")
-//	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
     implementation("com.rometools:rome:$romeToolsVersion")
     implementation("com.rometools:rome-modules:$romeToolsVersion")
 
     runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+
     // below are needed for Hibernate L2 caching - https://www.baeldung.com/hibernate-second-level-cache
     runtimeOnly("org.hibernate.orm:hibernate-jcache:$jCacheVersion")
     runtimeOnly("org.ehcache:ehcache:$ehCacheVersion")
@@ -81,7 +72,7 @@ configurations {
 
     implementation {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-        exclude(module = "spring-boot-starter-tomcat")
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         exclude(group = "org.apache.tomcat")
         exclude(group = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

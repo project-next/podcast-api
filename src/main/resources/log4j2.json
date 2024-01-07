@@ -45,7 +45,7 @@
     },
     "loggers": {
       "logger": {
-        "name": "com.rtomyj.podcast.api",
+        "name": "com.rtomyj.podcast",
         "additivity": false
       , "level": "${env:LOG_LEVEL}"
       , "appender-ref":

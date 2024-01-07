@@ -37,3 +37,7 @@ bin/
 .DS_Store
 
 logs/
+
+# Certs
+**/certs/
+**/*.jks
