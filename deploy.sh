@@ -11,11 +11,11 @@ DIR_ON_SERVER="api/podcast-api"
 echo "Using server $SERVER and directory $DIR_ON_SERVER to sync prod API"
 
 echo "Uploading API files"
-rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" docker-compose.yml "${USER}@${SERVER}:${DIR_ON_SERVER}/"
-rsync -avz -e "ssh -i ~/.ssh/podcast-api-server.pem" -R "build/libs/podcast-api.jar" "${USER}@${SERVER}:${DIR_ON_SERVER}/"
+rsync -avz -e "ssh -i ~/.ssh/project-next.pem" docker-compose.yml "${USER}@${SERVER}:${DIR_ON_SERVER}/"
+rsync -avz -e "ssh -i ~/.ssh/project-next.pem" -R "build/libs/podcast-api.jar" "${USER}@${SERVER}:${DIR_ON_SERVER}/"
 
 echo "Restaging API"
-ssh -i ~/.ssh/podcast-api-server.pem "${USER}@${SERVER}" << EOF
+ssh -i ~/.ssh/project-next.pem "${USER}@${SERVER}" << EOF
 	cd "$DIR_ON_SERVER"
 	docker-compose kill
 	docker-compose rm -f
