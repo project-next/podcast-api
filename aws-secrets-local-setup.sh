@@ -2,13 +2,16 @@ aws secretsmanager get-secret-value --secret-id "/project-next/podcast-api/users
   | jq -r '.SecretString' | jq -r "to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" > .env
 
 aws secretsmanager get-secret-value --secret-id "/project-next/podcast-api/db-creds" --region us-east-2 \
-  | jq -r '.SecretString' | jq -r "to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" >> .env
+  | jq -r '.SecretString' \
+  | jq -r "with_entries(select(.key | startswith(\"dbInstanceIdentifier\") or startswith(\"engine\") | not)) | {DB_USERNAME: .username, DB_PASSWORD: .password, DB_HOST: .host, DB_PORT: .port, DB_NAME: .dbname} | to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" \
+  >> .env
 
 aws secretsmanager get-secret-value --secret-id "/project-next/podcast-api/ssl" --region us-east-2 \
   | jq -r '.SecretString' \
   | jq -r "with_entries(select(.key | startswith(\"SSL_KEYSTORE_PASSWORD\") or startswith(\"PK\"))) | to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" >> .env
 
 source .env
+cat .env
 
 #########################################################################################
 
