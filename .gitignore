@@ -29,7 +29,6 @@
 ### VS Code ###
 .vscode/
 
-
 ### Java ###
 bin/
 
@@ -41,3 +40,5 @@ logs/
 # Certs
 **/certs/
 **/*.jks
+
+.**env**
