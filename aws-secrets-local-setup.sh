@@ -1,12 +1,12 @@
-aws secretsmanager get-secret-value --secret-id "/project-next/podcast-api/users" --region us-east-2 \
+aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/users" --region us-east-2 \
   | jq -r '.SecretString' | jq -r "to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" > .env
 
-aws secretsmanager get-secret-value --secret-id "/project-next/podcast-api/db-creds" --region us-east-2 \
+aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/db-creds" --region us-east-2 \
   | jq -r '.SecretString' \
   | jq -r "with_entries(select(.key | startswith(\"dbInstanceIdentifier\") or startswith(\"engine\") | not)) | {DB_USERNAME: .username, DB_PASSWORD: .password, DB_HOST: .host, DB_PORT: .port, DB_NAME: .dbname} | to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" \
   >> .env
 
-aws secretsmanager get-secret-value --secret-id "/project-next/podcast-api/ssl" --region us-east-2 \
+aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/ssl" --region us-east-2 \
   | jq -r '.SecretString' \
   | jq -r "with_entries(select(.key | startswith(\"SSL_KEYSTORE_PASSWORD\") or startswith(\"PK\"))) | to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" >> .env
 
@@ -15,15 +15,17 @@ cat .env
 
 #########################################################################################
 
-# doppler is still needed to store/retrieve SSL certs/private key
 ENV="prod"
 echo -e "Downloading latest certs and creating truststore\n"
-doppler setup -p podcast-api -c ${ENV} --no-interactive
 
 mkdir -p certs
-doppler secrets get --plain SSL_PRIVATE_KEY > certs/private.key
-doppler secrets get --plain SSL_CA_BUNDLE_CRT > certs/ca_bundle.crt
-doppler secrets get --plain SSL_CERTIFICATE_CRT > certs/certificate.crt
+aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/ssl" --region us-east-2 \
+  | jq -r '.SecretString' \
+  | jq -r "with_entries(select(.key | startswith(\"SSL\")))" > certs/base64-certs-json
+cat certs/base64-certs-json | jq -r ".SSL_PRIVATE_KEY" | base64 -d > certs/private.key
+cat certs/base64-certs-json | jq -r ".SSL_CA_BUNDLE_CRT" | base64 -d > certs/ca_bundle.crt
+cat certs/base64-certs-json | jq -r ".SSL_CERTIFICATE_CRT" | base64 -d > certs/certificate.crt
+rm certs/base64-certs-json
 
 # Create keystore w/ certs
 cd certs || exit
