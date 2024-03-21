@@ -22,9 +22,9 @@ mkdir -p certs
 aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/ssl" --region us-east-2 \
   | jq -r '.SecretString' \
   | jq -r "with_entries(select(.key | startswith(\"SSL\")))" > certs/base64-certs-json
-cat certs/base64-certs-json | jq -r ".SSL_PRIVATE_KEY" | base64 -d > certs/private.key
-cat certs/base64-certs-json | jq -r ".SSL_CA_BUNDLE_CRT" | base64 -d > certs/ca_bundle.crt
-cat certs/base64-certs-json | jq -r ".SSL_CERTIFICATE_CRT" | base64 -d > certs/certificate.crt
+jq -r ".SSL_PRIVATE_KEY" < certs/base64-certs-json | base64 -d > certs/private.key
+jq -r ".SSL_CA_BUNDLE_CRT" < certs/base64-certs-json | base64 -d > certs/ca_bundle.crt
+jq -r ".SSL_CERTIFICATE_CRT" < certs/base64-certs-json | base64 -d > certs/certificate.crt
 rm certs/base64-certs-json
 
 # Create keystore w/ certs
