@@ -30,4 +30,4 @@ networks:
   podcast-api:
     name: podcast-api
     driver: bridge
-    external: true
+    external: false
