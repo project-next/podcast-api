@@ -1,4 +1,4 @@
-SECRET_MANAGER_ID="/project-next/podcast-api/ssl"
+SECRET_MANAGER_ID="/prod/project-next/podcast-api/ssl"
 
 # AWS will remove new line characters, which are needed in below files - converting to base64 at the time of saving will resolve this issue
 SSL_PRIVATE_KEY=$(base64 certs/private.key)
