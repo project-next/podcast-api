@@ -63,6 +63,7 @@ class TransformToFeedUtil {
                 image = URI(episode.imageLink).toURL()
                 keywords = episode.keywords.toTypedArray()
                 explicit = episode.isExplicit
+                season = episode.season
 
                 val durationTokens = episode.duration.split(":")
                 duration = Duration(durationTokens[0].toInt(), durationTokens[1].toInt(), durationTokens[2].toFloat())

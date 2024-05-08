@@ -79,6 +79,9 @@ data class PodcastEpisode(
 	@Column(name = "episode_duration")
 	lateinit var duration: String
 
+	@Column(name = "season", columnDefinition = "int2")
+	var season = 0
+
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
 		if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
