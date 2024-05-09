@@ -29,7 +29,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.6.3"
+version = "1.6.4"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 
