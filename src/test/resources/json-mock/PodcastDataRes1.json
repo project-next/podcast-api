@@ -18,8 +18,8 @@
       "podcastId": "1712103d-14ee-4679-8e9d-d6d277257b8b",
       "episodeId": "b9c3dc9a-773e-4fde-a66a-f224d196e34e",
       "title": "Rip The Bandaid",
-      "episodeWebpageLink": "https://www.makeuseof.com/regular-expressions-validate-url",
-      "episodeAudioLink": "https://www.makeuseof.com/regular-expressions-validate-url",
+      "webpageLink": "https://www.makeuseof.com/regular-expressions-validate-url",
+      "audioLink": "https://www.makeuseof.com/regular-expressions-validate-url",
       "description": "Testing...",
       "publicationDate": "2022-12-30T10:38:45.216492",
       "author": "Javi Gomez",
@@ -28,7 +28,8 @@
       "length": 327610467,
       "mediaType": "audio/mp3",
       "isExplicit": true,
-      "duration": "00:45:21"
+      "duration": "00:45:21",
+      "season": 1
     }
   ]
 }
