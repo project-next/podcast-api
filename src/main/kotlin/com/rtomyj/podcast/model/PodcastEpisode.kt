@@ -1,6 +1,5 @@
 package com.rtomyj.podcast.model
 
-import com.rtomyj.podcast.dao.KeywordsConverter
 import com.rtomyj.podcast.util.Constants
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
@@ -8,6 +7,7 @@ import org.hibernate.Hibernate
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Type
 import java.time.LocalDateTime
 import java.util.*
 
@@ -57,9 +57,10 @@ data class PodcastEpisode(
     @Column(name = "image")
     lateinit var imageLink: String
 
-    @Column(name = "keywords")
-    @Convert(converter = KeywordsConverter::class)
-    var keywords = arrayListOf<String>()
+    @Column(
+        name = "keywords", columnDefinition = "text[]"
+    )
+    var keywords = arrayOf<String>()
 
     @Column(name = "length")
     var length = 0L

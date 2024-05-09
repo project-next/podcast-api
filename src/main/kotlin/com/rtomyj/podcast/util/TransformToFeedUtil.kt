@@ -61,7 +61,7 @@ class TransformToFeedUtil {
 
             this.modules = EntryInformationImpl().run {
                 image = URI(episode.imageLink).toURL()
-                keywords = episode.keywords.toTypedArray()
+                keywords = episode.keywords
                 explicit = episode.isExplicit
                 season = episode.season
 

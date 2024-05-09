@@ -20,7 +20,7 @@ data class Podcast(
 ) {
 	@NotBlank
 	@Size(max = 50)
-	@Pattern(regexp = "[\\w\\d ]+")
+	@Pattern(regexp = "[\\w ]+")
 	@Column(name = "title")
 	lateinit var title: String
 
