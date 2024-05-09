@@ -48,13 +48,13 @@ class TransformToFeedUtil {
             this.enclosures = Enclosure().run {
                 length = episode.length
                 type = episode.mediaType
-                url = episode.episodeAudioLink
+                url = episode.audioLink
                 listOf(this)
             }
 
             title = episode.title
             author = episode.author
-            link = episode.episodeWebpageLink
+            link = episode.webpageLink
             pubDate = dbLocalDateToDate(episode.publicationDate)
             guid = Guid()
             guid.value = episode.episodeId

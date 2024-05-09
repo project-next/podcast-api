@@ -12,59 +12,59 @@ import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 import java.util.*
 
-@Entity(name = "podcast_info")
+@Entity(name = "podcast")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class Podcast(
-	@Id @Column(name = "podcast_id", columnDefinition="bpchar", updatable = false, nullable = false) var id: String = UUID.randomUUID().toString()
+	@Id @Column(name = "id", columnDefinition="bpchar", updatable = false, nullable = false) var id: String = UUID.randomUUID().toString()
 ) {
 	@NotBlank
 	@Size(max = 50)
 	@Pattern(regexp = "[\\w\\d ]+")
-	@Column(name = "podcast_title")
+	@Column(name = "title")
 	lateinit var title: String
 
 	@NotBlank
 	@Size(max = 255)
 	@Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-	@Column(name = "podcast_link")
+	@Column(name = "link")
 	lateinit var link: String
 
 	@NotBlank
 	@Size(max = 3000)
-	@Column(name = "podcast_description")
+	@Column(name = "description")
 	lateinit var description: String
 
 	@NotBlank
 	@Pattern(regexp = "\\w{2}-\\w{2}")
 	@Size(max = 5)
-	@Column(name = "podcast_language")
+	@Column(name = "language")
 	lateinit var language: String
 
 	@NotBlank
 	@Size(max = 40)
-	@Column(name = "podcast_copyright")
+	@Column(name = "copyright")
 	lateinit var copyright: String
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "podcast_last_build_date", nullable = false)
+	@Column(name = "last_build_date", nullable = false)
 	@CreationTimestamp
 	lateinit var lastBuildDate: LocalDateTime
 
 	@NotBlank
 	@Email
 	@Size(max = 30)
-	@Column(name = "podcast_email")
+	@Column(name = "email")
 	lateinit var email: String
 
 	@NotBlank
 	@Size(max = 20)
-	@Column(name = "podcast_category")
+	@Column(name = "category")
 	lateinit var category: String
 
 	@NotBlank
 	@Size(max = 30)
-	@Column(name = "podcast_author")
+	@Column(name = "author")
 	lateinit var author: String
 
 	var isExplicit: Boolean = true
@@ -72,7 +72,7 @@ data class Podcast(
 	@NotBlank
 	@Size(max = 255)
 	@Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-	@Column(name = "podcast_image_url")
+	@Column(name = "image_url")
 	lateinit var imageUrl: String
 
 	override fun toString(): String {
