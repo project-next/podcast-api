@@ -48,21 +48,22 @@ class TransformToFeedUtil {
             this.enclosures = Enclosure().run {
                 length = episode.length
                 type = episode.mediaType
-                url = episode.episodeAudioLink
+                url = episode.audioLink
                 listOf(this)
             }
 
             title = episode.title
             author = episode.author
-            link = episode.episodeWebpageLink
+            link = episode.webpageLink
             pubDate = dbLocalDateToDate(episode.publicationDate)
             guid = Guid()
             guid.value = episode.episodeId
 
             this.modules = EntryInformationImpl().run {
                 image = URI(episode.imageLink).toURL()
-                keywords = episode.keywords.toTypedArray()
+                keywords = episode.keywords
                 explicit = episode.isExplicit
+                season = episode.season
 
                 val durationTokens = episode.duration.split(":")
                 duration = Duration(durationTokens[0].toInt(), durationTokens[1].toInt(), durationTokens[2].toFloat())

@@ -1,11 +1,11 @@
-INSERT INTO podcast_info
+INSERT INTO podcast
 	(
 		podcast_id
-		, podcast_title, podcast_link
-		, podcast_description
-		, podcast_language, podcast_copyright, podcast_last_build_date, podcast_email
-		, podcast_category, podcast_author, is_explicit
-		, podcast_image_url
+		, title, link
+		, description
+		, language, copyright, last_build_date, email
+		, category, author, is_explicit
+		, image_url
 	)
 VALUES
 	(
@@ -20,15 +20,15 @@ VALUES
 
 INSERT INTO podcast_episode
 (
-	episode_title, podcast_id
-	, episode_webpage_link
-	, episode_audio_link
-	, episode_description
-	, episode_pub_date, episode_author
-	, episode_image
-	, episode_keywords
-	, episode_guid, episode_length, episode_media_type, is_episode_explicit
-	, episode_duration
+	title, podcast_id
+	, webpage_link
+	, audio_link
+	, description
+	, pub_date, author
+	, image
+	, keywords
+	, episode_id, length, media_type, is_explicit
+	, duration
 ) VALUES
 	(
 		'#1', '41c4e54d-bee9-43c9-b34b-d4eb87c1a377'
@@ -37,7 +37,7 @@ INSERT INTO podcast_episode
 		, 'The first episode!'
 		, '2020-06-15 17:36:00', 'NEXT'
 		, 'https://www.thesupremekingscastle.com'
-		, 'Tag1|Tag2'
+		, {'Tag1', 'Tag2'}
 		, '8380ee02-cd3f-4c96-85bd-238a0cd2ab90', 327610467, 'audio/x-m4a', true
 		, '02:01:37'
 	);
