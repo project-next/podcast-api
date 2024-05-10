@@ -26,13 +26,13 @@ CREATE TABLE podcast_episode
 		, pub_date TIMESTAMP NOT NULL
 		, author VARCHAR(30) NOT NULL
 		, image VARCHAR(255) NOT NULL
-		, keywords VARCHAR(300) NOT NULL
+        , keywords _text NOT NULL DEFAULT '{}'::text[],
 		, guid CHAR(36) NOT NULL
 		, length INT NOT NULL
 		, media_type VARCHAR(15) NOT NULL
 		, is_explicit BOOLEAN NOT NULL
 		, duration TIME NOT NULL
-        ,season int2 NOT NULL
+        , season int2 NOT NULL
 		, PRIMARY KEY(title, podcast_id, season)
 		, FOREIGN KEY(podcast_id) REFERENCES podcast_info(podcast_id)
 	);

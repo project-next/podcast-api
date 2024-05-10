@@ -37,7 +37,7 @@ INSERT INTO podcast_episode
 		, 'The first episode!'
 		, '2020-06-15 17:36:00', 'NEXT'
 		, 'https://www.thesupremekingscastle.com'
-		, 'Tag1|Tag2'
+		, {'Tag1', 'Tag2'}
 		, '8380ee02-cd3f-4c96-85bd-238a0cd2ab90', 327610467, 'audio/x-m4a', true
 		, '02:01:37'
 	);
