@@ -1,13 +1,13 @@
-val springVersion = "3.3.0"
+val springVersion = "3.3.3"
 val mockitKotlinVersion = "1.6.0"
-val h2Version = "2.2.224"
+val h2Version = "2.3.232"
 
 dependencies {
 	"testImplementation"(kotlin("test"))
 
 	"testImplementation"("com.nhaarman:mockito-kotlin:$mockitKotlinVersion")    // provides helper functions needed for mockito to work in Kotlin
 	"testImplementation"("org.springframework.boot:spring-boot-starter-test:$springVersion")
-	"testImplementation"("org.springframework.security:spring-security-test:6.3.0")
+	"testImplementation"("org.springframework.security:spring-security-test:6.3.3")
 
 	"testRuntimeOnly"("com.h2database:h2:$h2Version")
 }
