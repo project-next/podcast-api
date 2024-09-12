@@ -1,7 +1,7 @@
 aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/users" --region us-east-2 \
   | jq -r '.SecretString' | jq -r "to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" > .env
 
-aws secretsmanager get-secret-value --secret-id "/prod/project-next/podcast-api/db-creds" --region us-east-2 \
+aws secretsmanager get-secret-value --secret-id "/prod/project-next/db" --region us-east-2 \
   | jq -r '.SecretString' \
   | jq -r "with_entries(select(.key | startswith(\"dbInstanceIdentifier\") or startswith(\"engine\") | not)) | {DB_USERNAME: .username, DB_PASSWORD: .password, DB_HOST: .host, DB_PORT: .port, DB_NAME: .dbname} | to_entries|map(\"export \(.key)=\\\"\(.value|tostring)\\\"\")|.[]" \
   >> .env

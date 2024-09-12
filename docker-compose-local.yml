@@ -12,7 +12,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 600M
+          memory: 400M
     networks:
       - podcast-api
     environment:

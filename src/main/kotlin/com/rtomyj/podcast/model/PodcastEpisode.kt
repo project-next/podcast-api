@@ -7,11 +7,11 @@ import org.hibernate.Hibernate
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.Type
 import java.time.LocalDateTime
 import java.util.*
 
 @Entity(name = "podcast_episode")
+@Table(schema = "podcasting")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class PodcastEpisode(

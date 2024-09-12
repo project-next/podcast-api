@@ -6,7 +6,7 @@ val romeToolsVersion = "2.1.0"
 val springBootVersion = "3.3.3"
 val jacksonKotlinVersion = "2.17.2"
 val jacksonCoreVersion = "2.17.2"
-val snakeYamlVersion = "2.2"
+val snakeYamlVersion = "2.3"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.7.4"
 val slf4jVersion = "2.0.16"
@@ -29,7 +29,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.6.6"
+version = "1.6.7"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 
