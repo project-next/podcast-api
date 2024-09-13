@@ -5,64 +5,61 @@
         {
           "name": "log-path",
           "value": "logs"
-        },
-        {
-          "name": "archive",
-          "value": "${log-path}/archive"
         }
       ]
     },
     "appenders": {
-      "Console":
-      [
+      "console": [
         {
           "name": "STD_Out",
           "PatternLayout": {
-            "pattern": "%highlight{%level:} %highlight{%m} • MDC[reqIp=%X{reqIp}, reqPath=%X{reqPath}, reqUUID=%X{reqUUID}, clientID=%X{clientID}, userAgent=%X{userAgent}] • %l • %d{MM/dd/YYYY HH:mm:ss.SS} %n"
-          , "disableAnsi": false
+            "pattern": "%highlight{%level:} %highlight{%m} • MDC[reqIp=%X{reqIp}, reqPath=%X{reqPath}, reqUUID=%X{reqUUID}, clientID=%X{clientID}, userAgent=%X{userAgent}] • %l • %d{MM/dd/YYYY HH:mm:ss.SS} %n",
+            "disableAnsi": false
           }
-        }
-      , {
-        "name": "STD_Out_Simple",
-        "PatternLayout": {
-          "pattern": "%highlight{%level:} %highlight{%m} • %l • %d{MM/dd/YYYY HH:mm:ss.SS} %n"
-        , "disableAnsi": false
-        }
-      }
-      ]
-    , "RollingFile": {
-        "name": "File Out",
-        "fileName": "${log-path}/podcast-api.log",
-        "filePattern":"${log-path}/podcast-api-%d{MM-dd-yy}.log.gz",
-        "PatternLayout": {
-          "pattern": "%level: %m • MDC[reqIp=%X{reqIp}, reqPath=%X{reqPath}, reqUUID=%X{reqUUID}, clientID=%X{clientID}, userAgent=%X{userAgent}] • %l • %d{MM/dd/YYYY HH:mm:ss.SS} %n"
         },
-        "Policies": {
-          "TimeBasedTriggeringPolicy": {
+        {
+          "name": "STD_Out_Simple",
+          "PatternLayout": {
+            "pattern": "%highlight{%level:} %highlight{%m} • %l • %d{MM/dd/YYYY HH:mm:ss.SS} %n",
+            "disableAnsi": false
+          }
+        },
+        {
+          "name": "STD_Out_JSON",
+          "JSONLayout": {
+            "compact": true,
+            "eventEol": true,
+            "properties": true,
+            "stacktraceAsString": true,
+            "locationInfo": false,
+            "objectMessageAsJsonObject": true,
+            "KeyValuePair": [
+              {
+                "key": "timestamp",
+                "value": "$${date:MM/dd/YYYY HH:mm:ss.SS}"
+              }
+            ]
           }
         }
-      }
+      ]
     },
     "loggers": {
       "logger": {
         "name": "com.rtomyj.podcast",
-        "additivity": false
-      , "level": "${env:LOG_LEVEL}"
-      , "appender-ref":
-        [
+        "additivity": false,
+        "level": "${env:LOG_LEVEL}",
+        "appender-ref": [
           {
-            "ref": "STD_Out"
-          }, {
-          "ref": "File Out",
-          "level": "INFO"
-        }
+            "ref": "STD_Out_JSON",
+            "level": "INFO"
+          }
         ]
       },
       "root": {
-        "additivity": false
-      , "level": "INFO"
-      , "appender-ref": {
-          "ref": "STD_Out_Simple"
+        "additivity": false,
+        "level": "INFO",
+        "appender-ref": {
+          "ref": "STD_Out_JSON"
         }
       }
     }
