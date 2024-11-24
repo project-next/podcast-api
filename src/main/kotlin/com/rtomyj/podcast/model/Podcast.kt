@@ -81,6 +81,11 @@ data class Podcast(
     @Column(name = "image_url")
     lateinit var imageUrl: String
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "podcast_id", insertable = false, updatable = false, nullable = false)
+    @OrderBy("publicationDate ASC")
+    var episodes: List<PodcastEpisode> = emptyList()
+
     override fun toString(): String {
         return StringBuilder("Podcast ID: $id").append("Podcast Title: $title").append("Podcast Link: $link").toString()
     }
