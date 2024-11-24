@@ -18,23 +18,23 @@ class RequestFilterTest {
     private lateinit var httpServletRequest: HttpServletRequest
 
     companion object {
-        private const val path = "/path"
-        private const val queryString = "x=y"
-        private const val clientID = "JUNIT"
-        private const val agent = "POSTMAN"
+        private const val PATH = "/path"
+        private const val QUERY_STRING = "x=y"
+        private const val CLIENT_ID = "JUNIT"
+        private const val AGENT = "POSTMAN"
     }
 
     @Test
     fun `Test MDC Configuration - Query String Not Null`() {
         // mock
         Mockito.`when`(httpServletRequest.servletPath)
-            .thenReturn(path)
+            .thenReturn(PATH)
         Mockito.`when`(httpServletRequest.queryString)
-            .thenReturn(queryString)
+            .thenReturn(QUERY_STRING)
         Mockito.`when`(httpServletRequest.getHeader(RequestFilter.CLIENT_ID_NAME))
-            .thenReturn(clientID)
+            .thenReturn(CLIENT_ID)
         Mockito.`when`(httpServletRequest.getHeader(HttpHeaders.USER_AGENT))
-            .thenReturn(agent)
+            .thenReturn(AGENT)
 
         // call
         RequestFilter.configureMDC(httpServletRequest, "")
@@ -45,9 +45,9 @@ class RequestFilterTest {
         assertNotNull(MDC.get("clientID"))
         assertNotNull(MDC.get("userAgent"))
 
-        assertEquals("$path?$queryString", MDC.get("reqPath"))
-        assertEquals(clientID, MDC.get("clientID"))
-        assertEquals(agent, MDC.get("userAgent"))
+        assertEquals("$PATH?$QUERY_STRING", MDC.get("reqPath"))
+        assertEquals(CLIENT_ID, MDC.get("clientID"))
+        assertEquals(AGENT, MDC.get("userAgent"))
 
         Mockito.verify(httpServletRequest)
             .servletPath
@@ -63,13 +63,13 @@ class RequestFilterTest {
     fun `Test MDC Configuration - Query String Is Null`() {
         // mock
         Mockito.`when`(httpServletRequest.servletPath)
-            .thenReturn(path)
+            .thenReturn(PATH)
         Mockito.`when`(httpServletRequest.queryString)
             .thenReturn(null)
         Mockito.`when`(httpServletRequest.getHeader(RequestFilter.CLIENT_ID_NAME))
-            .thenReturn(clientID)
+            .thenReturn(CLIENT_ID)
         Mockito.`when`(httpServletRequest.getHeader(HttpHeaders.USER_AGENT))
-            .thenReturn(agent)
+            .thenReturn(AGENT)
 
         // call
         RequestFilter.configureMDC(httpServletRequest, "")
@@ -80,9 +80,9 @@ class RequestFilterTest {
         assertNotNull(MDC.get("clientID"))
         assertNotNull(MDC.get("userAgent"))
 
-        assertEquals(path, MDC.get("reqPath"))
-        assertEquals(clientID, MDC.get("clientID"))
-        assertEquals(agent, MDC.get("userAgent"))
+        assertEquals(PATH, MDC.get("reqPath"))
+        assertEquals(CLIENT_ID, MDC.get("clientID"))
+        assertEquals(AGENT, MDC.get("userAgent"))
 
         Mockito.verify(httpServletRequest)
             .servletPath

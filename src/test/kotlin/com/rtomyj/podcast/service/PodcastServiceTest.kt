@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.dao.DataRetrievalFailureException
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
@@ -24,10 +24,10 @@ import java.util.*
 @ContextConfiguration(classes = [PodcastService::class])
 @Tag("Service")
 class PodcastServiceTest {
-    @MockBean
+    @MockitoBean
     private lateinit var podcastCrudRepositoryMock: PodcastCrudRepository
 
-    @MockBean
+    @MockitoBean
     private lateinit var podcastEpisodePagingAndSortingRepositoryMock: PodcastEpisodePagingAndSortingRepository
 
     @Autowired
@@ -37,8 +37,7 @@ class PodcastServiceTest {
         val mockPodcastData = TestObjectsFromFile.podcastData1
         val podcastId = mockPodcastData.id
         val mockedPodcast = mockPodcastData
-        val mockedEpisodes = mockPodcastData.episodes
-        val podcastEpisode = mockedEpisodes[0]
+        val podcastEpisode = mockPodcastData.episodes[0]
     }
 
     @Nested
