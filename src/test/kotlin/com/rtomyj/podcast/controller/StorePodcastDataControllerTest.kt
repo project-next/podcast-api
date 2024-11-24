@@ -112,12 +112,12 @@ class StorePodcastDataControllerTest {
         @Test
         fun `User is admin - Body Is Valid`() {
             // setup mocks
-            val mockData = TestObjectsFromFile.podcastData1.podcast
-            Mockito.doNothing().`when`(service).storeNewPodcast(mockData)
+            val mockPodcast = TestObjectsFromFile.podcastData1
+            Mockito.doNothing().`when`(service).storeNewPodcast(mockPodcast)
 
             mockMvc.perform(
                 post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
-                    .content(Helpers.mapper.writeValueAsString(mockData))
+                    .content(Helpers.mapper.writeValueAsString(mockPodcast))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
                 jsonPath(
@@ -128,7 +128,7 @@ class StorePodcastDataControllerTest {
             )
 
             // verify mocks are called
-            Mockito.verify(service).storeNewPodcast(mockData)
+            Mockito.verify(service).storeNewPodcast(mockPodcast)
         }
     }
 
@@ -199,15 +199,15 @@ class StorePodcastDataControllerTest {
         @Test
         fun `User is admin - Body Is Valid`() {
             // setup mocks
-            val mockData = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            val mockEpisode = TestObjectsFromFile.podcastData1.episodes[0]
             Mockito.doNothing().`when`(service)
-                .storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+                .storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.id, mockEpisode)
 
             mockMvc.perform(
-                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(
+                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.id).contentType(
                     TestConstants.CONTENT_TYPE
                 )
-                    .content(Helpers.mapper.writeValueAsString(mockData))
+                    .content(Helpers.mapper.writeValueAsString(mockEpisode))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
                 jsonPath(
@@ -218,7 +218,7 @@ class StorePodcastDataControllerTest {
             )
 
             // verify mocks are called
-            Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+            Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.id, mockEpisode)
         }
     }
 }

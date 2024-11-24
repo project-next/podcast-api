@@ -5,7 +5,6 @@ import com.nhaarman.mockito_kotlin.never
 import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
-import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.util.TestObjectsFromFile
 import com.rtomyj.podcast.util.enum.ErrorType
 import org.junit.jupiter.api.Assertions
@@ -17,7 +16,6 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.dao.DataRetrievalFailureException
-import org.springframework.data.domain.Sort
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
@@ -37,12 +35,10 @@ class PodcastServiceTest {
 
     companion object {
         val mockPodcastData = TestObjectsFromFile.podcastData1
-        val podcastId = mockPodcastData.podcast.id
-        val mockedPodcast = mockPodcastData.podcast
-        val mockedEpisodes = mockPodcastData.podcastEpisodes
-
-        val podcast = TestObjectsFromFile.podcastData1.podcast
-        val podcastEpisode = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+        val podcastId = mockPodcastData.id
+        val mockedPodcast = mockPodcastData
+        val mockedEpisodes = mockPodcastData.episodes
+        val podcastEpisode = mockedEpisodes[0]
     }
 
     @Nested
@@ -51,13 +47,6 @@ class PodcastServiceTest {
         fun `Successfully Retrieve Feed`() {
             // mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-            Mockito.`when`(
-                podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
-                    podcastId,
-                    Sort.by("publicationDate")
-                )
-            )
-                .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
             // Call
             val feed = podcastService.getRssFeedForPodcast(podcastId)
@@ -66,8 +55,6 @@ class PodcastServiceTest {
             Assertions.assertNotNull(feed)
 
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock)
-                .findAllByPodcastId(podcastId, Sort.by("publicationDate"))
         }
     }
 
@@ -77,13 +64,6 @@ class PodcastServiceTest {
         fun `Successfully Retrieve Podcast Info`() {
             // mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId)).thenReturn(Optional.of(mockedPodcast))
-            Mockito.`when`(
-                podcastEpisodePagingAndSortingRepositoryMock.findAllByPodcastId(
-                    podcastId,
-                    Sort.by("publicationDate")
-                )
-            )
-                .thenReturn(mockedEpisodes as ArrayList<PodcastEpisode>)
 
             // Call
             val data = podcastService.getPodcastData(podcastId)
@@ -93,8 +73,6 @@ class PodcastServiceTest {
             Assertions.assertEquals(mockPodcastData, data)
 
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastEpisodePagingAndSortingRepositoryMock)
-                .findAllByPodcastId(podcastId, Sort.by("publicationDate"))
         }
     }
 
@@ -128,7 +106,7 @@ class PodcastServiceTest {
         @Test
         fun `Successfully Add Podcast To DB`() {
             // Mock
-            val podcast = TestObjectsFromFile.podcastData1.podcast
+            val podcast = TestObjectsFromFile.podcastData1
 
             Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
                 .thenReturn(podcast)
@@ -147,17 +125,17 @@ class PodcastServiceTest {
         fun `Successfully Update Existing Podcast`() {
             // Mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
-                .thenReturn(Optional.of(podcast))
+                .thenReturn(Optional.of(mockedPodcast))
 
-            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
-                .thenReturn(podcast)
+            Mockito.`when`(podcastCrudRepositoryMock.save(mockedPodcast))
+                .thenReturn(mockedPodcast)
 
             // Call
-            podcastService.updatePodcast(podcastId, podcast)
+            podcastService.updatePodcast(podcastId, mockedPodcast)
 
             // Assert
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+            Mockito.verify(podcastCrudRepositoryMock).save(mockedPodcast)
         }
     }
 
@@ -172,7 +150,7 @@ class PodcastServiceTest {
             // Call
             val err = Assertions.assertThrows(
                 PodcastException::class.java,
-                { podcastService.updatePodcast(podcastId, podcast) },
+                { podcastService.updatePodcast(podcastId, mockedPodcast) },
                 "Expected an error thrown as there should be no records for ID."
             )
 
@@ -183,22 +161,22 @@ class PodcastServiceTest {
             Mockito.verify(podcastCrudRepositoryMock)
                 .findById(podcastId)
             Mockito.verify(podcastCrudRepositoryMock, never())
-                .save(podcast)
+                .save(mockedPodcast)
         }
 
         @Test
         fun `DB Error On Podcast Save`() {
             // Mock
             Mockito.`when`(podcastCrudRepositoryMock.findById(podcastId))
-                .thenReturn(Optional.of(podcast))
+                .thenReturn(Optional.of(mockedPodcast))
 
-            Mockito.`when`(podcastCrudRepositoryMock.save(podcast))
+            Mockito.`when`(podcastCrudRepositoryMock.save(mockedPodcast))
                 .thenThrow(DataRetrievalFailureException(""))
 
             // Call
             val err = Assertions.assertThrows(
                 PodcastException::class.java,
-                { podcastService.updatePodcast(podcastId, podcast) },
+                { podcastService.updatePodcast(podcastId, mockedPodcast) },
                 "Expected an error thrown as an error was thrown while saving podcast data."
             )
 
@@ -207,7 +185,7 @@ class PodcastServiceTest {
             Assertions.assertEquals(PodcastException("Something went wrong!", ErrorType.DB003), err)
 
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)
-            Mockito.verify(podcastCrudRepositoryMock).save(podcast)
+            Mockito.verify(podcastCrudRepositoryMock).save(mockedPodcast)
         }
     }
 
