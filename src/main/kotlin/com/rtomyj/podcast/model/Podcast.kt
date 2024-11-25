@@ -81,7 +81,10 @@ data class Podcast(
     @Column(name = "image_url")
     lateinit var imageUrl: String
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        cascade = [CascadeType.ALL],
+    )
     @JoinColumn(name = "podcast_id", insertable = false, updatable = false, nullable = false)
     @OrderBy("publicationDate ASC")
     var episodes: List<PodcastEpisode> = emptyList()

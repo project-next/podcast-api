@@ -19,8 +19,16 @@ class DeletePodcastDataController {
     @Autowired
     private lateinit var podcastService: PodcastService
 
+    @DeleteMapping("/podcast/{podcastId}")
+    fun deletePodcast(
+        @PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String
+    ): ResponseEntity<Status> {
+        podcastService.deletePodcast(podcastId)
+        return ResponseEntity.ok(Status("Successfully deleted podcast!"))
+    }
+
     @DeleteMapping("/podcast/episode/{podcastEpisodeId}")
-    fun updatePodcastEpisode(
+    fun deletePodcastEpisode(
         @PathVariable("podcastEpisodeId") @NotBlank @Size(min = 36, max = 36) podcastEpisodeId: String
     ): ResponseEntity<Status> {
         podcastService.deletePodcastEpisode(podcastEpisodeId)
