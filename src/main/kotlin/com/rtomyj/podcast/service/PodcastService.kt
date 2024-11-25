@@ -137,4 +137,21 @@ class PodcastService @Autowired constructor(
             throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
         }
     }
+
+    @Transactional
+    fun deletePodcastEpisode(podcastEpisodeId: String) {
+        log.info("Deleting podcast episode with ID {}", podcastEpisodeId)
+
+        try {
+            if (podcastEpisodePagingAndSortingRepository.existsById(podcastEpisodeId)) {
+                podcastEpisodePagingAndSortingRepository.deleteById(podcastEpisodeId)
+            } else {
+                log.error("Episode doesn't exist - nothing to delete")
+                throw PodcastException(EPISODE_ID_NOT_FOUND, ErrorType.DB001)
+            }
+        } catch (ex: DataAccessException) {
+            log.error("Exception occurred while deleting podcast episode {}", ex.toString())
+            throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
+        }
+    }
 }
