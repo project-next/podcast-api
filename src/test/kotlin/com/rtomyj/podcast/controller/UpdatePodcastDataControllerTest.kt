@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -45,7 +45,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 @ActiveProfiles("test") // Loading test props with H2 in memory DB configurations
 @Tag("Controller")
 class UpdatePodcastDataControllerTest {
-    @MockBean
+    @MockitoBean
     private lateinit var service: PodcastService
 
     @Autowired
@@ -122,13 +122,13 @@ class UpdatePodcastDataControllerTest {
         @Test
         fun `User is admin - Body Is Valid`() {
             // setup mocks
-            val mockData = TestObjectsFromFile.podcastData1.podcast
-            Mockito.doNothing().`when`(service).updatePodcast(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+            val mockPodcast = TestObjectsFromFile.podcastData1
+            Mockito.doNothing().`when`(service).updatePodcast(mockPodcast.id, mockPodcast)
 
             mockMvc.perform(
-                put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(
+                put(TestConstants.PODCAST_WITH_ID_ENDPOINT, mockPodcast.id).contentType(
                     TestConstants.CONTENT_TYPE
-                ).content(Helpers.mapper.writeValueAsString(mockData))
+                ).content(Helpers.mapper.writeValueAsString(mockPodcast))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isOk).andExpect(
                 jsonPath(
@@ -139,7 +139,7 @@ class UpdatePodcastDataControllerTest {
             )
 
             // verify mocks are called
-            Mockito.verify(service).updatePodcast(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+            Mockito.verify(service).updatePodcast(mockPodcast.id, mockPodcast)
         }
     }
 
@@ -214,14 +214,14 @@ class UpdatePodcastDataControllerTest {
         @Test
         fun `User is admin - Body Is Valid`() {
             // setup mocks
-            val mockData = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            val mockPodcastEpisode = TestObjectsFromFile.podcastData1.episodes[0]
             Mockito.doNothing().`when`(service)
-                .updatePodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+                .updatePodcastEpisode(TestObjectsFromFile.podcastData1.id, mockPodcastEpisode)
 
             mockMvc.perform(
-                put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(
+                put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.id).contentType(
                     TestConstants.CONTENT_TYPE
-                ).content(Helpers.mapper.writeValueAsString(mockData))
+                ).content(Helpers.mapper.writeValueAsString(mockPodcastEpisode))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isOk).andExpect(
                 jsonPath(
@@ -232,7 +232,7 @@ class UpdatePodcastDataControllerTest {
             )
 
             // verify mocks are called
-            Mockito.verify(service).updatePodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+            Mockito.verify(service).updatePodcastEpisode(TestObjectsFromFile.podcastData1.id, mockPodcastEpisode)
         }
     }
 }

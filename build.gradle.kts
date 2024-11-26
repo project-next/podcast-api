@@ -3,33 +3,33 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.3.3"
-val jacksonKotlinVersion = "2.17.2"
-val jacksonCoreVersion = "2.17.2"
+val springBootVersion = "3.4.0"
+val jacksonKotlinVersion = "2.18.1"
+val jacksonCoreVersion = "2.18.1"
 val snakeYamlVersion = "2.3"
 val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.7.4"
 val slf4jVersion = "2.0.16"
-val jCacheVersion = "6.6.0.Final"
+val jCacheVersion = "6.6.3.Final"
 val ehCacheVersion = "3.10.8"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
-    id("org.springframework.boot") version "3.3.3"
+    id("org.springframework.boot") version "3.4.0"
     id("io.spring.dependency-management") version "1.1.6"
     id("info.solidsoft.pitest") version "1.15.0"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 
-    kotlin("jvm") version "2.0.20"
-    kotlin("plugin.spring") version "2.0.20"
+    kotlin("jvm") version "2.0.21"
+    kotlin("plugin.spring") version "2.0.21"
 
     jacoco
 }
 
 
 group = "com.rtomyj.next"
-version = "1.6.7"
+version = "1.7.0"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 

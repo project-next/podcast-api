@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 @ActiveProfiles("test") // Loading test props with H2 in memory DB configurations
 @Tag("Controller")
 class StorePodcastDataControllerTest {
-    @MockBean
+    @MockitoBean
     private lateinit var service: PodcastService
 
     @Autowired
@@ -112,12 +112,12 @@ class StorePodcastDataControllerTest {
         @Test
         fun `User is admin - Body Is Valid`() {
             // setup mocks
-            val mockData = TestObjectsFromFile.podcastData1.podcast
-            Mockito.doNothing().`when`(service).storeNewPodcast(mockData)
+            val mockPodcast = TestObjectsFromFile.podcastData1
+            Mockito.doNothing().`when`(service).storeNewPodcast(mockPodcast)
 
             mockMvc.perform(
                 post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
-                    .content(Helpers.mapper.writeValueAsString(mockData))
+                    .content(Helpers.mapper.writeValueAsString(mockPodcast))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
                 jsonPath(
@@ -128,7 +128,7 @@ class StorePodcastDataControllerTest {
             )
 
             // verify mocks are called
-            Mockito.verify(service).storeNewPodcast(mockData)
+            Mockito.verify(service).storeNewPodcast(mockPodcast)
         }
     }
 
@@ -199,15 +199,15 @@ class StorePodcastDataControllerTest {
         @Test
         fun `User is admin - Body Is Valid`() {
             // setup mocks
-            val mockData = TestObjectsFromFile.podcastData1.podcastEpisodes[0]
+            val mockEpisode = TestObjectsFromFile.podcastData1.episodes[0]
             Mockito.doNothing().`when`(service)
-                .storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+                .storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.id, mockEpisode)
 
             mockMvc.perform(
-                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.podcast.id).contentType(
+                post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.id).contentType(
                     TestConstants.CONTENT_TYPE
                 )
-                    .content(Helpers.mapper.writeValueAsString(mockData))
+                    .content(Helpers.mapper.writeValueAsString(mockEpisode))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isCreated).andExpect(
                 jsonPath(
@@ -218,7 +218,7 @@ class StorePodcastDataControllerTest {
             )
 
             // verify mocks are called
-            Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.podcast.id, mockData)
+            Mockito.verify(service).storeNewPodcastEpisode(TestObjectsFromFile.podcastData1.id, mockEpisode)
         }
     }
 }

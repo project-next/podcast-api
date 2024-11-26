@@ -1,6 +1,6 @@
 services:
   podcast-api:
-    image: "eclipse-temurin:21.0.4_7-jre-alpine"
+    image: "eclipse-temurin:21.0.5_11-jre-alpine"
     ports:
       - "80:8080"
     volumes:
@@ -25,6 +25,22 @@ services:
       - ADMIN_PASSWORD=${PODCAST_API_ADMIN_PASSWORD}
       - GENERIC_USER_USERNAME=${PODCAST_API_GENERIC_USER_USERNAME}
       - GENERIC_USER_PASSWORD=${PODCAST_API_GENERIC_USER_PASSWORD}
+    labels:
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"host":"%%host%%", "port": "%%port%%"}]'
+      com.datadoghq.ad.logs: >-
+        [{
+          "source": "java", 
+          "service": "podcast-api",
+          "auto_multi_line_detection": true,
+          "log_processing_rules": [{
+            "type": "exclude_at_match",
+            "name": "exclude_health_check",
+            "pattern" : "/status"
+          }]
+        }]
+      com.datadoghq.tags.env: 'prod'
+      com.datadoghq.tags.service: 'podcast-api'
 
 networks:
   podcast-api:

@@ -4,7 +4,6 @@ import com.rtomyj.podcast.dao.PodcastCrudRepository
 import com.rtomyj.podcast.dao.PodcastEpisodePagingAndSortingRepository
 import com.rtomyj.podcast.exception.PodcastException
 import com.rtomyj.podcast.model.Podcast
-import com.rtomyj.podcast.model.PodcastData
 import com.rtomyj.podcast.model.PodcastEpisode
 import com.rtomyj.podcast.model.RssFeed
 import com.rtomyj.podcast.util.TransformToFeedUtil
@@ -12,7 +11,6 @@ import com.rtomyj.podcast.util.enum.ErrorType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataAccessException
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
@@ -35,16 +33,15 @@ class PodcastService @Autowired constructor(
     fun getRssFeedForPodcast(podcastId: String) = RssFeed(getPodcastData(podcastId), TransformToFeedUtil())
 
     @Transactional(readOnly = true)
-    fun getPodcastData(podcastId: String): PodcastData {
+    fun getPodcastData(podcastId: String): Podcast {
         log.info("Retrieving podcast info and episodes for podcast w/ ID: {}", podcastId)
-        val podcastInfo = getPodcastInfo(podcastId)
-        val podcastEpisodes = getPodcastEpisodes(podcastId)
+        val podcast = getPodcastInfo(podcastId)
 
         log.info(
-            "Podcast w/ ID: {} and name {} has a feed with {} episodes.", podcastId, podcastInfo.title,
-            podcastEpisodes.size
+            "Podcast w/ ID: {} and name {} has {} episodes.", podcastId, podcast.title,
+            podcast.episodes.size
         )
-        return PodcastData(podcastInfo, podcastEpisodes)
+        return podcast
     }
 
     private fun getPodcastInfo(podcastId: String) =
@@ -52,9 +49,6 @@ class PodcastService @Autowired constructor(
             PODCAST_ID_NOT_FOUND,
             ErrorType.DB001
         )
-
-    private fun getPodcastEpisodes(podcastId: String) =
-        podcastEpisodePagingAndSortingRepository.findAllByPodcastId(podcastId, Sort.by("publicationDate"))
 
     @Transactional
     fun storeNewPodcast(podcast: Podcast) {
@@ -83,6 +77,23 @@ class PodcastService @Autowired constructor(
             podcastCrudRepository.save(podcast)
         } catch (ex: DataAccessException) {
             log.error(SQL_EXCEPTION_LOG, ex.toString())
+            throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
+        }
+    }
+
+    @Transactional
+    fun deletePodcast(podcastId: String) {
+        log.info("Deleting podcast with ID {}", podcastId)
+
+        try {
+            if (podcastCrudRepository.existsById(podcastId)) {
+                podcastCrudRepository.deleteById(podcastId)
+            } else {
+                log.error("Podcast doesn't exist - nothing to delete")
+                throw PodcastException(PODCAST_ID_NOT_FOUND, ErrorType.DB001)
+            }
+        } catch (ex: DataAccessException) {
+            log.error("Exception occurred while deleting podcast w/ ID {}", ex.toString())
             throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
         }
     }
@@ -140,6 +151,23 @@ class PodcastService @Autowired constructor(
             podcastEpisodePagingAndSortingRepository.save(podcastEpisode)
         } catch (ex: DataAccessException) {
             log.error(SQL_EXCEPTION_LOG, ex.toString())
+            throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
+        }
+    }
+
+    @Transactional
+    fun deletePodcastEpisode(podcastEpisodeId: String) {
+        log.info("Deleting podcast episode with ID {}", podcastEpisodeId)
+
+        try {
+            if (podcastEpisodePagingAndSortingRepository.existsById(podcastEpisodeId)) {
+                podcastEpisodePagingAndSortingRepository.deleteById(podcastEpisodeId)
+            } else {
+                log.error("Episode doesn't exist - nothing to delete")
+                throw PodcastException(EPISODE_ID_NOT_FOUND, ErrorType.DB001)
+            }
+        } catch (ex: DataAccessException) {
+            log.error("Exception occurred while deleting podcast episode w/ ID {}", ex.toString())
             throw PodcastException(SOMETHING_WENT_WRONG, ErrorType.DB003)
         }
     }

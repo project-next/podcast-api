@@ -1,19 +1,17 @@
 {
-  "podcast": {
-    "id": "1712103d-14ee-4679-8e9d-d6d277257b8b",
-    "title": "Testing 123",
-    "link": "https://www.makeuseof.com/regular-expressions-validate-url",
-    "description": "Testing....",
-    "language": "en-us",
-    "copyright": "Temp name 2023",
-    "lastBuildDate": "2022-12-18T13:53:22.461934",
-    "email": "javi.gomez@gmail.com",
-    "category": "comedy",
-    "author": "Javi Gomez",
-    "isExplicit": true,
-    "imageUrl": "https://thesupremekingscastle.com"
-  },
-  "podcastEpisodes": [
+  "id": "1712103d-14ee-4679-8e9d-d6d277257b8b",
+  "title": "Testing 123",
+  "link": "https://www.makeuseof.com/regular-expressions-validate-url",
+  "description": "Testing....",
+  "language": "en-us",
+  "copyright": "Temp name 2023",
+  "lastBuildDate": "2022-12-18T13:53:22.461934",
+  "email": "javi.gomez@gmail.com",
+  "category": "comedy",
+  "author": "Javi Gomez",
+  "isExplicit": true,
+  "imageUrl": "https://thesupremekingscastle.com",
+  "episodes": [
     {
       "podcastId": "1712103d-14ee-4679-8e9d-d6d277257b8b",
       "episodeId": "b9c3dc9a-773e-4fde-a66a-f224d196e34e",
