@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 // main
 val romeToolsVersion = "2.1.0"
 val springBootVersion = "3.4.0"
-val jacksonKotlinVersion = "2.18.1"
+val jacksonKotlinVersion = "2.18.2"
 val jacksonCoreVersion = "2.18.2"
 val snakeYamlVersion = "2.3"
 val kotlinVersion = "1.7.22"
