@@ -7,7 +7,6 @@ val springBootVersion = "3.4.4"
 val jacksonKotlinVersion = "2.18.3"
 val jacksonCoreVersion = "2.18.3"
 val snakeYamlVersion = "2.4"
-val kotlinVersion = "1.7.22"
 val postgresqlVersion = "42.7.5"
 val slf4jVersion = "2.0.17"
 val jCacheVersion = "6.6.13.Final"
@@ -29,7 +28,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.7.1"
+version = "1.7.2"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 
@@ -41,7 +40,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
-    runtimeOnly("org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootVersion")
 
@@ -54,6 +52,7 @@ dependencies {
     implementation("com.rometools:rome:$romeToolsVersion")
     implementation("com.rometools:rome-modules:$romeToolsVersion")
 
+    runtimeOnly("org.springframework.boot:spring-boot-starter-log4j2:${springBootVersion}")
     runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
 
     // below are needed for Hibernate L2 caching - https://www.baeldung.com/hibernate-second-level-cache
@@ -91,8 +90,8 @@ apply(from = "gradle/unitTest.gradle.kts")
 
 tasks {
     withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_21.toString()
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
         }
     }
 
@@ -115,7 +114,7 @@ tasks {
         enabled = false    // Spring Boot > 2.5.x will create two JARs (one which is useless) unless this is disabled
     }
 
-    create("bootJarPath") {
+    register("bootJarPath") {
         group = "Project Info"
         description = "Specifies the absolute path of the JAR created by the bootJar task."
 
