@@ -21,7 +21,7 @@ plugins {
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 
     kotlin("jvm") version "2.2.10"
-    kotlin("plugin.spring") version "2.2.0"
+    kotlin("plugin.spring") version "2.2.10"
 
     jacoco
 }
