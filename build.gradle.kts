@@ -3,33 +3,33 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.5.3"
-val jacksonKotlinVersion = "2.19.1"
-val jacksonCoreVersion = "2.19.1"
+val springBootVersion = "3.5.5"
+val jacksonKotlinVersion = "2.19.2"
+val jacksonCoreVersion = "2.19.2"
 val snakeYamlVersion = "2.4"
 val postgresqlVersion = "42.7.7"
 val slf4jVersion = "2.0.17"
-val jCacheVersion = "7.0.5.Final"
-val ehCacheVersion = "3.10.8"
+val jCacheVersion = "7.1.0.Final"
+val ehCacheVersion = "3.11.0"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
-    id("org.springframework.boot") version "3.5.3"
+    id("org.springframework.boot") version "3.5.5"
     id("io.spring.dependency-management") version "1.1.7"
     id("info.solidsoft.pitest") version "1.15.0"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 
-    kotlin("jvm") version "2.2.0"
-    kotlin("plugin.spring") version "2.2.0"
+    kotlin("jvm") version "2.2.10"
+    kotlin("plugin.spring") version "2.2.10"
 
     jacoco
 }
 
 
 group = "com.rtomyj.next"
-version = "1.7.3"
-java.sourceCompatibility = JavaVersion.VERSION_21
+version = "1.7.4"
+java.sourceCompatibility = JavaVersion.VERSION_24
 
 
 repositories {
@@ -91,7 +91,7 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_24
         }
     }
 
