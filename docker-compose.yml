@@ -1,6 +1,6 @@
 services:
   podcast-api:
-    image: "eclipse-temurin:21.0.8_9-jre-alpine"
+    image: "eclipse-temurin:24.0.2_12-jre-alpine"
     ports:
       - "80:8080"
     volumes:

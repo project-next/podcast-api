@@ -28,8 +28,8 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.7.3"
-java.sourceCompatibility = JavaVersion.VERSION_21
+version = "1.7.4"
+java.sourceCompatibility = JavaVersion.VERSION_24
 
 
 repositories {
@@ -91,7 +91,7 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_24
         }
     }
 
