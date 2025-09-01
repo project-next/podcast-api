@@ -4,8 +4,9 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 // main
 val romeToolsVersion = "2.1.0"
 val springBootVersion = "3.5.5"
-val jacksonKotlinVersion = "2.19.2"
-val jacksonCoreVersion = "2.19.2"
+val jacksonKotlinVersion = "2.20.0"
+val jacksonCoreVersion = "2.20.0"
+val jacksonAnnotationsVersion = "2.20"
 val snakeYamlVersion = "2.5"
 val postgresqlVersion = "42.7.7"
 val slf4jVersion = "2.0.17"
@@ -64,7 +65,11 @@ configurations {
     all {
         resolutionStrategy.eachDependency {
             if (this.requested.group == ("com.fasterxml.jackson.core")) {
-                this.useVersion(jacksonCoreVersion)
+                if (this.requested.name == ("jackson-annotations")) {
+                    this.useVersion(jacksonAnnotationsVersion)
+                } else {
+                    this.useVersion(jacksonCoreVersion)
+                }
             }
         }
     }
