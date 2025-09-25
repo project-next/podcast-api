@@ -1,6 +1,6 @@
 val springVersion = "3.5.6"
 val mockitKotlinVersion = "1.6.0"
-val h2Version = "2.3.232"
+val h2Version = "2.4.240"
 
 dependencies {
 	"testImplementation"(kotlin("test"))
