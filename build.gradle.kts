@@ -3,32 +3,34 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.5.5"
-val jacksonKotlinVersion = "2.19.2"
-val jacksonCoreVersion = "2.19.2"
-val snakeYamlVersion = "2.4"
-val postgresqlVersion = "42.7.7"
+val springBootVersion = "3.5.6"
+val jacksonKotlinVersion = "2.20.0"
+val jacksonCoreVersion = "2.20.0"
+val jacksonAnnotationsVersion = "2.20"
+val snakeYamlVersion = "2.5"
+val postgresqlVersion = "42.7.8"
 val slf4jVersion = "2.0.17"
-val jCacheVersion = "7.1.0.Final"
-val ehCacheVersion = "3.11.0"
+val jCacheVersion = "7.1.1.Final"
+val ehCacheVersion = "3.11.1"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
-    id("org.springframework.boot") version "3.5.5"
-    id("io.spring.dependency-management") version "1.1.7"
-    id("info.solidsoft.pitest") version "1.15.0"
-    id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
+    // ensure kotlin declarations are first as they throw error otherwise
+    kotlin("jvm") version "2.2.20"
+    kotlin("plugin.spring") version "2.2.20"
 
-    kotlin("jvm") version "2.2.10"
-    kotlin("plugin.spring") version "2.2.10"
+    id("org.springframework.boot") version "3.5.6"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("info.solidsoft.pitest") version "1.19.0-rc.1"
+    id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 
     jacoco
 }
 
 
 group = "com.rtomyj.next"
-version = "1.7.4"
+version = "1.7.5"
 java.sourceCompatibility = JavaVersion.VERSION_24
 
 
@@ -64,7 +66,11 @@ configurations {
     all {
         resolutionStrategy.eachDependency {
             if (this.requested.group == ("com.fasterxml.jackson.core")) {
-                this.useVersion(jacksonCoreVersion)
+                if (this.requested.name == ("jackson-annotations")) {
+                    this.useVersion(jacksonAnnotationsVersion)
+                } else {
+                    this.useVersion(jacksonCoreVersion)
+                }
             }
         }
     }
