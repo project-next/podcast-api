@@ -22,7 +22,7 @@ plugins {
 
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
-    id("info.solidsoft.pitest") version "1.19.0-rc.1"
+    id("info.solidsoft.pitest") version "1.19.0-rc.2"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 
     jacoco
