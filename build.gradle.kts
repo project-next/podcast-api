@@ -17,8 +17,8 @@ val archivesBaseName = "podcast-api"
 
 plugins {
     // ensure kotlin declarations are first as they throw error otherwise
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.spring") version "2.2.21"
+    kotlin("jvm") version "2.3.0-Beta2"
+    kotlin("plugin.spring") version "2.3.0-Beta2"
 
     id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
@@ -30,8 +30,8 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.7.5"
-java.sourceCompatibility = JavaVersion.VERSION_24
+version = "1.7.6"
+java.sourceCompatibility = JavaVersion.VERSION_25
 
 
 repositories {
@@ -97,7 +97,8 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_24
+            apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25
         }
     }
 
