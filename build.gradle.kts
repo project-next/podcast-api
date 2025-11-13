@@ -3,26 +3,26 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.5.6"
-val jacksonKotlinVersion = "2.20.0"
-val jacksonCoreVersion = "2.20.0"
+val springBootVersion = "3.5.7"
+val jacksonKotlinVersion = "2.20.1"
+val jacksonCoreVersion = "2.20.1"
 val jacksonAnnotationsVersion = "2.20"
 val snakeYamlVersion = "2.5"
 val postgresqlVersion = "42.7.8"
 val slf4jVersion = "2.0.17"
-val jCacheVersion = "7.1.1.Final"
+val jCacheVersion = "7.1.7.Final"
 val ehCacheVersion = "3.11.1"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
     // ensure kotlin declarations are first as they throw error otherwise
-    kotlin("jvm") version "2.2.20"
-    kotlin("plugin.spring") version "2.2.20"
+    kotlin("jvm") version "2.3.0-Beta2"
+    kotlin("plugin.spring") version "2.3.0-Beta2"
 
-    id("org.springframework.boot") version "3.5.6"
+    id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
-    id("info.solidsoft.pitest") version "1.19.0-rc.1"
+    id("info.solidsoft.pitest") version "1.19.0-rc.2"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
 
     jacoco
@@ -30,8 +30,8 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.7.5"
-java.sourceCompatibility = JavaVersion.VERSION_24
+version = "1.7.6"
+java.sourceCompatibility = JavaVersion.VERSION_25
 
 
 repositories {
@@ -97,7 +97,8 @@ apply(from = "gradle/unitTest.gradle.kts")
 tasks {
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_24
+            apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_3)
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25
         }
     }
 
@@ -164,5 +165,5 @@ pitest {
 }
 
 jacoco {
-    toolVersion = "0.8.13"
+    toolVersion = "0.8.14"
 }
