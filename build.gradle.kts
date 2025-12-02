@@ -17,7 +17,7 @@ val archivesBaseName = "podcast-api"
 
 plugins {
     // ensure kotlin declarations are first as they throw error otherwise
-    kotlin("jvm") version "2.3.0-RC"
+    kotlin("jvm") version "2.3.0-RC2"
     kotlin("plugin.spring") version "2.3.0-RC"
 
     id("org.springframework.boot") version "3.5.8"
