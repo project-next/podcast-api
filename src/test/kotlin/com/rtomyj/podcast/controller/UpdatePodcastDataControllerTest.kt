@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -102,9 +102,9 @@ class UpdatePodcastDataControllerTest {
             mockMvc.perform(
                 put(TestConstants.PODCAST_WITH_ID_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
                     TestConstants.CONTENT_TYPE
-                ).content(TestConstants.EMPTY_BODY)
+                ).content(TestConstants.PODCAST_INVALID_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
                         "Body is missing data or fields do not conform to spec."
@@ -194,9 +194,9 @@ class UpdatePodcastDataControllerTest {
             mockMvc.perform(
                 put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
                     TestConstants.CONTENT_TYPE
-                ).content(TestConstants.EMPTY_BODY)
+                ).content(TestConstants.PODCAST_EPISODE_INVALID_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
                         "Body is missing data or fields do not conform to spec."

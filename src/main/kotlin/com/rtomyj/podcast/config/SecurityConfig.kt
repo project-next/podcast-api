@@ -51,8 +51,8 @@ class SecurityConfig @Autowired constructor(
     @Bean
     fun userDetailsService(): UserDetailsService {
         val manager = InMemoryUserDetailsManager()
-        val adminEncodedPassword: String = passwordEncoder().encode(adminPassword)
-        val genericUserEncodedPassword: String = passwordEncoder().encode(genericUserPassword)
+        val adminEncodedPassword: String = passwordEncoder().encode(adminPassword).toString()
+        val genericUserEncodedPassword: String = passwordEncoder().encode(genericUserPassword).toString()
 
         manager.createUser(
             User.withUsername(adminUsername).password(adminEncodedPassword).roles("ADMIN").build()

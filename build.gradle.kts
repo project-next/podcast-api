@@ -3,7 +3,8 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.5.8"
+val springBootVersion = "4.0.0"
+val springBootUndertow = "3.5.8"
 val jacksonKotlinVersion = "2.20.1"
 val jacksonCoreVersion = "2.20.1"
 val jacksonAnnotationsVersion = "2.20"
@@ -20,7 +21,7 @@ plugins {
     kotlin("jvm") version "2.3.0-RC2"
     kotlin("plugin.spring") version "2.3.0-RC2"
 
-    id("org.springframework.boot") version "3.5.8"
+    id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("info.solidsoft.pitest") version "1.19.0-rc.2"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
@@ -30,7 +31,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.7.6"
+version = "1.8.0"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
 
@@ -43,7 +44,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootUndertow")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 

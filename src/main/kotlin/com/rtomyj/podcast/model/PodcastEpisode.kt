@@ -1,5 +1,6 @@
 package com.rtomyj.podcast.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.rtomyj.podcast.util.Constants
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
@@ -71,6 +72,7 @@ data class PodcastEpisode(
     lateinit var mediaType: String
 
     @Column(name = "is_explicit")
+    @JsonProperty("isExplicit")
     var isExplicit = false
 
     @NotBlank
