@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 // main
 val romeToolsVersion = "2.1.0"
 val springBootVersion = "4.0.0"
-val springBootUndertow = "3.5.8"
+val jettyHttp2Version = "12.1.4"
 val jacksonKotlinVersion = "2.20.1"
 val jacksonCoreVersion = "2.20.1"
 val jacksonAnnotationsVersion = "2.20"
@@ -44,7 +44,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootUndertow")
+    implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
+
+    implementation("org.eclipse.jetty.http2:jetty-http2-server:$jettyHttp2Version")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
