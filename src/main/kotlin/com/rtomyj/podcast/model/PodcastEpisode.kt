@@ -1,6 +1,8 @@
 package com.rtomyj.podcast.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.rtomyj.podcast.util.Constants
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
@@ -15,14 +17,29 @@ import java.util.*
 @Table(schema = "podcasting")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonPropertyOrder(value = ["podcastId", "episodeId"], alphabetic = true)
 data class PodcastEpisode(
+    @get:JsonProperty
+    @set:JsonIgnore
     @param:Size(min = 36, max = 36)
-    @Column(name = "podcast_id", columnDefinition = "bpchar")
-    var podcastId: String = "",
-    @Id
-    @Column(name = "episode_id", columnDefinition = "bpchar")
-    val episodeId: String = UUID.randomUUID().toString()
+    @Column(
+        name = "podcast_id",
+        columnDefinition = "bpchar",
+        updatable = false,
+        nullable = false
+    ) var podcastId: String = ""
 ) {
+    @get:JsonProperty
+    @set:JsonIgnore
+    @Id
+    @Column(
+        name = "episode_id",
+        columnDefinition = "bpchar",
+        updatable = false,
+        nullable = false
+    )
+    var episodeId: String = UUID.randomUUID().toString()
+
     @NotBlank
     @Size(min = 3, max = 100)
     @Pattern(regexp = "[\\w\$&+,:?.!@#\\-• ]+")
@@ -61,9 +78,7 @@ data class PodcastEpisode(
     @Column(name = "image")
     lateinit var imageLink: String
 
-    @Column(
-        name = "keywords", columnDefinition = "text[]"
-    )
+    @Column(name = "keywords", columnDefinition = "text[]")
     var keywords = arrayOf<String>()
 
     @Column(name = "length")
@@ -87,6 +102,13 @@ data class PodcastEpisode(
     @Max(100)
     @Column(name = "season", columnDefinition = "int2")
     var season = 0
+
+    // L2 cache will not have lastBuildDate value as it is generated when row is inserted
+    // Meaning lastBuildDate will always be null when retrieving from L2 unless we specifically set it before record is added to L2
+    @PrePersist
+    fun onPrePersist() {
+        publicationDate = LocalDateTime.now()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

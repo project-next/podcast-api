@@ -179,7 +179,7 @@ class StorePodcastDataControllerTest {
             mockMvc.perform(
                 post(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
                     TestConstants.CONTENT_TYPE
-                ).content(TestConstants.PODCAST_EPISODE_INVALID_BODY)
+                ).content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(

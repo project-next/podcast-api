@@ -17,8 +17,6 @@ object TestConstants {
 
     const val EMPTY_BODY = "{}"
 
-    const val PODCAST_EPISODE_INVALID_BODY = """{"podcastId": "", "episodeId": ""}"""
-
     val CONTENT_TYPE =
         MediaType(MediaType.APPLICATION_JSON.type, MediaType.APPLICATION_JSON.subtype, Charset.forName("utf8"))
 }
