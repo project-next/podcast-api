@@ -16,8 +16,12 @@ import java.util.*
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class PodcastEpisode(
-    @Size(min = 36, max = 36) @Column(name = "podcast_id", columnDefinition = "bpchar") var podcastId: String = "",
-    @Id @Column(name = "episode_id", columnDefinition = "bpchar") val episodeId: String = UUID.randomUUID().toString()
+    @param:Size(min = 36, max = 36)
+    @Column(name = "podcast_id", columnDefinition = "bpchar")
+    var podcastId: String = "",
+    @Id
+    @Column(name = "episode_id", columnDefinition = "bpchar")
+    val episodeId: String = UUID.randomUUID().toString()
 ) {
     @NotBlank
     @Size(min = 3, max = 100)
@@ -42,7 +46,6 @@ data class PodcastEpisode(
     @Column(name = "description")
     lateinit var description: String
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "pub_date", nullable = false)
     @CreationTimestamp
     lateinit var publicationDate: LocalDateTime
