@@ -18,7 +18,8 @@ import java.util.*
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class Podcast(
-    @Id @Column(
+    @Id
+    @Column(
         name = "id",
         columnDefinition = "bpchar",
         updatable = false,
