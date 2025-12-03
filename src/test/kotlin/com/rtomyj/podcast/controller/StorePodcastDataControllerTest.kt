@@ -92,7 +92,7 @@ class StorePodcastDataControllerTest {
         fun `User is admin - Body is empty`() {
             mockMvc.perform(
                 post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
-                    .content(TestConstants.PODCAST_INVALID_BODY)
+                    .content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
             ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(

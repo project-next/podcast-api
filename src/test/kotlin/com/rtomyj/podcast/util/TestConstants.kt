@@ -17,7 +17,6 @@ object TestConstants {
 
     const val EMPTY_BODY = "{}"
 
-    const val PODCAST_INVALID_BODY = """{"id": ""}"""
     const val PODCAST_EPISODE_INVALID_BODY = """{"podcastId": "", "episodeId": ""}"""
 
     val CONTENT_TYPE =
