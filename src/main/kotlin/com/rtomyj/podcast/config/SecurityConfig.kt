@@ -21,10 +21,10 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig @Autowired constructor(
     var accessDeniedHandler: RestAccessDeniedHandler,
     val authenticationEntryPoint: RestAuthenticationEntryPoint,
-    @Value("\${auth.admin.username}") val adminUsername: String,
-    @Value("\${auth.admin.password}") val adminPassword: String,
-    @Value("\${auth.generic-user.username}") val genericUserUsername: String,
-    @Value("\${auth.generic-user.password}") val genericUserPassword: String
+    @param:Value($$"${auth.admin.username}") val adminUsername: String,
+    @param:Value($$"${auth.admin.password}") val adminPassword: String,
+    @param:Value($$"${auth.generic-user.username}") val genericUserUsername: String,
+    @param:Value($$"${auth.generic-user.password}") val genericUserPassword: String
 ) {
     @Bean
     @Throws(Exception::class)

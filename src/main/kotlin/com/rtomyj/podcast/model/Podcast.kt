@@ -53,7 +53,6 @@ data class Podcast(
     @Column(name = "copyright")
     lateinit var copyright: String
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_build_date", nullable = false)
     @CreationTimestamp
     lateinit var lastBuildDate: LocalDateTime
