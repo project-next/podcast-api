@@ -112,15 +112,14 @@ class PodcastService @Autowired constructor(
     }
 
     @Transactional
-    fun updatePodcastEpisode(podcastId: String, podcastEpisode: PodcastEpisode) {
+    fun updatePodcastEpisode(podcastEpisodeId: String, podcastEpisode: PodcastEpisode) {
         log.info(
-            "Attempting to update episode w/ name [{}]. ID of podcast is {} and the episode ID is {}",
+            "Attempting to update episode w/ name [{}] and episode ID {}",
             podcastEpisode.title,
-            podcastEpisode.podcastId,
             podcastEpisode.episodeId
         )
 
-        podcastEpisode.podcastId = podcastId
+        podcastEpisode.episodeId = podcastEpisodeId
         val dbPodcast = podcastEpisodePagingAndSortingRepository.findById(podcastEpisode.episodeId)
         if (dbPodcast.isEmpty) {
             log.error(
@@ -128,10 +127,8 @@ class PodcastService @Autowired constructor(
                 podcastEpisode.episodeId
             )
             throw PodcastException(EPISODE_ID_NOT_FOUND, ErrorType.DB001)
-        } else if (dbPodcast.get().podcastId != podcastEpisode.podcastId) {
-            log.error("Podcast ID from request does not match ID in DB for given podcast episode.")
-            throw PodcastException("Podcast ID mismatch", ErrorType.DB003)
         }
+        podcastEpisode.podcastId = dbPodcast.get().podcastId
         savePodcastEpisode(podcastEpisode)
 
         log.info("Successfully updated episode")
