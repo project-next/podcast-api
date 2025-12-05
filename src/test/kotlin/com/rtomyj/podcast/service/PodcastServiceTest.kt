@@ -268,7 +268,7 @@ class PodcastServiceTest {
                 .thenReturn(podcastEpisode)
 
             // Call
-            podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+            podcastService.updatePodcastEpisode(podcastEpisode.episodeId, podcastEpisode)
 
             // Assert
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)

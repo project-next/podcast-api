@@ -28,12 +28,12 @@ class UpdatePodcastDataController {
         return ResponseEntity.ok(Status("Successfully updated podcast!"))
     }
 
-    @PutMapping("/podcast/{podcastId}/episode")
+    @PutMapping("/podcast/episode/{podcastEpisodeId}")
     fun updatePodcastEpisode(
-        @PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String,
+        @PathVariable("podcastEpisodeId") @NotBlank @Size(min = 36, max = 36) podcastEpisodeId: String,
         @Valid @RequestBody podcastEpisode: PodcastEpisode
     ): ResponseEntity<Status> {
-        podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+        podcastService.updatePodcastEpisode(podcastEpisodeId, podcastEpisode)
         return ResponseEntity.ok(Status("Successfully updated podcast episode!"))
     }
 }

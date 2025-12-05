@@ -192,7 +192,10 @@ class UpdatePodcastDataControllerTest {
         @Test
         fun `User is admin - Body is empty`() {
             mockMvc.perform(
-                put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
+                put(
+                    TestConstants.PODCAST_EPISODE_RESOURCE_ENDPOINT,
+                    TestConstants.PODCAST_ID_FROM_SQL_QUERY
+                ).contentType(
                     TestConstants.CONTENT_TYPE
                 ).content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
@@ -219,7 +222,10 @@ class UpdatePodcastDataControllerTest {
                 .updatePodcastEpisode(TestObjectsFromFile.podcastData1.id, mockPodcastEpisode)
 
             mockMvc.perform(
-                put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.id).contentType(
+                put(
+                    TestConstants.PODCAST_EPISODE_RESOURCE_ENDPOINT,
+                    TestObjectsFromFile.podcastData1.id
+                ).contentType(
                     TestConstants.CONTENT_TYPE
                 ).content(Helpers.mapper.writeValueAsString(mockPodcastEpisode))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")

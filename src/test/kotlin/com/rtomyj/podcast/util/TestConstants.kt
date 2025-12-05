@@ -10,6 +10,7 @@ object TestConstants {
     const val PODCAST_DATA_AS_FEED_ENDPOINT = "/podcast/feed/{podcastId}"
 
     const val PODCAST_EPISODE_ENDPOINT = "/podcast/{podcastId}/episode"
+    const val PODCAST_EPISODE_RESOURCE_ENDPOINT = "/podcast/episode/{episodeId}"
 
     const val PODCAST_ID_FROM_SQL_QUERY = "41c4e54d-bee9-43c9-b34b-d4eb87c1a377"
 
