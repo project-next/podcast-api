@@ -35,7 +35,7 @@ jobs:
           arguments: build
 
       - name: Upload Results
-        uses: actions/upload-artifact@v5.0.0
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: junit-results
           path: |
