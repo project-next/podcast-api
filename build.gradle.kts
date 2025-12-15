@@ -46,7 +46,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
 
-    implementation("org.eclipse.jetty.http2:jetty-http2-server:$jettyHttp2Version")
+    implementation("org.eclipse.jetty:jetty-alpn-java-server:$jettyHttp2Version")
+    implementation("org.eclipse.jetty.http2:jetty-http2-server:${jettyHttp2Version}")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 

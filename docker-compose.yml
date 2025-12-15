@@ -14,6 +14,7 @@ services:
     networks:
       - podcast-api
     environment:
+      - LOG_LEVEL=INFO
       - SPRING_PROFILES_ACTIVE=docker
       - SSL_KEYSTORE_PASSWORD=${PODCAST_API_SSL_KEYSTORE_PASSWORD}
       - DB_HOST=${PODCAST_API_DB_HOST}
