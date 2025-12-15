@@ -11,7 +11,7 @@ dependencies {
     "testImplementation"("org.springframework.boot:spring-boot-starter-jdbc-test:$springVersion")
     "testImplementation"("org.springframework.boot:spring-boot-starter-webmvc-test:$springVersion")
 
-    "testImplementation"("org.springframework.security:spring-security-test:7.0.0")
+    "testImplementation"("org.springframework.security:spring-security-test:7.0.1")
 
     "testRuntimeOnly"("com.h2database:h2:$h2Version")
 }
