@@ -21,10 +21,10 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig @Autowired constructor(
     var accessDeniedHandler: RestAccessDeniedHandler,
     val authenticationEntryPoint: RestAuthenticationEntryPoint,
-    @Value("\${auth.admin.username}") val adminUsername: String,
-    @Value("\${auth.admin.password}") val adminPassword: String,
-    @Value("\${auth.generic-user.username}") val genericUserUsername: String,
-    @Value("\${auth.generic-user.password}") val genericUserPassword: String
+    @param:Value($$"${auth.admin.username}") val adminUsername: String,
+    @param:Value($$"${auth.admin.password}") val adminPassword: String,
+    @param:Value($$"${auth.generic-user.username}") val genericUserUsername: String,
+    @param:Value($$"${auth.generic-user.password}") val genericUserPassword: String
 ) {
     @Bean
     @Throws(Exception::class)
@@ -51,8 +51,8 @@ class SecurityConfig @Autowired constructor(
     @Bean
     fun userDetailsService(): UserDetailsService {
         val manager = InMemoryUserDetailsManager()
-        val adminEncodedPassword: String = passwordEncoder().encode(adminPassword)
-        val genericUserEncodedPassword: String = passwordEncoder().encode(genericUserPassword)
+        val adminEncodedPassword: String = passwordEncoder().encode(adminPassword).toString()
+        val genericUserEncodedPassword: String = passwordEncoder().encode(genericUserPassword).toString()
 
         manager.createUser(
             User.withUsername(adminUsername).password(adminEncodedPassword).roles("ADMIN").build()

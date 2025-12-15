@@ -3,24 +3,25 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "3.5.7"
+val springBootVersion = "4.0.0"
+val jettyHttp2Version = "12.1.5"
 val jacksonKotlinVersion = "2.20.1"
 val jacksonCoreVersion = "2.20.1"
 val jacksonAnnotationsVersion = "2.20"
 val snakeYamlVersion = "2.5"
 val postgresqlVersion = "42.7.8"
 val slf4jVersion = "2.0.17"
-val jCacheVersion = "7.1.7.Final"
+val jCacheVersion = "7.2.0.Final"
 val ehCacheVersion = "3.11.1"
 
 val archivesBaseName = "podcast-api"
 
 plugins {
     // ensure kotlin declarations are first as they throw error otherwise
-    kotlin("jvm") version "2.3.0-Beta2"
-    kotlin("plugin.spring") version "2.3.0-Beta2"
+    kotlin("jvm") version "2.3.0-RC3"
+    kotlin("plugin.spring") version "2.3.0-RC3"
 
-    id("org.springframework.boot") version "3.5.7"
+    id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("info.solidsoft.pitest") version "1.19.0-rc.2"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
@@ -30,7 +31,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.7.6"
+version = "1.8.0"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
 
@@ -43,7 +44,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")    // needed for @Validated to work
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-undertow:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
+
+    implementation("org.eclipse.jetty.http2:jetty-http2-server:$jettyHttp2Version")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 

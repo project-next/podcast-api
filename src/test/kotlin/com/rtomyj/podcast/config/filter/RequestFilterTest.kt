@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.junit.jupiter.MockitoExtension
 import org.slf4j.MDC
 import org.springframework.http.HttpHeaders
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@ExtendWith(SpringExtension::class)
+@ExtendWith(SpringExtension::class, MockitoExtension::class)
 class RequestFilterTest {
     @Mock
     private lateinit var httpServletRequest: HttpServletRequest

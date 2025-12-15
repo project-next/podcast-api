@@ -1,5 +1,8 @@
 package com.rtomyj.podcast.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.rtomyj.podcast.util.Constants
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
@@ -16,8 +19,12 @@ import java.util.*
 @Table(schema = "podcasting")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonPropertyOrder(value = ["id"], alphabetic = true)
 data class Podcast(
-    @Id @Column(
+    @get:JsonProperty
+    @set:JsonIgnore
+    @Id
+    @Column(
         name = "id",
         columnDefinition = "bpchar",
         updatable = false,
@@ -52,8 +59,7 @@ data class Podcast(
     @Column(name = "copyright")
     lateinit var copyright: String
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_build_date", nullable = false)
+    @Column(name = "last_build_date", nullable = false, updatable = false)
     @CreationTimestamp
     lateinit var lastBuildDate: LocalDateTime
 
@@ -73,6 +79,7 @@ data class Podcast(
     @Column(name = "author")
     lateinit var author: String
 
+    @JsonProperty("isExplicit")
     var isExplicit: Boolean = true
 
     @NotBlank
@@ -88,6 +95,13 @@ data class Podcast(
     @JoinColumn(name = "podcast_id", insertable = false, updatable = false, nullable = false)
     @OrderBy("publicationDate ASC")
     var episodes: List<PodcastEpisode> = emptyList()
+
+    // L2 cache will not have lastBuildDate value as it is generated when row is inserted
+    // Meaning lastBuildDate will always be null when retrieving from L2 unless we specifically set it before record is added to L2
+    @PrePersist
+    fun onPrePersist() {
+        lastBuildDate = LocalDateTime.now()
+    }
 
     override fun toString(): String {
         return StringBuilder("Podcast ID: $id").append("Podcast Title: $title").append("Podcast Link: $link").toString()

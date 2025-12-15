@@ -11,31 +11,36 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(produces = ["application/json; charset=UTF-8"])
 @Validated
 class StorePodcastDataController {
-	@Autowired
-	private lateinit var podcastService: PodcastService
+    @Autowired
+    private lateinit var podcastService: PodcastService
 
-	@PostMapping("/podcast")
-	fun storeNewPodcast(@Valid @RequestBody podcast: Podcast): ResponseEntity<Status> {
-		podcastService.storeNewPodcast(podcast)
-		return ResponseEntity(Status("Successfully stored new podcast!"), HttpStatus.CREATED)
-	}
+    @PostMapping("/podcast")
+    fun storeNewPodcast(
+        @Valid
+        @RequestBody
+        podcast: Podcast
+    ): ResponseEntity<Status> {
+        podcastService.storeNewPodcast(podcast)
+        return ResponseEntity(Status("Successfully stored new podcast!"), HttpStatus.CREATED)
+    }
 
-	@PostMapping("/podcast/{podcastId}/episode")
-	fun storeNewPodcastEpisode(
-		@PathVariable("podcastId") @NotBlank @Size(min = 36, max = 36) podcastId: String,
-		@Valid @RequestBody podcastEpisode: PodcastEpisode
-	): ResponseEntity<Status> {
-		podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
-		return ResponseEntity(Status("Successfully stored new podcast episode!"), HttpStatus.CREATED)
-	}
+    @PostMapping("/podcast/{podcastId}/episode")
+    fun storeNewPodcastEpisode(
+        @PathVariable("podcastId")
+        @NotBlank
+        @Size(min = 36, max = 36)
+        podcastId: String,
+        @Valid
+        @RequestBody
+        podcastEpisode: PodcastEpisode
+    ): ResponseEntity<Status> {
+        podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode)
+        return ResponseEntity(Status("Successfully stored new podcast episode!"), HttpStatus.CREATED)
+    }
 }

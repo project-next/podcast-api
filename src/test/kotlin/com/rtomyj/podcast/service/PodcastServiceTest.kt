@@ -244,7 +244,7 @@ class PodcastServiceTest {
             val err = Assertions.assertThrows(
                 PodcastException::class.java,
                 { podcastService.storeNewPodcastEpisode(podcastId, podcastEpisode) },
-                "Expected an error thrown as mcoks will cause SQL Error."
+                "Expected an error thrown as mocks will cause SQL Error."
             )
 
             // Assert
@@ -268,7 +268,7 @@ class PodcastServiceTest {
                 .thenReturn(podcastEpisode)
 
             // Call
-            podcastService.updatePodcastEpisode(podcastId, podcastEpisode)
+            podcastService.updatePodcastEpisode(podcastEpisode.episodeId, podcastEpisode)
 
             // Assert
             Mockito.verify(podcastCrudRepositoryMock).findById(podcastId)

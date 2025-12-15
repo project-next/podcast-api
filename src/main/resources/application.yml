@@ -1,5 +1,5 @@
 spring:
-  main.web-application-type: SERVLET
+  main.web-application-type: servlet
   datasource:
     hikari:
       maximum-pool-size: 10
@@ -28,6 +28,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher # fixes spring-fox error on spring-boot >= v2.6
+  threads.virtual.enabled: true
 
 server:
   http2:

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -104,7 +104,7 @@ class UpdatePodcastDataControllerTest {
                     TestConstants.CONTENT_TYPE
                 ).content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
                         "Body is missing data or fields do not conform to spec."
@@ -192,11 +192,14 @@ class UpdatePodcastDataControllerTest {
         @Test
         fun `User is admin - Body is empty`() {
             mockMvc.perform(
-                put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestConstants.PODCAST_ID_FROM_SQL_QUERY).contentType(
+                put(
+                    TestConstants.PODCAST_EPISODE_RESOURCE_ENDPOINT,
+                    TestConstants.PODCAST_ID_FROM_SQL_QUERY
+                ).contentType(
                     TestConstants.CONTENT_TYPE
                 ).content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
                         "Body is missing data or fields do not conform to spec."
@@ -219,7 +222,10 @@ class UpdatePodcastDataControllerTest {
                 .updatePodcastEpisode(TestObjectsFromFile.podcastData1.id, mockPodcastEpisode)
 
             mockMvc.perform(
-                put(TestConstants.PODCAST_EPISODE_ENDPOINT, TestObjectsFromFile.podcastData1.id).contentType(
+                put(
+                    TestConstants.PODCAST_EPISODE_RESOURCE_ENDPOINT,
+                    TestObjectsFromFile.podcastData1.id
+                ).contentType(
                     TestConstants.CONTENT_TYPE
                 ).content(Helpers.mapper.writeValueAsString(mockPodcastEpisode))
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -94,7 +94,7 @@ class StorePodcastDataControllerTest {
                 post(TestConstants.PODCAST_ENDPOINT).contentType(TestConstants.CONTENT_TYPE)
                     .content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
                         "Body is missing data or fields do not conform to spec."
@@ -181,7 +181,7 @@ class StorePodcastDataControllerTest {
                     TestConstants.CONTENT_TYPE
                 ).content(TestConstants.EMPTY_BODY)
                     .header("Authorization", "Basic SmF2aTpDaGFuZ2VtZSE=")
-            ).andExpect(MockMvcResultMatchers.status().isUnprocessableEntity).andExpect(
+            ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
                         "Body is missing data or fields do not conform to spec."
