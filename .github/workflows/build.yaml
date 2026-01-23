@@ -28,11 +28,11 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Execute Gradle Build
-        uses: gradle/gradle-build-action@v3.5.0
-        with:
-          gradle-version: wrapper
-          arguments: build
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Build API
+        run: ./gradlew build
 
       - name: Upload Results
         uses: actions/upload-artifact@v6.0.0
