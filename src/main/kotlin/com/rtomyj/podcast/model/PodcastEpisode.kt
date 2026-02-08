@@ -43,24 +43,24 @@ data class PodcastEpisode(
     @NotBlank
     @Size(min = 3, max = 100)
     @Pattern(regexp = "[\\w\$&+,:?.!@#\\-• ]+")
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     lateinit var title: String
 
     @NotBlank
     @Size(max = 255)
     @Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-    @Column(name = "webpage_link")
+    @Column(name = "webpage_link", nullable = false)
     lateinit var webpageLink: String
 
     @NotBlank
     @Size(max = 255)
     @Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-    @Column(name = "audio_link")
+    @Column(name = "audio_link", nullable = false)
     lateinit var audioLink: String
 
     @NotBlank
     @Size(max = 3000)
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     lateinit var description: String
 
     @Column(name = "pub_date", nullable = false)
@@ -69,38 +69,38 @@ data class PodcastEpisode(
 
     @NotBlank
     @Size(max = 30)
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     lateinit var author: String
 
     @NotBlank
     @Size(max = 255)
     @Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-    @Column(name = "image")
+    @Column(name = "image", nullable = false)
     lateinit var imageLink: String
 
-    @Column(name = "keywords", columnDefinition = "text[]")
-    var keywords = arrayOf<String>()
+    @Column(name = "keywords", columnDefinition = "text[]", nullable = false)
+    lateinit var keywords: Array<String>
 
-    @Column(name = "length")
+    @Column(name = "length", nullable = false)
     var length = 0L
 
     @NotBlank
     @Size(max = 15)
-    @Column(name = "media_type")
+    @Column(name = "media_type", nullable = false)
     lateinit var mediaType: String
 
-    @Column(name = "is_explicit")
+    @Column(name = "is_explicit", nullable = false)
     @JsonProperty("isExplicit")
     var isExplicit = false
 
     @NotBlank
     @Pattern(regexp = "(\\d{2}:?){3}")
-    @Column(name = "duration")
+    @Column(name = "duration", nullable = false)
     lateinit var duration: String
 
     @Min(1)
     @Max(100)
-    @Column(name = "season", columnDefinition = "int2")
+    @Column(name = "season", columnDefinition = "int2", nullable = false)
     var season = 0
 
     // L2 cache will not have lastBuildDate value as it is generated when row is inserted
