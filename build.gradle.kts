@@ -7,7 +7,7 @@ val springBootVersion = "4.0.2"
 val jettyHttp2Version = "12.1.6"
 val jacksonKotlinVersion = "2.21.0"
 val jacksonCoreVersion = "2.21.0"
-val jacksonAnnotationsVersion = "2.20"
+val jacksonAnnotationsVersion = "2.21"
 val snakeYamlVersion = "2.5"
 val postgresqlVersion = "42.7.9"
 val slf4jVersion = "2.0.17"
@@ -31,7 +31,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.8.0"
+version = "1.8.1"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
 
