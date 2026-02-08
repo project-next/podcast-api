@@ -34,29 +34,29 @@ data class Podcast(
     @NotBlank
     @Size(max = 50)
     @Pattern(regexp = "[\\w ]+")
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     lateinit var title: String
 
     @NotBlank
     @Size(max = 255)
     @Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-    @Column(name = "link")
+    @Column(name = "link", nullable = false)
     lateinit var link: String
 
     @NotBlank
     @Size(max = 3000)
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     lateinit var description: String
 
     @NotBlank
     @Pattern(regexp = "\\w{2}-\\w{2}")
     @Size(max = 5)
-    @Column(name = "language")
+    @Column(name = "language", nullable = false)
     lateinit var language: String
 
     @NotBlank
     @Size(max = 40)
-    @Column(name = "copyright")
+    @Column(name = "copyright", nullable = false)
     lateinit var copyright: String
 
     @Column(name = "last_build_date", nullable = false, updatable = false)
@@ -66,26 +66,27 @@ data class Podcast(
     @NotBlank
     @Email
     @Size(max = 30)
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     lateinit var email: String
 
     @NotBlank
     @Size(max = 20)
-    @Column(name = "category")
+    @Column(name = "category", nullable = false)
     lateinit var category: String
 
     @NotBlank
     @Size(max = 30)
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     lateinit var author: String
 
     @JsonProperty("isExplicit")
+    @Column(name = "is_explicit", nullable = false)
     var isExplicit: Boolean = true
 
     @NotBlank
     @Size(max = 255)
     @Pattern(regexp = Constants.URL_REGEX, message = Constants.URL_VALIDATOR_MESSAGE)
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false)
     lateinit var imageUrl: String
 
     @OneToMany(
