@@ -11,7 +11,7 @@ val jacksonAnnotationsVersion = "2.21"
 val snakeYamlVersion = "2.6"
 val postgresqlVersion = "42.7.10"
 val slf4jVersion = "2.0.17"
-val jCacheVersion = "7.2.5.Final"
+val jCacheVersion = "7.2.6.Final"
 val ehCacheVersion = "3.11.1"
 
 val archivesBaseName = "podcast-api"
