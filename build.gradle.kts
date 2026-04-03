@@ -12,7 +12,7 @@ val snakeYamlVersion = "2.6"
 val postgresqlVersion = "42.7.10"
 val slf4jVersion = "2.0.17"
 val jCacheVersion = "7.3.0.Final"
-val ehCacheVersion = "3.11.1"
+val ehCacheVersion = "3.12.0"
 
 val archivesBaseName = "podcast-api"
 
