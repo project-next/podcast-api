@@ -31,7 +31,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.8.2"
+version = "1.8.3"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
 
