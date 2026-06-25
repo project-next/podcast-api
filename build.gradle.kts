@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 // main
 val romeToolsVersion = "2.1.0"
-val springBootVersion = "4.0.6"
+val springBootVersion = "4.1.0"
 val jettyHttp2Version = "12.1.10"
 val jacksonKotlinVersion = "2.22.0"
 val jacksonCoreVersion = "2.22.0"
@@ -21,7 +21,7 @@ plugins {
     kotlin("jvm") version "2.4.0"
     kotlin("plugin.spring") version "2.4.0"
 
-    id("org.springframework.boot") version "4.0.6"
+    id("org.springframework.boot") version "4.1.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("info.solidsoft.pitest") version "1.19.0"
     id("com.adarshr.test-logger") version "4.0.0"    // printing for JUnits
