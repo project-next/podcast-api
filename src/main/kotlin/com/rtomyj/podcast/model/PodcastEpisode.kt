@@ -1,6 +1,5 @@
 package com.rtomyj.podcast.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.rtomyj.podcast.util.Constants
@@ -20,17 +19,15 @@ import java.util.*
 @JsonPropertyOrder(value = ["podcastId", "episodeId"], alphabetic = true)
 data class PodcastEpisode(
     @get:JsonProperty
-    @set:JsonIgnore
     @param:Size(min = 36, max = 36)
     @Column(
         name = "podcast_id",
         columnDefinition = "bpchar",
         updatable = false,
         nullable = false
-    ) var podcastId: String = ""
+    ) var podcastId: String
 ) {
     @get:JsonProperty
-    @set:JsonIgnore
     @Id
     @Column(
         name = "episode_id",

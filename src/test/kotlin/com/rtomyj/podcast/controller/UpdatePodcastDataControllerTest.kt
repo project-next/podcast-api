@@ -107,7 +107,7 @@ class UpdatePodcastDataControllerTest {
             ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
-                        "Body is missing data or fields do not conform to spec."
+                        "Body is missing data or fields do not conform to spec"
                     )
                 )
             ).andExpect(jsonPath("$.code", `is`("G002")))
@@ -202,7 +202,7 @@ class UpdatePodcastDataControllerTest {
             ).andExpect(MockMvcResultMatchers.status().isUnprocessableContent).andExpect(
                 jsonPath(
                     "message", startsWith(
-                        "Body is missing data or fields do not conform to spec."
+                        "Body is missing data or fields do not conform to spec"
                     )
                 )
             ).andExpect(jsonPath("$.code", `is`("G002")))
