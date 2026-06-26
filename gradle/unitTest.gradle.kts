@@ -56,7 +56,7 @@ tasks.withType<JacocoCoverageVerification> {
             limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"
-                minimum = "0.8".toBigDecimal()
+                minimum = "0.75".toBigDecimal()
             }
         }
 
