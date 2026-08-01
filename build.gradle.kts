@@ -6,6 +6,7 @@ val romeToolsVersion = "2.1.0"
 val springBootVersion = "4.1.0"
 val jettyHttp2Version = "12.1.10"
 val jacksonKotlinVersion = "2.22.1"
+val jackson3Version = "3.1.4"
 val jacksonCoreVersion = "2.22.1"
 val jacksonAnnotationsVersion = "2.21"
 val snakeYamlVersion = "2.6"
@@ -53,6 +54,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonCoreVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
+    implementation("tools.jackson.module:jackson-module-kotlin:$jackson3Version")
     implementation("org.yaml:snakeyaml:$snakeYamlVersion")
 
     implementation("com.rometools:rome:$romeToolsVersion")

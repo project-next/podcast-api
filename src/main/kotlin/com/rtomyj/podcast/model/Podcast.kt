@@ -21,16 +21,15 @@ import java.util.*
 @JsonPropertyOrder(value = ["id"], alphabetic = true)
 data class Podcast(
     @get:JsonProperty
+    @get:Size(min = 36, max = 36)
     @Id
     @Column(
         name = "id",
         columnDefinition = "bpchar",
         updatable = false,
         nullable = false
-    ) var id: String
+    ) var id: String = UUID.randomUUID().toString()
 ) {
-    constructor() : this(id = UUID.randomUUID().toString())
-
     @NotBlank
     @Size(max = 50)
     @Pattern(regexp = "[\\w ]+")

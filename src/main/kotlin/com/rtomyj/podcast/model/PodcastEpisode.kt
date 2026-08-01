@@ -19,16 +19,13 @@ import java.util.*
 @JsonPropertyOrder(value = ["podcastId", "episodeId"], alphabetic = true)
 data class PodcastEpisode(
     @get:JsonProperty
-    @param:Size(min = 36, max = 36)
     @Column(
         name = "podcast_id",
         columnDefinition = "bpchar",
         updatable = false,
         nullable = false
-    ) var podcastId: String
+    ) var podcastId: String = ""
 ) {
-    constructor() : this(podcastId = "")
-
     @get:JsonProperty
     @Id
     @Column(
