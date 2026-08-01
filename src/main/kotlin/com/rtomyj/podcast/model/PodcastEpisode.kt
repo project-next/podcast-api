@@ -27,6 +27,8 @@ data class PodcastEpisode(
         nullable = false
     ) var podcastId: String
 ) {
+    constructor() : this(podcastId = "")
+
     @get:JsonProperty
     @Id
     @Column(
