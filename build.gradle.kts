@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 // main
 val romeToolsVersion = "2.1.0"
 val springBootVersion = "4.1.0"
-val jettyHttp2Version = "12.1.11"
+val jettyHttp2Version = "12.1.10"
 val jacksonKotlinVersion = "2.22.1"
 val jacksonCoreVersion = "2.22.1"
 val jacksonAnnotationsVersion = "2.21"
@@ -31,7 +31,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.8.5"
+version = "1.8.6"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
 
