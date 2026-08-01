@@ -35,7 +35,7 @@ class PodcastExceptionAdvice {
     }
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun onValidationFail(exception: MethodArgumentNotValidException): PodcastError {
         log.error("Request body did not conform to spec. Constraints violated: {}", exception.allErrors.toString())
@@ -50,7 +50,7 @@ class PodcastExceptionAdvice {
     }
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun onBodyNotReadable(exception: HttpMessageNotReadableException): PodcastError {
         log.error("Request body was missing or unparsable: {}", exception.message)
