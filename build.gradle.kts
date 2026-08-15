@@ -47,7 +47,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-jetty:$springBootVersion")
 
-    implementation("org.eclipse.jetty:jetty-alpn-java-server:$jettyHttp2Version")
+    implementation("org.eclipse.jetty:jetty-io:$jettyHttp2Version")
+    implementation("org.eclipse.jetty:jetty-alpn-java-server:${jettyHttp2Version}")
     implementation("org.eclipse.jetty.http2:jetty-http2-server:${jettyHttp2Version}")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
@@ -172,4 +173,16 @@ pitest {
 
 jacoco {
     toolVersion = "0.8.15"
+}
+tasks.register("printJettyJars") {
+    doLast {
+        listOf("runtimeClasspath", "testRuntimeClasspath").forEach { cfg ->
+            println("### $cfg")
+            configurations.getByName(cfg).resolvedConfiguration.resolvedArtifacts
+                .filter { it.moduleVersion.id.group.startsWith("org.eclipse.jetty") }
+                .map { "${it.moduleVersion.id.group}:${it.name}:${it.moduleVersion.id.version}" }
+                .sorted()
+                .forEach { println("  $it") }
+        }
+    }
 }
