@@ -11,7 +11,7 @@ val jacksonCoreVersion = "2.22.2"
 val jacksonAnnotationsVersion = "2.21"
 val snakeYamlVersion = "2.7"
 val postgresqlVersion = "42.7.13"
-val slf4jVersion = "2.0.18"
+val slf4jVersion = "2.0.19"
 val jCacheVersion = "7.4.7.Final"
 val ehCacheVersion = "3.12.0"
 
