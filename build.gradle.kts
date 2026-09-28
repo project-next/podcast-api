@@ -32,7 +32,7 @@ plugins {
 
 
 group = "com.rtomyj.next"
-version = "1.8.7"
+version = "1.8.8"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
 
@@ -173,16 +173,4 @@ pitest {
 
 jacoco {
     toolVersion = "0.8.15"
-}
-tasks.register("printJettyJars") {
-    doLast {
-        listOf("runtimeClasspath", "testRuntimeClasspath").forEach { cfg ->
-            println("### $cfg")
-            configurations.getByName(cfg).resolvedConfiguration.resolvedArtifacts
-                .filter { it.moduleVersion.id.group.startsWith("org.eclipse.jetty") }
-                .map { "${it.moduleVersion.id.group}:${it.name}:${it.moduleVersion.id.version}" }
-                .sorted()
-                .forEach { println("  $it") }
-        }
-    }
 }
