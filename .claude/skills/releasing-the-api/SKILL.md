@@ -81,6 +81,7 @@ heading:
 * <hand-written bullet describing a user-visible change>
 * <another>
 
+### Dependency updates
 * Update jetty monorepo to v12.1.12 by @renovate[bot] in <PR url>
 * Update Gradle to v9.7.0 by @renovate[bot] in <PR url>
 
@@ -89,7 +90,15 @@ heading:
 
 Renovate automerges minor/patch here, so most releases genuinely are dependency roll-ups — the
 generated PR list is the content, not noise. Keep it. The hand-written bullets go **above** it,
-separated by a blank line, and cover only what a human did.
+under `## What's Changed`, and cover only what a human did. The generated list then goes under its
+own `### Dependency updates` heading.
+
+**Never separate the two groups with a bare blank line.** A blank line between any two items of one
+Markdown list makes the whole list *loose*: GitHub wraps every `<li>` in a `<p>`, and the paragraph
+margins space out **every** bullet in the release, not just the two either side of the gap. The
+`### Dependency updates` heading is what keeps them visually separate — it ends the first list, so
+the blank line before it is outside both lists and costs nothing. `v1.8.6`, `v1.8.7` and `v1.8.8`
+were all published loose from this exact mistake and had to be edited afterwards.
 
 Seed the file from GitHub rather than typing the PR list by hand:
 
@@ -98,8 +107,17 @@ gh api repos/project-next/podcast-api/releases/generate-notes \
   -f tag_name="vX.Y.Z" -f previous_tag_name="$PREV" --jq .body > notes.md
 ```
 
-Then edit `notes.md` to insert the hand-written bullets under `## What's Changed`. Write it to a
-scratch directory, not into the repo.
+Then edit `notes.md`: insert the hand-written bullets directly under `## What's Changed`, and add
+the `### Dependency updates` heading above the first generated bullet. Write it to a scratch
+directory, not into the repo.
+
+Before publishing, confirm no blank line sits between two bullets — this prints the offenders and
+should print nothing:
+
+```bash
+awk '/^\* /{if(blank&&prev)print "LOOSE: blank line before line "NR": "$0; blank=0; prev=1; next}
+     /^[[:space:]]*$/{if(prev)blank=1; next} {prev=0; blank=0}' notes.md
+```
 
 ## Sequence
 
@@ -142,5 +160,8 @@ release, not an edit.
   already public.
 - **Retyping the renovate PR list.** Use the `generate-notes` API; hand-copying it is how entries
   get dropped or point at the wrong PR.
+- **A blank line between the hand-written bullets and the generated list.** It makes the whole
+  Markdown list loose and GitHub then spaces out every bullet in the release. Use the
+  `### Dependency updates` heading instead; run the awk guard above before publishing.
 - **Dropping the Full Changelog footer.** `v1.8.0` and `v1.8.2` are missing it. It is the last line
   of every other release.
