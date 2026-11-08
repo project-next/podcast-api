@@ -115,9 +115,13 @@ Before publishing, confirm no blank line sits between two bullets — this print
 should print nothing:
 
 ```bash
-awk '/^\* /{if(blank&&prev)print "LOOSE: blank line before line "NR": "$0; blank=0; prev=1; next}
+awk '/^\* /{if(blank&&prev)print "LOOSE: blank line before line "NR": "$(0); blank=0; prev=1; next}
      /^[[:space:]]*$/{if(prev)blank=1; next} {prev=0; blank=0}' notes.md
 ```
+
+Keep it as `$(0)`, not the bare form: Claude Code substitutes `$` followed by a digit with the skill's
+arguments when loading this file, so `/releasing-the-api patch` would otherwise turn the field
+reference into the literal word `patch`.
 
 ## Sequence
 
