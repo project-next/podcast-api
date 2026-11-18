@@ -1,16 +1,38 @@
 services:
   podcast-api:
     image: "eclipse-temurin:25.0.5_8-jre-ubi10-minimal"
+    user: "1000:1000"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "80:8080"
     volumes:
-      - "./build/libs/podcast-api.jar:/podcast-api.jar"
-    command: "java -jar podcast-api.jar"
-    restart: always
+      - "./build/libs/podcast-api.jar:/podcast-api.jar:ro"
+    tmpfs:
+      - "/tmp:size=32m,mode=0700,uid=1000,gid=1000"
+    command: ["java", "-XX:MaxRAMPercentage=50", "-XX:+ExitOnOutOfMemoryError", "-jar", "/podcast-api.jar"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 30s
+      timeout: 3s
+      start_period: 60s
+      retries: 3
     deploy:
       resources:
         limits:
           memory: 400M
+          cpus: "1.0"
+          pids: 128
+    memswap_limit: 400M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - podcast-api
     environment:
