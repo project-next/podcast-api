@@ -1,6 +1,6 @@
 services:
   podcast-api:
-    image: "eclipse-temurin:25.0.5_8-jre-ubi10-minimal"
+    image: "eclipse-temurin:25.0.5.1_2-jre-ubi10-minimal"
     user: "1000:1000"
     read_only: true
     cap_drop:
